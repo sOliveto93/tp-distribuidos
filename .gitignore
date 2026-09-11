@@ -1,0 +1,27 @@
+# Java / Maven
+rest/target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# Node
+graphql/node_modules/
+graphql/npm-debug.log*
+graphql/yarn-debug.log*
+graphql/yarn-error.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+application-local.properties
+
+# OS
+.DS_Store
+Thumbs.db
