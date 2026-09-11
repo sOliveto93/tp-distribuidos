@@ -2,7 +2,7 @@
 
 CREATE TABLE `artistas` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `biografia` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -12,9 +12,9 @@ CREATE TABLE `artistas` (
 
 CREATE TABLE `usuarios` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
+  `contrasenia` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `rol` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -37,9 +37,9 @@ CREATE TABLE `eventos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- museo.eventos_usuarios definition
+-- museo.evento_usuario definition
 
-CREATE TABLE `eventos_usuarios` (
+CREATE TABLE `evento_usuario` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_evento` int NOT NULL,
   `id_usuario` int NOT NULL,
@@ -65,12 +65,12 @@ CREATE TABLE `filtros_favoritos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- museo.obra definition
+-- museo.obras definition
 
-CREATE TABLE `obra` (
+CREATE TABLE `obras` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
+  `titulo` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descripcion` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `anio_creacion` date NOT NULL,
   `epoca` varchar(100) NOT NULL,
   `tecnica` varchar(100) NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE `comentarios` (
   PRIMARY KEY (`id`),
   KEY `comentarios_usuarios_FK` (`id_usuario`),
   KEY `comentarios_obra_FK` (`id_obra`),
-  CONSTRAINT `comentarios_obra_FK` FOREIGN KEY (`id_obra`) REFERENCES `obra` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comentarios_obra_FK` FOREIGN KEY (`id_obra`) REFERENCES `obras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comentarios_usuarios_FK` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -111,5 +111,5 @@ CREATE TABLE `evento_obra` (
   KEY `evento_obra_eventos_FK` (`id_evento`),
   KEY `evento_obra_obra_FK` (`id_obra`),
   CONSTRAINT `evento_obra_eventos_FK` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `evento_obra_obra_FK` FOREIGN KEY (`id_obra`) REFERENCES `obra` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `evento_obra_obra_FK` FOREIGN KEY (`id_obra`) REFERENCES `obras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
