@@ -1,0 +1,43 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: museo_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: museo
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  graphql:
+    build: ./graphql
+    container_name: museo_graphql
+    restart: always
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mysql
+
+  backend:
+    image: maven:3.9.6-eclipse-temurin-21
+    container_name: museo_backend
+    restart: always
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    command: mvn spring-boot:run -DskipTests
+    depends_on:
+      - mysql
+
+  front:
+    build: ./front
+    container_name: museo_front
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - graphql
