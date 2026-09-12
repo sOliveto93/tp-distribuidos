@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rest.dto.UsuarioResponseDTO;
-import com.example.rest.entity.Usuario;
 import com.example.rest.repository.UsuarioRepository;
 
 @RestController
