@@ -1,15 +1,24 @@
 import "dotenv/config";
 import express from "express";
-import connection from "./config/database.js";
+import { graphql } from "graphql";
+import { schema } from "./schema/schema.js";
+import { resolvers } from "./resolver/resolvers.js";
 
 const app = express();
 
-app.get("/", (req, res) => {
-    
+app.use(express.json());
 
-        res.json("todo salio bien");
+app.post("/graphql",async(req,res)=>{
+    const result = await graphql({
+        schema,
+        source:req.body.query,
+        rootValue:resolvers
     });
 
-app.listen(3000, () => {
-    console.log("Servidor escuchando en http://localhost:3000");
+    res.json(result);
+});
+
+
+app.listen(4000, () => {
+    console.log("Servidor escuchando en http://localhost:4000");
 });
