@@ -44,8 +44,8 @@ export const reportesResolvers = {
   
     const tiposAgrupacion={
       'MES':(evento)=>evento.mes,
-      'TIPO':(evento)=>evento.tipo,
-      'AMBOS':(evento)=>`${evento.mes}-${evento.tipo}`
+      'TIPO':(evento)=>evento.tipo.replaceAll('_', ' '),
+      'AMBOS':(evento)=>`${evento.mes} - ${evento.tipo.replaceAll('_', ' ')}`
     }
     const gruposMapa = {};
     const agrupacionKey = tiposAgrupacion[filtros?.agruparPor] || tiposAgrupacion['MES'];//Agrupar por mes (por defecto)
