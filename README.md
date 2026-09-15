@@ -45,7 +45,10 @@ cd rest
 
 Ejecutar:
 
-./mvnw spring-boot:run 
+./mvnw clean install -DskipTests <-- comando necesario por si hay problemas con las dependencias y los test
+
+./mvnw spring-boot:run
+
 o click derecho 'RUN' o metodo que utilice su ide para ejecutar
 
 Disponible en:
