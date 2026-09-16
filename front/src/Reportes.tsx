@@ -1,32 +1,7 @@
 import { useState } from 'react';
 import './Reportes.css';
-
-interface Filtros {
-  agruparPor: 'MES' | 'TIPO' | 'AMBOS';
-  estado: 'TODOS' | 'PASADOS' | 'FUTUROS';
-  tipo: string;
-}
-
-interface Evento {
-  titulo: string;
-  fecha_hora: string;
-  cantidad_inscriptos: number;
-}
-
-interface GrupoReporte {
-  llave_agrupacion: string;
-  cantidad_de_eventos: number;
-  total_inscriptos_acumulados: number;
-  promedio_de_asistencia: number;
-  eventos: Evento[];
-}
-
-interface GraphQLResponse {
-  data?: {
-    reporteAsistencia: GrupoReporte[];
-  };
-  errors?: { message: string }[];
-}
+import type{ Filtros, GrupoReporte } from './types';
+import { traerReporte } from './reportesService';
 
 
 export default function PanelReportes() {
@@ -37,48 +12,17 @@ export default function PanelReportes() {
     tipo: ''
   });
 
-  const QUERY_REPORTE = `
-    query ObtenerReporte($filtros: FiltrosReporte) {
-      reporteAsistencia(filtros: $filtros) {
-        llave_agrupacion
-        cantidad_de_eventos
-        total_inscriptos_acumulados
-        promedio_de_asistencia
-        eventos {
-          titulo
-          fecha_hora
-          cantidad_inscriptos
-        }
-      }
-    }
-  `;
 
   const generarReporte = async () => {
     try {
-      const respuesta = await fetch('http://localhost:4000/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          //'Authorization': `Bearer ${localStorage.getItem('token')}`         
-        },
-        body: JSON.stringify({
-          query: QUERY_REPORTE,
-          variables: { filtros }
-        })
-      });
-
-      const datos: GraphQLResponse = await respuesta.json();
-
-      if (datos.errors) {
-        alert(datos.errors[0].message);
-        return;
-      }
-
-      if (datos.data) {
-        setReporte(datos.data.reporteAsistencia);
-      }
+      const datos = await traerReporte(filtros);
+      setReporte(datos);
     } catch (error) {
-      console.error("Error al traer el reporte", error);
+      if (error instanceof Error) {
+        console.error("Error al traer el reporte:", error.message);
+      } else {
+        console.error("Error desconocido:", error);
+      }
     }
   };
 
