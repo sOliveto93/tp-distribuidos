@@ -1,3 +1,8 @@
+export const obtenerTiposEvento = async (db) => {
+  const [tipos] = await db.query('SELECT DISTINCT tipo FROM eventos WHERE tipo IS NOT NULL');
+  
+  return tipos.map(fila => fila.tipo);
+};
 
 export const obtenerEventosPorFiltros = async (filtros, db) => {
   let querySql = `
@@ -18,11 +23,11 @@ export const obtenerEventosPorFiltros = async (filtros, db) => {
   if (filtros) {
     if (filtros.fechaInicio) {
       querySql += ` AND e.fecha_hora >= ?`;
-      queryParams.push(filtros.fechaInicio);
+      queryParams.push(`${filtros.fechaInicio} 00:00:00`);//Fecha principio del dia
     }
     if (filtros.fechaFin) {
       querySql += ` AND e.fecha_hora <= ?`;
-      queryParams.push(filtros.fechaFin);
+      queryParams.push(`${filtros.fechaFin} 23:59:59`);//Fecha final del dia
     }
     if (filtros.tipo) {
       querySql += ` AND e.tipo = ?`;

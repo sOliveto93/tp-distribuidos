@@ -1,4 +1,8 @@
-import { obtenerEventosPorFiltros } from '../repository/eventoRepository.js';
+import { obtenerEventosPorFiltros ,obtenerTiposEvento } from '../repository/eventoRepository.js';
+
+export const listarTiposEvento = async (db) => {
+  return await obtenerTiposEvento(db);
+};
 
 export const generarReporteAsistencia = async (filtros, db) => {
 

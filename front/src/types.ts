@@ -2,6 +2,8 @@ export interface Filtros {
   agruparPor: 'MES' | 'TIPO' | 'AMBOS';
   estado: 'TODOS' | 'PASADOS' | 'FUTUROS';
   tipo: string;
+  fechaInicio:string;
+  fechaFin:string;
 }
 
 export interface Evento {

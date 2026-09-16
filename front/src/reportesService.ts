@@ -17,12 +17,17 @@ const QUERY_REPORTE = `
   }
 `;
 
+const QUERY_TIPOS = `
+  query {
+    obtenerTiposEvento
+  }
+`;
 export const traerReporte = async (filtros: Filtros): Promise<GrupoReporte[]> => {
   const respuesta = await fetch('http://localhost:4000/graphql', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}` // Descomentar cuando uses JWT
+      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
     },
     body: JSON.stringify({
       query: QUERY_REPORTE,
@@ -32,11 +37,30 @@ export const traerReporte = async (filtros: Filtros): Promise<GrupoReporte[]> =>
 
   const datos: GraphQLResponse = await respuesta.json();
 
-  // Si el backend (tu resolver) tira un error de "No autorizado" u otro, lo atrapamos acá
   if (datos.errors) {
     throw new Error(datos.errors[0].message);
   }
 
-  // Devolvemos la data lista para usar. Si viene vacía, devolvemos un array vacío.
   return datos.data?.reporteAsistencia || [];
+};
+
+export const traerTiposEvento = async (): Promise<string[]> => {
+  const respuesta = await fetch('http://localhost:4000/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify({
+      query: QUERY_TIPOS
+    })
+  });
+
+  const datos = await respuesta.json();
+
+  if (datos.errors) {
+    throw new Error(datos.errors[0].message);
+  }
+
+  return datos.data?.obtenerTiposEvento || [];
 };

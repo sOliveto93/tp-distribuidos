@@ -7,6 +7,7 @@ export const schema = buildSchema(`
         usuario(id:ID!): Usuario
         obra(id: ID!): Obra
         reporteAsistencia(filtros: FiltrosReporte): [AgruparReporte!]!
+        obtenerTiposEvento: [String] #Obtener tipos evento de la BD
     }
 
     input FiltrosReporte {

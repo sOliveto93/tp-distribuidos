@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Reportes.css';
 import type{ Filtros, GrupoReporte } from './types';
-import { traerReporte } from './reportesService';
+import { traerReporte, traerTiposEvento } from './reportesService';
 
 
 export default function PanelReportes() {
@@ -9,8 +9,23 @@ export default function PanelReportes() {
   const [filtros, setFiltros] = useState<Filtros>({
     agruparPor: 'MES',
     estado: 'TODOS',
-    tipo: ''
+    tipo: '',
+    fechaInicio:'',
+    fechaFin:''
   });
+  const [tiposDisponibles, setTiposDisponibles] = useState<string[]>([]);
+  useEffect(() => {
+    const cargarTipos = async () => {
+      try {
+        const tipos = await traerTiposEvento();
+        setTiposDisponibles(tipos);
+      } catch (error) {
+        console.error("No se pudieron cargar los tipos de evento", error);
+      }
+    };
+
+    cargarTipos();
+  }, []);
 
 
   const generarReporte = async () => {
@@ -31,6 +46,37 @@ export default function PanelReportes() {
       <h2>Reporte de estadisticas de eventos</h2>
       
       <div className="filtros-container">
+        <div>
+          <label>Desde: </label>
+          <input 
+            type="date" 
+            value={filtros.fechaInicio} 
+            onChange={(e) => setFiltros({...filtros, fechaInicio: e.target.value})}
+          />
+        </div>
+
+        <div>
+          <label>Hasta: </label>
+          <input 
+            type="date" 
+            value={filtros.fechaFin} 
+            onChange={(e) => setFiltros({...filtros, fechaFin: e.target.value})}
+          />
+        </div>
+        <div>
+          <select 
+            value={filtros.tipo} 
+            onChange={(e) => setFiltros({...filtros, tipo: e.target.value})}
+          >
+            <option value="">Todos los tipos</option>
+            {/* Traer tipos de la base de datos */}
+            {tiposDisponibles.map((tipoBD) => (
+              <option key={tipoBD} value={tipoBD}>
+                {tipoBD.replaceAll('_', ' ')}
+              </option>
+            ))}
+          </select>
+        </div>
         <select 
           value={filtros.agruparPor} 
           onChange={(e) => setFiltros({...filtros, agruparPor: e.target.value as Filtros['agruparPor']})}
@@ -62,14 +108,24 @@ export default function PanelReportes() {
             
             <h4>Detalle de eventos:</h4>
             <ul>
-              {grupo.eventos.map((ev, index) => (
-                <li key={`${ev.titulo}-${index}`}>
-                  {ev.titulo} - {ev.cantidad_inscriptos} inscriptos
+              {grupo.eventos.map((ev, index) => {
+                  const fechaObj = new Date(Number(ev.fecha_hora));//Formateado de fecha y hora
+                  const fechaFormat= fechaObj.toLocaleString('es-AR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  });
+                  return(
+                 <li key={`${ev.titulo}-${index}`}>
+                  {fechaFormat} - {ev.titulo} - {ev.cantidad_inscriptos} inscriptos
                 </li>
-              ))}
-            </ul>
+              );
+              })}
+               </ul>
           </div>
-        ))}
+        ))}      
       </div>
     </div>
   );

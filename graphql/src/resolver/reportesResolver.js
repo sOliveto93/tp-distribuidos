@@ -1,4 +1,4 @@
-import { generarReporteAsistencia } from "../service/reporteService.js";
+import { generarReporteAsistencia, listarTiposEvento} from "../service/reporteService.js";
 export const reportesResolvers = {
   reporteAsistencia: async ({ filtros }, context) => {
 
@@ -7,5 +7,8 @@ export const reportesResolvers = {
     const reporte = await generarReporteAsistencia(filtros, context.db);
 
     return reporte;
+  },
+  obtenerTiposEvento: async (_, context) => {
+    return await listarTiposEvento(context.db);
   }
 };
