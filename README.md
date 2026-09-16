@@ -26,7 +26,7 @@ La base de datos MySQL se ejecuta mediante Docker.
 
 docker compose up
 
-Configuración:
+Configuración(a modo de ejemplo):
 
 - Host: localhost
 - Puerto: 3307
