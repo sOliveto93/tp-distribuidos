@@ -1,5 +1,7 @@
 package com.example.rest.controller;
 
+import com.example.rest.dto.EventoResponseDTO;
+import com.example.rest.dto.UsuarioResponseDTO;
 import com.example.rest.entity.Evento;
 import com.example.rest.service.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,18 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping
-    public List<Evento> listarTodos() {
-        return eventoService.obtenerTodos();
+    public List<EventoResponseDTO> listarTodos() {
+        return eventoService.obtenerTodos().stream()
+                .map(this::mapearAEventoDTO)
+                .toList();
     }
 
     // (GET a http://localhost:8080/api/eventos/1)
     @GetMapping("/{id}")
-    public ResponseEntity<Evento> obtenerPorId(@PathVariable Integer id) {
+    public ResponseEntity<EventoResponseDTO> obtenerPorId(@PathVariable Integer id) {
         try {
-            return ResponseEntity.ok(eventoService.obtenerPorId(id));
+            Evento evento = eventoService.obtenerPorId(id);
+            return ResponseEntity.ok(mapearAEventoDTO(evento));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -61,7 +66,33 @@ public class EventoController {
     // (DELETE a http://localhost:8080/api/eventos/1)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarEvento(@PathVariable Integer id) {
-        eventoService.eliminarEvento(id);
-        return ResponseEntity.ok().build();
+        try {
+            eventoService.eliminarEvento(id);
+            return ResponseEntity.ok("El evento fue eliminado exitosamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body("No se pudo eliminar: Evento no encontrado con el ID especificado.");
+        }
+    }
+
+    private EventoResponseDTO mapearAEventoDTO(Evento evento) {
+        List<UsuarioResponseDTO> usuariosDTO = evento.getUsuarios().stream()
+                .map(u -> UsuarioResponseDTO.builder()
+                        .id(u.getId())
+                        .nombre(u.getNombre())
+                        .email(u.getEmail())
+                        .rol(u.getRol())
+                        .build())
+                .toList();
+
+        return EventoResponseDTO.builder()
+                .id(evento.getId())
+                .titulo(evento.getTitulo())
+                .descripcion(evento.getDescripcion())
+                .fechaHora(evento.getFechaHora())
+                .duracion(evento.getDuracion())
+                .tipo(evento.getTipo())
+                .cupoMax(evento.getCupoMax())
+                .usuarios(usuariosDTO)
+                .build();
     }
 }
