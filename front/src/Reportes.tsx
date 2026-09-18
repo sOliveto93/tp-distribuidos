@@ -27,11 +27,13 @@ export default function PanelReportes() {
     cargarTipos();
   }, []);
 
-
+  const [busquedaRealizada, setBusquedaRealizada] = useState(false);
+  
   const generarReporte = async () => {
     try {
       const datos = await traerReporte(filtros);
       setReporte(datos);
+      setBusquedaRealizada(true);
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error al traer el reporte:", error.message);
@@ -40,6 +42,8 @@ export default function PanelReportes() {
       }
     }
   };
+
+
 
   return (
     <div className="panel-container">
@@ -69,7 +73,6 @@ export default function PanelReportes() {
             onChange={(e) => setFiltros({...filtros, tipo: e.target.value})}
           >
             <option value="">Todos los tipos</option>
-            {/* Traer tipos de la base de datos */}
             {tiposDisponibles.map((tipoBD) => (
               <option key={tipoBD} value={tipoBD}>
                 {tipoBD.replaceAll('_', ' ')}
@@ -98,7 +101,7 @@ export default function PanelReportes() {
         <button onClick={generarReporte}>Generar Reporte</button>
       </div>
 
-      <div>
+      {busquedaRealizada && reporte.length == 0 ? <div className="grupo-card">No se encuentran resultados</div>:<div>
         {reporte.map((grupo) => (
           <div key={grupo.llave_agrupacion} className="grupo-card">
             <h3>{grupo.llave_agrupacion}</h3>
@@ -109,7 +112,7 @@ export default function PanelReportes() {
             <h4>Detalle de eventos:</h4>
             <ul>
               {grupo.eventos.map((ev, index) => {
-                  const fechaObj = new Date(Number(ev.fecha_hora));//Formateado de fecha y hora
+                  const fechaObj = new Date(Number(ev.fecha_hora));
                   const fechaFormat= fechaObj.toLocaleString('es-AR', {
                     day: '2-digit',
                     month: '2-digit',
@@ -126,7 +129,7 @@ export default function PanelReportes() {
                </ul>
           </div>
         ))}      
-      </div>
+      </div> } 
     </div>
   );
 }

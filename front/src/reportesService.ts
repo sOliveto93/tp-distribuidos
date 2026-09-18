@@ -1,5 +1,7 @@
 import type{ Filtros, GraphQLResponse, GrupoReporte } from './types';
-
+const URL_BASE: string =import.meta.env.VITE_URL_BASE;
+const PORT:string= import.meta.env.VITE_PORT;
+const GRAPHQL:string =import.meta.env.VITE_GRAPHQL;
 // Definimos la query de GraphQL
 const QUERY_REPORTE = `
   query ObtenerReporte($filtros: FiltrosReporte) {
@@ -23,7 +25,7 @@ const QUERY_TIPOS = `
   }
 `;
 export const traerReporte = async (filtros: Filtros): Promise<GrupoReporte[]> => {
-  const respuesta = await fetch('http://localhost:4000/graphql', {
+  const respuesta = await fetch(`${URL_BASE}${PORT}${GRAPHQL}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -45,7 +47,7 @@ export const traerReporte = async (filtros: Filtros): Promise<GrupoReporte[]> =>
 };
 
 export const traerTiposEvento = async (): Promise<string[]> => {
-  const respuesta = await fetch('http://localhost:4000/graphql', {
+  const respuesta = await fetch(`${URL_BASE}${PORT}${GRAPHQL}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
