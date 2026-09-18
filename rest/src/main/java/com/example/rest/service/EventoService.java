@@ -4,10 +4,12 @@ import com.example.rest.entity.Evento;
 import com.example.rest.entity.Usuario;
 import com.example.rest.repository.EventoRepository;
 import com.example.rest.repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +39,7 @@ public class EventoService {
         eventoRepository.deleteById(id);
     }
 
+    @Transactional 
     public Evento inscribirVisitante(Integer idEvento, Integer idUsuario) {
         Evento evento = obtenerPorId(idEvento);
         
@@ -59,6 +62,7 @@ public class EventoService {
     }
 
 
+    @Transactional 
     public Evento desinscribirVisitante(Integer idEvento, Integer idUsuario) {
         Evento evento = obtenerPorId(idEvento);
         Usuario usuario = usuarioRepository.findById(idUsuario)

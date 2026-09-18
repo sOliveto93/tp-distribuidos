@@ -3,6 +3,7 @@ package com.example.rest.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,11 +49,14 @@ public class Obra {
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "id_artista")
+    @JsonIgnore
     private Artista artista;
     
     @OneToMany (mappedBy = "obra",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Comentario> comentarios;
 
     @ManyToMany (mappedBy = "obras",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Evento> eventos;
 }
