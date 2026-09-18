@@ -2,6 +2,8 @@ package com.example.rest.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +31,7 @@ public class Artista {
     private String nombre;
     private String biografia;
     @OneToMany (mappedBy = "artista", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Obra> obras;
 
 }

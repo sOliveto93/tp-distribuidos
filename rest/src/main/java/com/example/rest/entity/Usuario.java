@@ -3,6 +3,7 @@ package com.example.rest.entity;
 import java.util.List;
 
 import com.example.rest.enums.Rol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,8 +39,10 @@ public class Usuario {
     private Rol rol;
 
     @OneToMany (mappedBy = "usuario" ,fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<FiltrosFavoritos> filtrosFavoritos;
 
     @OneToMany (mappedBy = "usuario" ,fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Comentario> comentarios;
 }
