@@ -1,10 +1,10 @@
 import { getObra ,getCatalogo} from "../service/obraService.js"
 
 export const obrasResolver = {
-    obra: async({id},context)=>{
-        return await getObra(id,context.db);
+    obra: async({id})=>{
+        return await getObra(id);
     },
-    obras:async({filtros},context)=>{
-        return await getCatalogo(filtros,context.db);
+    obras:async({filtros})=>{
+        return await getCatalogo(filtros);
     }
 }
