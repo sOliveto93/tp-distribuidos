@@ -3,7 +3,8 @@ import express from "express";
 import { graphql } from "graphql";
 import { schema } from "./schema/schema.js";
 import { resolvers } from "./resolver/resolvers.js";
-import connection from "./config/database.js";
+import sequelizeConnection from "./config/sequelize.js";
+import mysqlConnection from "./config/mysql.js";
 import "./models/associations.js"; // para cargar las relaciones desde el primer momento
 import cors from "cors";
 const app = express();
@@ -12,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 try {
-    await connection.authenticate();
+    await sequelizeConnection.authenticate();
     console.log("Conexión a MySQL OK");
 
 } catch (error) {
@@ -26,7 +27,7 @@ app.post("/graphql",async(req,res)=>{
         rootValue:resolvers,
         //ya no es necesario por migrar a sequelize
         contextValue:{
-            db:connection
+            db:mysqlConnection
         }
     });
 
