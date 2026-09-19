@@ -1,7 +1,19 @@
-import connection from "../config/database.js";
+import Usuario from "../models/usuario.js"
 
-export async function findById(id) {
-    const [rows] = await connection.execute(
+export async function findById(id){
+    return await Usuario.findByPk(id,{
+        attributes:["id","nombre","email"]
+    });
+}
+export async function findAll(){
+    return await Usuario.findAll();
+}
+
+
+
+/*
+export async function findById(id,db) {
+    const [rows] = await db.execute(
         `SELECT id, nombre, email
         FROM usuarios
         WHERE id = ?`,
@@ -9,4 +21,4 @@ export async function findById(id) {
     );
 
     return rows[0] ?? null;
-}
+}*/
