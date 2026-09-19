@@ -2,15 +2,19 @@ package com.example.rest.eventos.controller;
 
 import com.example.rest.entity.Evento;
 import com.example.rest.eventos.dto.EventoResponseDTO;
-import com.example.rest.eventos.dto.UsuarioResponseDTO;
 import com.example.rest.eventos.service.EventoService;
+import com.example.rest.usuario.dto.UsuarioResponseDTO;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/eventos")
 public class EventoController {
@@ -37,6 +41,7 @@ public class EventoController {
     }
 
     // (POST a http://localhost:8080/api/eventos)
+    @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @PostMapping
     public Evento crearEvento(@RequestBody Evento evento) {
         return eventoService.guardarEvento(evento);
@@ -65,6 +70,7 @@ public class EventoController {
     }
     
     // (DELETE a http://localhost:8080/api/eventos/1)
+    @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarEvento(@PathVariable Integer id) {
         try {

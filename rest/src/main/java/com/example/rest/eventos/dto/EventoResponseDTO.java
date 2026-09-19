@@ -6,6 +6,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.rest.usuario.dto.UsuarioResponseDTO;
+
 @Getter
 @Setter
 @Builder

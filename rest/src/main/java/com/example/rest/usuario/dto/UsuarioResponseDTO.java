@@ -1,4 +1,4 @@
-package com.example.rest.eventos.dto;
+package com.example.rest.usuario.dto;
 
 import com.example.rest.enums.Rol;
 
