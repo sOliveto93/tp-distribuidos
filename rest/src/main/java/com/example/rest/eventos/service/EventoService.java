@@ -1,9 +1,10 @@
-package com.example.rest.service;
+package com.example.rest.eventos.service;
 
 import com.example.rest.entity.Evento;
 import com.example.rest.entity.Usuario;
-import com.example.rest.repository.EventoRepository;
-import com.example.rest.repository.UsuarioRepository;
+import com.example.rest.eventos.repository.EventoRepository;
+import com.example.rest.eventos.repository.UsuarioRepository;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

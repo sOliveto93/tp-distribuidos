@@ -1,9 +1,10 @@
-package com.example.rest.controller;
+package com.example.rest.eventos.controller;
 
-import com.example.rest.dto.EventoResponseDTO;
-import com.example.rest.dto.UsuarioResponseDTO;
 import com.example.rest.entity.Evento;
-import com.example.rest.service.EventoService;
+import com.example.rest.eventos.dto.EventoResponseDTO;
+import com.example.rest.eventos.dto.UsuarioResponseDTO;
+import com.example.rest.eventos.service.EventoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

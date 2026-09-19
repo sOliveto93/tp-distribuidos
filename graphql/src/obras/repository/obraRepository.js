@@ -1,8 +1,8 @@
 import {Op} from "sequelize";
-import Obra from "../models/obra.js";
-import Artista from "../models/artista.js";
-import Comentario from "../models/comentario.js";
-import Usuario from "../models/usuario.js";
+import Obra from "../../models/obra.js"
+import Artista from "../../models/artista.js";
+import Comentario from "../../models/comentario.js";
+import Usuario from "../../models/usuario.js";
 
 export async function findById(id) {
 

@@ -1,4 +1,4 @@
-package com.example.rest.repository;
+package com.example.rest.eventos.repository;
 
 import com.example.rest.entity.Evento;
 import org.springframework.data.jpa.repository.JpaRepository;

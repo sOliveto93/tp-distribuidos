@@ -10,11 +10,14 @@ export const obtenerEventosPorFiltros = async (filtros, db) => {
       e.id, 
       e.titulo, 
       e.fecha_hora, 
-      e.tipo, 
+      e.tipo,
+      e.cupo_max,
+      u.nombre AS curador, 
       DATE_FORMAT(e.fecha_hora, '%Y-%m') AS mes,
       COUNT(eu.id) AS cantidad_inscriptos
     FROM eventos e
     LEFT JOIN evento_usuario eu ON e.id = eu.id_evento
+    LEFT JOIN usuarios u ON e.id_curador = u.id
     WHERE 1=1
   `;
   

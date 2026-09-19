@@ -5,6 +5,8 @@ export const reporteType=`
         fecha_hora: String!
         tipo: String!
         cantidad_inscriptos: Int!
+        curador: String
+        cupo_max: Int!
     }
     type AgruparReporte {
         llave_agrupacion: String!

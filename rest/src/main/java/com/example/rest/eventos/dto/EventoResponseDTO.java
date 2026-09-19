@@ -1,4 +1,4 @@
-package com.example.rest.dto;
+package com.example.rest.eventos.dto;
 
 import lombok.Builder;
 import lombok.Getter;
