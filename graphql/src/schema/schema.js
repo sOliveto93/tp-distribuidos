@@ -15,8 +15,6 @@ export const schema = buildSchema(`
     ${filtrosInputType}
     
     type Query{
-        usuario(id:ID!): Usuario
-        usuarios: [Usuario!]!
         obra(id: ID!): Obra
         obras(filtros:FiltrosObra):[Obra!]!
         reporteAsistencia(filtros: FiltrosReporte): [AgruparReporte!]!

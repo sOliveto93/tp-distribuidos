@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import { graphql } from "graphql";
+import { graphqlHTTP } from "express-graphql";
 import { schema } from "./schema/schema.js";
 import { resolvers } from "./resolver/resolvers.js";
 import sequelizeConnection from "./config/sequelize.js";
@@ -19,6 +19,16 @@ try {
 } catch (error) {
     console.error("Error conectando a MySQL:", error);
 }
+
+
+app.use("/graphql", graphqlHTTP({
+    schema,
+    rootValue: resolvers,
+    graphiql: true,
+    context: {
+        db: mysqlConnection
+    }
+}));/*
 app.post("/graphql",async(req,res)=>{
     const result = await graphql({
         schema,
@@ -32,7 +42,7 @@ app.post("/graphql",async(req,res)=>{
     });
 
     res.json(result);
-});
+});*/
 
 
 app.listen(4000, () => {
