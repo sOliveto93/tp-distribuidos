@@ -9,6 +9,7 @@ import com.example.rest.auth.dto.AuthResponse;
 import com.example.rest.auth.dto.LoginRequest;
 import com.example.rest.auth.dto.RegisterRequest;
 import com.example.rest.entity.Usuario;
+import com.example.rest.usuario.dto.UsuarioResponseDTO;
 import com.example.rest.usuario.service.UsuarioService;
 
 @Service
@@ -42,6 +43,16 @@ public class AuthService {
         String token = jwtService.generateToken(usuario.getEmail());
 
         return new AuthResponse(token);
+    }
+    public UsuarioResponseDTO obtenerPerfil(String email){
+        Usuario usuario = usuarioService.obtenerPorEmail(email);
+    
+        return UsuarioResponseDTO.builder()
+            .id(usuario.getId())
+            .nombre(usuario.getNombre())
+            .email(usuario.getEmail())
+            .rol(usuario.getRol())
+            .build();
     }
 
 }
