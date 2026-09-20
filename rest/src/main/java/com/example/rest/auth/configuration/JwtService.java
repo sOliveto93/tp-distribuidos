@@ -42,7 +42,7 @@ public class JwtService {
                  .claim("role", usuarioRepository.findByEmail(username).get().getRol().name())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
-                .signWith(secretKey)
+                .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
     }
     public boolean validateToken(String token, String username) {

@@ -41,29 +41,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String token = authHeader.substring(7);
 
-        final String username = jwtService.extractClaims(token).getSubject();
+        try {
+            final String username = jwtService.extractClaims(token).getSubject();
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = usuarioService.loadUserByUsername(username);
+                UserDetails userDetails = usuarioService.loadUserByUsername(username);
 
-            if (jwtService.validateToken(token, userDetails.getUsername())) {
+                if (jwtService.validateToken(token, userDetails.getUsername())) {
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities());
 
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request));
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request));
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(authToken);
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(authToken);
+                }
             }
+        } catch (Exception e) {
+           System.out.println("JWT inválido: " + e.getMessage());
         }
-
         filterChain.doFilter(request, response);
     }
 

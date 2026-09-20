@@ -7,6 +7,8 @@ import sequelizeConnection from "./config/sequelize.js";
 import mysqlConnection from "./config/mysql.js";
 import "./models/associations.js"; // para cargar las relaciones desde el primer momento
 import cors from "cors";
+import { jwtMiddleware } from "./auth/jwtMiddleware.js";
+
 const app = express();
 
 app.use(cors());
@@ -20,29 +22,18 @@ try {
     console.error("Error conectando a MySQL:", error);
 }
 
+app.use("/graphql", jwtMiddleware);
 
-app.use("/graphql", graphqlHTTP({
+app.use("/graphql", graphqlHTTP((req) => ({
     schema,
     rootValue: resolvers,
     graphiql: true,
     context: {
-        db: mysqlConnection
+        db: mysqlConnection,
+        user: req.user
     }
-}));/*
-app.post("/graphql",async(req,res)=>{
-    const result = await graphql({
-        schema,
-        source:req.body.query,
-        variableValues: req.body.variables,
-        rootValue:resolvers,
-        //ya no es necesario por migrar a sequelize
-        contextValue:{
-            db:mysqlConnection
-        }
-    });
+})));
 
-    res.json(result);
-});*/
 
 
 app.listen(4000, () => {
