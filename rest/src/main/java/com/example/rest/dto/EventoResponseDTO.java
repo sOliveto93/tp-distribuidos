@@ -17,6 +17,6 @@ public class EventoResponseDTO {
     private Integer duracion;
     private String tipo;
     private Integer cupoMax;
-    
+    private UsuarioResponseDTO curador;
     private List<UsuarioResponseDTO> usuarios;
 }

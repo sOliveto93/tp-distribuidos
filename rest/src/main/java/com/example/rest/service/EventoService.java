@@ -63,4 +63,28 @@ public class EventoService {
         evento.getUsuarios().remove(usuario);
         return eventoRepository.save(evento);
     }
+
+    public List<Evento> obtenerConFiltros(String fecha, String tipo, Integer idCurador) {
+        List<Evento> eventos = eventoRepository.findAll();
+
+        if (tipo != null && !tipo.isEmpty()) {
+            eventos = eventos.stream()
+                    .filter(e -> e.getTipo().equalsIgnoreCase(tipo))
+                    .toList();
+        }
+        
+        if (idCurador != null) {
+            eventos = eventos.stream()
+                    .filter(e -> e.getCurador() != null && e.getCurador().getId().equals(idCurador))
+                    .toList();
+        }
+        
+        if (fecha != null && !fecha.isEmpty()) {
+            eventos = eventos.stream()
+                    .filter(e -> e.getFechaHora().toLocalDate().toString().equals(fecha))
+                    .toList();
+        }
+
+        return eventos;
+    }
 }

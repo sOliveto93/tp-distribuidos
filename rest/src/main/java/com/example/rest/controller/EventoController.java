@@ -18,8 +18,12 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping
-    public List<EventoResponseDTO> listarTodos() {
-        return eventoService.obtenerTodos().stream()
+    public List<EventoResponseDTO> listarTodos(
+            @RequestParam(required = false) String fecha,
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false) Integer idCurador) {
+            
+        return eventoService.obtenerConFiltros(fecha, tipo, idCurador).stream()
                 .map(this::mapearAEventoDTO)
                 .toList();
     }
@@ -84,6 +88,16 @@ public class EventoController {
                         .build())
                 .toList();
 
+        UsuarioResponseDTO curadorDTO = null;
+        if (evento.getCurador() != null) {
+            curadorDTO = UsuarioResponseDTO.builder()
+                    .id(evento.getCurador().getId())
+                    .nombre(evento.getCurador().getNombre())
+                    .email(evento.getCurador().getEmail())
+                    .rol(evento.getCurador().getRol())
+                    .build();
+        }
+
         return EventoResponseDTO.builder()
                 .id(evento.getId())
                 .titulo(evento.getTitulo())
@@ -92,7 +106,10 @@ public class EventoController {
                 .duracion(evento.getDuracion())
                 .tipo(evento.getTipo())
                 .cupoMax(evento.getCupoMax())
+                .curador(curadorDTO)
                 .usuarios(usuariosDTO)
                 .build();
     }
+
+
 }
