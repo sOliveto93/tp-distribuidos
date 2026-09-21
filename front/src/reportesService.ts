@@ -14,11 +14,13 @@ const QUERY_REPORTE = `
         titulo
         fecha_hora
         cantidad_inscriptos
+        curador
+        cupo_max
+        tipo
       }
     }
   }
 `;
-
 const QUERY_TIPOS = `
   query {
     obtenerTiposEvento
@@ -42,7 +44,7 @@ export const traerReporte = async (filtros: Filtros): Promise<GrupoReporte[]> =>
   if (datos.errors) {
     throw new Error(datos.errors[0].message);
   }
-
+  console.log(datos)
   return datos.data?.reporteAsistencia || [];
 };
 

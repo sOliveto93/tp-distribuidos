@@ -1,28 +1,39 @@
 import "dotenv/config";
 import express from "express";
-import { graphql } from "graphql";
+import { graphqlHTTP } from "express-graphql";
 import { schema } from "./schema/schema.js";
 import { resolvers } from "./resolver/resolvers.js";
-import connection from "./config/database.js";
+import sequelizeConnection from "./config/sequelize.js";
+import mysqlConnection from "./config/mysql.js";
+import "./models/associations.js"; // para cargar las relaciones desde el primer momento
 import cors from "cors";
+import { jwtMiddleware } from "./auth/jwtMiddleware.js";
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.post("/graphql",async(req,res)=>{
-    const result = await graphql({
-        schema,
-        source:req.body.query,
-        variableValues: req.body.variables,
-        rootValue:resolvers,
-        contextValue:{
-            db:connection
-        }
-    });
+try {
+    await sequelizeConnection.authenticate();
+    console.log("Conexión a MySQL OK");
 
-    res.json(result);
-});
+} catch (error) {
+    console.error("Error conectando a MySQL:", error);
+}
+
+app.use("/graphql", jwtMiddleware);
+
+app.use("/graphql", graphqlHTTP((req) => ({
+    schema,
+    rootValue: resolvers,
+    graphiql: true,
+    context: {
+        db: mysqlConnection,
+        user: req.user
+    }
+})));
+
 
 
 app.listen(4000, () => {
