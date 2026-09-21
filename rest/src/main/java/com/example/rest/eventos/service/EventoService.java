@@ -32,6 +32,24 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
+    @Transactional
+    public Evento actualizarEvento(Integer id, Evento eventoActualizado) {
+        Evento eventoExistente = obtenerPorId(id);
+
+        eventoExistente.setTitulo(eventoActualizado.getTitulo());
+        eventoExistente.setDescripcion(eventoActualizado.getDescripcion());
+        eventoExistente.setFechaHora(eventoActualizado.getFechaHora());
+        eventoExistente.setDuracion(eventoActualizado.getDuracion());
+        eventoExistente.setTipo(eventoActualizado.getTipo());
+        eventoExistente.setCupoMax(eventoActualizado.getCupoMax());
+
+        if (eventoActualizado.getCurador() != null) {
+            eventoExistente.setCurador(eventoActualizado.getCurador());
+        }
+
+        return eventoRepository.save(eventoExistente);
+    }
+
     public void eliminarEvento(Integer id) {
         eventoRepository.deleteById(id);
     }
