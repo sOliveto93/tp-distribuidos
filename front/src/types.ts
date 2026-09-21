@@ -26,3 +26,18 @@ export interface GraphQLResponse {
   };
   errors?: { message: string }[];
 }
+
+export interface UsuarioCurador {
+  id: number;
+  nombre: string;
+}
+
+export interface Evento {
+  id?: number;
+  titulo: string;
+  descripcion: string;
+  fecha_hora: string;
+  duracion: number;
+  cupo_maximo: number;
+  curador_responsable: UsuarioCurador;
+}
