@@ -32,6 +32,7 @@ export interface Evento {
   id?: number;
   titulo: string;
   descripcion?: string;
+  tipo?: string;
   duracion?: number;
   fechaHora?: string;
   cupoMax?: number;
