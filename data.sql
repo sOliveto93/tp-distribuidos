@@ -16,11 +16,11 @@ INSERT INTO artistas (id, nombre, biografia) VALUES
 -- =========================================================
 
 INSERT INTO usuarios (id, nombre, email, contrasenia, rol) VALUES
-(1, 'Sebastian Oliveto', 'sebas@museo.com', '123456', 'ADMINISTRADOR'),
-(2, 'Laura Gomez', 'laura@museo.com', '123456', 'CURADOR'),
-(3, 'Martin Perez', 'martin@gmail.com', '123456', 'VISITANTE'),
-(4, 'Ana Rodriguez', 'ana@gmail.com', '123456', 'VISITANTE'),
-(5, 'Carlos Fernandez', 'carlos@gmail.com', '123456', 'VISITANTE');
+(1, 'Sebastian Oliveto', 'admin@admin.com', '$2a$10$BGTC0bkRLPOqCHuOE9J1Yu7qjlyFKUXjGwKpOqjsQufD9f/BVqBgi', 'ADMINISTRADOR'),
+(2, 'Laura Gomez', 'curador@curador.com', '$2a$10$2VTjh67rotJHtFpCHuwPYe0EAJ/4tbWj6YKuAjrc9F.MmvuUSqCWC', 'CURADOR'),
+(3, 'Martin Perez', 'martin@gmail.com', '$2a$10$pfbqN7OUJgn41DfNQWmCuOwIYWUtxo2VRvdFKy29TSWTCUcgq.z4K', 'VISITANTE'),
+(4, 'Ana Rodriguez', 'ana@gmail.com', '$2a$10$qURiZUkqXRNRiG3fTzP.GOsgvzGaTLBwwypnFE4RLPAftIkjnHKQW', 'VISITANTE'),
+(5, 'Carlos Fernandez', 'carlos@gmail.com', '$2a$10$EVynsA8g8.DkocgErKD0YOukB3QdjH3nI3NZryuoSrX27DobOYUY.', 'VISITANTE');
 
 
 -- =========================================================
