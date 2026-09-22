@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Evento } from './types';
 import { getEventos } from './eventosService';
+import './Eventos.css';
 
 export default function Eventos() {
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -9,19 +10,40 @@ export default function Eventos() {
     getEventos().then(setEventos).catch(console.error);
   }, []);
 
+  const formatearFecha = (fecha: string | number[] | undefined) => {
+    if (!fecha) return 'Sin fecha';
+    if (Array.isArray(fecha)) {
+      const [year, month, day, hour = 0, minute = 0] = fecha;
+      return new Date(year, month - 1, day, hour, minute).toLocaleString();
+    }
+    const parsed = new Date(fecha);
+    return isNaN(parsed.getTime()) ? 'Fecha inválida' : parsed.toLocaleString();
+  };
+
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', color: 'white', padding: '20px' }}>
+    <div className="eventos-container">
       <h2>Catálogo de Eventos</h2>
-      <div style={{ display: 'grid', gap: '15px' }}>
-        {eventos.map(e => (
-          <div key={e.id} style={{ border: '1px solid #555', padding: '15px', borderRadius: '5px' }}>
-            <h3>{e.titulo}</h3>
-            <p>{e.descripcion}</p>
-            <p><strong>Fecha:</strong> {new Date(e.fecha_hora).toLocaleString()} | <strong>Duración:</strong> {e.duracion} min</p>
-            <p><strong>Cupo:</strong> {e.cupo_maximo} | <strong>Curador:</strong> {e.curador_responsable?.nombre}</p>
-          </div>
-        ))}
-        {eventos.length === 0 && <p>No hay eventos registrados.</p>}
+      <div className="eventos-grid">
+        {eventos.map(e => {
+          console.log("Datos del evento:", e);
+          const fechaReal = e.fechaHora;
+          const curadorReal = e.curador;
+          const cupoReal = e.cupoMax;
+
+          return (
+            <div key={e.id} className="evento-card">
+              <h3>{e.titulo}</h3>
+              <p className="evento-desc">{e.descripcion}</p>
+              <div className="evento-details">
+                <p><strong>Fecha:</strong> {formatearFecha(fechaReal)}</p>
+                <p><strong>Duración:</strong> {e.duracion} min</p>
+                <p><strong>Cupo:</strong> {cupoReal}</p>
+                <p><strong>Curador:</strong> {curadorReal?.nombre || 'No asignado'}</p>
+              </div>
+            </div>
+          );
+        })}
+        {eventos.length === 0 && <p className="no-eventos">No hay eventos registrados.</p>}
       </div>
     </div>
   );

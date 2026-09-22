@@ -6,12 +6,6 @@ export interface Filtros {
   fechaFin:string;
 }
 
-export interface Evento {
-  titulo: string;
-  fecha_hora: string;
-  cantidad_inscriptos: number;
-}
-
 export interface GrupoReporte {
   llave_agrupacion: string;
   cantidad_de_eventos: number;
@@ -30,14 +24,20 @@ export interface GraphQLResponse {
 export interface UsuarioCurador {
   id: number;
   nombre: string;
+  email?: string; 
+  rol?: string;   
 }
 
 export interface Evento {
   id?: number;
   titulo: string;
-  descripcion: string;
-  fecha_hora: string;
-  duracion: number;
-  cupo_maximo: number;
-  curador_responsable: UsuarioCurador;
+  descripcion?: string;
+  duracion?: number;
+  fechaHora?: string;
+  cupoMax?: number;
+  curador?: UsuarioCurador;
+  fecha_hora?: string;
+  cupo_maximo?: number;
+  curador_responsable?: UsuarioCurador;
+  cantidad_inscriptos?: number;
 }
