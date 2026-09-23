@@ -41,4 +41,5 @@ export interface Evento {
   cupo_maximo?: number;
   curador_responsable?: UsuarioCurador;
   cantidad_inscriptos?: number;
+  usuarios?: { id: number; nombre?: string }[];
 }

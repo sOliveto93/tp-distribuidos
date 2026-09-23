@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Reportes from './Reportes';
 import Eventos from './Eventos';
 import CrearEvento from './CrearEvento';
+import EditarEvento from './EditarEvento';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Reportes />} />
           <Route path="/eventos" element={<Eventos />} />
           <Route path="/crear-evento" element={<CrearEvento />} />
+          <Route path="/editar-evento/:id" element={<EditarEvento />} />
         </Routes>
       </main>
     </BrowserRouter>

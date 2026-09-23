@@ -63,3 +63,36 @@
   color: #888;
   padding: 40px;
 }
+
+.evento-acciones {
+  margin-top: 20px;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.acciones-publicas, .acciones-privadas {
+  display: flex;
+  gap: 10px;
+}
+
+.evento-acciones button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.evento-acciones button:hover {
+  opacity: 0.8;
+}
+
+.btn-inscribir { background-color: #28a745; color: white; }
+.btn-desinscribir { background-color: #6c757d; color: white; }
+.btn-editar { background-color: #ffc107; color: black; }
+.btn-eliminar { background-color: #dc3545; color: white; }
