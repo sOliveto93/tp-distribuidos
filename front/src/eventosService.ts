@@ -4,10 +4,23 @@ const API_URL = 'http://localhost:8080/api/eventos';
 const TOKEN = 'TOKEN';
 
 //Obtener Eventos
-export const getEventos = async (): Promise<Evento[]> => {
-  const response = await fetch(API_URL, {
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+export const getEventos = async (filtros?: { fecha?: string; tipo?: string; idCurador?: number }): Promise<Evento[]> => {
+  let url = API_URL;
+  
+  if (filtros) {
+    const params = new URLSearchParams();
+    if (filtros.fecha) params.append('fecha', filtros.fecha);
+    if (filtros.tipo) params.append('tipo', filtros.tipo);
+    if (filtros.idCurador) params.append('idCurador', filtros.idCurador.toString());
+    
+    const queryString = params.toString();
+    if (queryString) url += `?${queryString}`;
+  }
+
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${TOKEN}` } 
   });
+  
   if (!response.ok) throw new Error('Error al obtener los eventos');
   return response.json();
 };
