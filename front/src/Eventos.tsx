@@ -1,34 +1,101 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Evento } from './types';
-import { getEventos, eliminarEvento, inscribirseEvento, desinscribirseEvento } from './eventosService';
+import type { Evento, FiltroFavorito } from './types';
+import { 
+  getEventos, eliminarEvento, inscribirseEvento, desinscribirseEvento,
+  getFiltrosFavoritos, guardarFiltroFavorito, eliminarFiltroFavorito
+} from './eventosService';
 import './Eventos.css';
 
 export default function Eventos() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [filtros, setFiltros] = useState({ fecha: '', tipo: '', idCurador: '' });
+  const [favoritos, setFavoritos] = useState<FiltroFavorito[]>([]);
+  const [nombreFavorito, setNombreFavorito] = useState('');
+
   const navigate = useNavigate();
 
-
-  const rolUsuarioActual: string = 'VISITANTE';
-  const idUsuarioActual = 7;
+  const rolUsuarioActual: string = 'CURADOR';
+  const idUsuarioActual = 6;
   const tienePermisosAdmin = rolUsuarioActual === 'ADMINISTRADOR' || rolUsuarioActual === 'CURADOR';
 
-  const aplicarFiltros = () => {
+  const aplicarFiltros = (filtrosEspecificos?: { fecha: string; tipo: string; idCurador: string }) => {
+    const filtrosAUso = filtrosEspecificos || filtros; 
+    
     const filtrosProcesados = {
-      fecha: filtros.fecha || undefined,
-      tipo: filtros.tipo || undefined,
-      idCurador: filtros.idCurador ? Number(filtros.idCurador) : undefined
+      fecha: filtrosAUso.fecha || undefined,
+      tipo: filtrosAUso.tipo || undefined,
+      idCurador: filtrosAUso.idCurador ? Number(filtrosAUso.idCurador) : undefined
     };
     getEventos(filtrosProcesados).then(setEventos).catch(console.error);
   };
 
+  const cargarFavoritos = () => {
+    getFiltrosFavoritos(idUsuarioActual).then(setFavoritos).catch(console.error);
+  };
+
   useEffect(() => {
     aplicarFiltros();
+    cargarFavoritos();
   }, []);
 
   const handleFiltroChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFiltros({ ...filtros, [e.target.name]: e.target.value });
+  };
+
+  const handleAplicarFavorito = (fav: FiltroFavorito) => {
+    try {
+      const config = fav.configuracionFiltros || {};
+      
+      const nuevosFiltros = {
+        fecha: config.fecha || '',
+        tipo: config.tipo || '',
+        idCurador: config.idCurador ? String(config.idCurador) : ''
+      };
+      
+      setFiltros(nuevosFiltros);
+      aplicarFiltros(nuevosFiltros);
+    } catch (e) {
+      console.error("Error interno:", e);
+      alert('Uy, parece que este filtro se guardó mal o está dañado. Te recomiendo borrarlo (X) y crearlo de nuevo.');
+    }
+  };
+
+  const handleGuardarFavorito = async () => {
+    if (!nombreFavorito.trim()) {
+      alert('Ingresá un nombre para guardar el filtro');
+      return;
+    }
+    try {
+      await guardarFiltroFavorito(idUsuarioActual, {
+        nombre: nombreFavorito,
+        configuracionFiltros: {
+          fecha: filtros.fecha,
+          tipo: filtros.tipo,
+          idCurador: filtros.idCurador
+        },
+        usuario: { id: idUsuarioActual } 
+      });
+      
+      alert('Filtro guardado con éxito');
+      setNombreFavorito('');
+      cargarFavoritos();
+    } catch (error) {
+      console.error(error);
+      alert('Error al guardar el filtro favorito.');
+    }
+  };
+
+  const handleEliminarFavorito = async (idFiltro: number) => {
+    if (window.confirm('¿Eliminar este filtro favorito?')) {
+      try {
+        await eliminarFiltroFavorito(idUsuarioActual, idFiltro);
+        cargarFavoritos();
+      } catch (error) {
+        console.error(error);
+        alert('Error al eliminar el filtro');
+      }
+    }
   };
 
   const formatearFecha = (fecha: string | number[] | undefined) => {
@@ -108,23 +175,20 @@ const handleInscribirse = async (idEvento: number) => {
       <h2>Catálogo de Eventos</h2>
 
       {/* Barra de Filtros */}
-      <div className="filtros-container" style={{ 
-        display: 'flex', gap: '15px', marginBottom: '20px', padding: '15px', 
-        backgroundColor: '#1e1e1e', borderRadius: '8px', border: '1px solid #333' 
-      }}>
+      <div className="filtros-container">
         <input 
           type="date" 
           name="fecha" 
           value={filtros.fecha} 
           onChange={handleFiltroChange} 
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2a2a2a', color: 'white' }}
+          className="filtro-input"
         />
         
         <select 
           name="tipo" 
           value={filtros.tipo} 
           onChange={handleFiltroChange}
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2a2a2a', color: 'white' }}
+          className="filtro-input"
         >
           <option value="">Todos los tipos</option>
           <option value="VISITA_GUIADA">Visita Guiada</option>
@@ -138,22 +202,53 @@ const handleInscribirse = async (idEvento: number) => {
           placeholder="ID del Curador" 
           value={filtros.idCurador} 
           onChange={handleFiltroChange}
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2a2a2a', color: 'white' }}
+          className="filtro-input"
         />
 
-        <button 
-          onClick={aplicarFiltros} 
-          style={{ padding: '8px 15px', backgroundColor: '#4da6ff', color: '#111', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}
-        >
+        <button onClick={() => aplicarFiltros()} className="btn-filtrar">
           Filtrar
         </button>
         
         <button 
           onClick={() => { setFiltros({ fecha: '', tipo: '', idCurador: '' }); getEventos().then(setEventos); }} 
-          style={{ padding: '8px 15px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}
+          className="btn-limpiar"
         >
           Limpiar
         </button>
+      </div>
+
+      {/* Sección de Filtros Favoritos */}
+      <div className="favoritos-container">
+        <div className="favoritos-input-group">
+          <input 
+            type="text" 
+            placeholder="Nombre para guardar filtro actual" 
+            value={nombreFavorito} 
+            onChange={(e) => setNombreFavorito(e.target.value)}
+            className="favorito-input"
+          />
+          <button onClick={handleGuardarFavorito} className="btn-guardar-favorito">
+            Guardar Favorito
+          </button>
+        </div>
+
+        {favoritos.length > 0 && (
+          <div>
+            <h4 className="favoritos-titulo">Mis Filtros Guardados:</h4>
+            <div className="favoritos-lista">
+              {favoritos.map(fav => (
+                <div key={fav.id} className="favorito-item">
+                  <span className="favorito-nombre" onClick={() => handleAplicarFavorito(fav)}>
+                    {fav.nombre}
+                  </span>
+                  <button onClick={() => fav.id && handleEliminarFavorito(fav.id)} className="btn-eliminar-favorito">
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="eventos-grid">

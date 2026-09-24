@@ -43,3 +43,14 @@ export interface Evento {
   cantidad_inscriptos?: number;
   usuarios?: { id: number; nombre?: string }[];
 }
+
+export interface FiltroFavorito {
+  id?: number;
+  nombre: string;
+  descripcion?: string;
+  configuracionFiltros?: { fecha?: string; tipo?: string; idCurador?: string | number };
+  fecha?: string;
+  tipo?: string;
+  idCurador?: number | null;
+  usuario?: { id: number };
+}

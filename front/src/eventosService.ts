@@ -1,6 +1,8 @@
-import type { Evento } from './types';
+import type { Evento, FiltroFavorito } from './types';
 
-const API_URL = 'http://localhost:8080/api/eventos';
+const BASE_URL = import.meta.env.VITE_URL_BASE || 'http://localhost:8080/api';
+
+const API_URL = `${BASE_URL}/eventos`;
 const TOKEN = 'TOKEN';
 
 //Obtener Eventos
@@ -87,4 +89,36 @@ export const actualizarEvento = async (id: string, eventoData: Partial<Evento>):
   });
   if (!response.ok) throw new Error('Error al actualizar el evento');
   return response.json();
+};
+
+
+// Obtener los filtros guardados de un usuario
+export const getFiltrosFavoritos = async (idUsuario: number): Promise<FiltroFavorito[]> => {
+  const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros`, {
+    headers: { 'Authorization': `Bearer ${TOKEN}` }
+  });
+  if (!response.ok) throw new Error('Error al obtener filtros favoritos');
+  return response.json();
+};
+
+// Guardar un nuevo filtro favorito
+export const guardarFiltroFavorito = async (idUsuario: number, filtroData: FiltroFavorito): Promise<void> => {
+  const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros`, {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${TOKEN}` 
+    },
+    body: JSON.stringify(filtroData)
+  });
+  if (!response.ok) throw new Error('Error al guardar el filtro favorito');
+};
+
+// Eliminar un filtro favorito
+export const eliminarFiltroFavorito = async (idUsuario: number, idFiltro: number): Promise<void> => {
+  const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros/${idFiltro}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${TOKEN}` }
+  });
+  if (!response.ok) throw new Error('Error al eliminar el filtro favorito');
 };

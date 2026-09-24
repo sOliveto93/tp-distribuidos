@@ -96,3 +96,139 @@
 .btn-desinscribir { background-color: #6c757d; color: white; }
 .btn-editar { background-color: #ffc107; color: black; }
 .btn-eliminar { background-color: #dc3545; color: white; }
+
+/* =========================================
+   Sección de Filtros y Búsqueda
+   ========================================= */
+
+.filtros-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.filtro-input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2a2a2a;
+  color: white;
+}
+
+button.btn-filtrar {
+  padding: 8px 15px;
+  background-color: #4da6ff;
+  color: #111;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button.btn-limpiar {
+  padding: 8px 15px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-filtrar:hover, .btn-limpiar:hover {
+  opacity: 0.8;
+}
+
+/* =========================================
+   Sección de Filtros Favoritos
+   ========================================= */
+
+.favoritos-container {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.favoritos-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.favorito-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2a2a2a;
+  color: white;
+}
+
+.btn-guardar-favorito {
+  padding: 8px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-guardar-favorito:hover {
+  opacity: 0.8;
+}
+
+.favoritos-titulo {
+  margin: 0 0 10px 0;
+  color: #aaa;
+  font-weight: normal;
+}
+
+.favoritos-lista {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.favorito-item {
+  display: flex;
+  align-items: center;
+  background-color: #2a2a2a;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid #444;
+}
+
+.favorito-nombre {
+  margin-right: 10px;
+  cursor: pointer;
+  color: #4da6ff;
+  transition: color 0.2s;
+}
+
+.favorito-nombre:hover {
+  color: #80c1ff;
+  text-decoration: underline;
+}
+
+.btn-eliminar-favorito {
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0 5px;
+}
+
+.btn-eliminar-favorito:hover {
+  color: #ff6b7a;
+}
