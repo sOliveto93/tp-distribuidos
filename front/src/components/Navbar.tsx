@@ -1,5 +1,7 @@
 
 import { Link, useNavigate } from 'react-router-dom';
+import './Navbar.css'
+
 interface NavbarProps {
   rol: string | null;
   setRol: (rol: string | null) => void;
@@ -16,20 +18,24 @@ export default function Navbar({ rol, setRol }: NavbarProps) {
   };
 
   return (
-    <nav>
-      <Link to="/obras">Obras</Link>
-      <Link to="/eventos">Eventos</Link>
-      
-      {(rol === 'CURADOR' || rol === 'ADMINISTRADOR') && (
-        <>
-          <Link to="/reportes">Reportes</Link>
-          <Link to="/crear-evento" style={{ color: '#4da6ff', fontWeight: 'bold' }}>
-            + Crear Evento
-          </Link>
-        </>
-      )}
+    <nav className="navbar-container">
+      <div className="navbar-links">
+        <Link to="/obras" className="nav-link">Obras</Link>
+        <Link to="/eventos" className="nav-link">Eventos</Link>
+        
+        {(rol === 'CURADOR' || rol === 'ADMINISTRADOR') && (
+          <>
+            <Link to="/reportes" className="nav-link">Reportes</Link>
+            <Link to="/crear-evento" className="nav-link nav-action">
+              + Crear Evento
+            </Link>
+          </>
+        )}
+      </div>
 
-      <button onClick={cerrarSesion}>Salir</button>
+      <button onClick={cerrarSesion} className="nav-logout-btn">
+        Salir
+      </button>
     </nav>
   );
 }
