@@ -31,7 +31,7 @@ export const traerReporte = async (filtros: Filtros): Promise<GrupoReporte[]> =>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     },
     body: JSON.stringify({
       query: QUERY_REPORTE,
@@ -53,7 +53,7 @@ export const traerTiposEvento = async (): Promise<string[]> => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      //'Authorization': `Bearer ${localStorage.getItem('token')}`
     },
     body: JSON.stringify({
       query: QUERY_TIPOS

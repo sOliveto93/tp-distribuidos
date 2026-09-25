@@ -1,35 +1,54 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Login from './api/Login';
 import Reportes from './Reportes';
 import Eventos from './Eventos';
 import CrearEvento from './CrearEvento';
 import EditarEvento from './EditarEvento';
 
+export default function App() {
+  const [rol, setRol] = useState(localStorage.getItem('rol'));
+  const iniciarSesion = (nuevoRol: string) => {
+    localStorage.setItem('rol', nuevoRol);
+    setRol(nuevoRol);
+  };
 
-function App() {
-  const rolUsuarioActual: string = 'CURADOR';
-  const tienePermisos = rolUsuarioActual === 'ADMINISTRADOR' || rolUsuarioActual === 'CURADOR';
   return (
     <BrowserRouter>
-      <nav style={{ display: 'flex', justifyContent: 'center', gap: '20px', padding: '1rem', background: '#333', 
-        marginBottom: '20px' 
-      }}>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Reportes</Link>
-        <Link to="/eventos" style={{ color: 'white', textDecoration: 'none' }}>Eventos</Link>
-        {tienePermisos && (
-          <Link to="/crear-evento" style={{ color: '#4da6ff', fontWeight: 'bold', textDecoration: 'none' }}>+ Crear Evento</Link>
-        )}
-      </nav>
+      <Navbar rol={rol} setRol={setRol} />
       
-      <main style={{ padding: '20px' }}>
         <Routes>
-          <Route path="/" element={<Reportes />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login onLogin={iniciarSesion} />} />
+          
           <Route path="/eventos" element={<Eventos />} />
-          <Route path="/crear-evento" element={<CrearEvento />} />
-          <Route path="/editar-evento/:id" element={<EditarEvento />} />
+
+          <Route 
+            path="/reportes" 
+            element={
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR') 
+                ? <Reportes /> 
+                : <Navigate to="/eventos" replace />
+            } 
+          />
+          <Route 
+            path="/crear-evento" 
+            element={
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR') 
+                ? <CrearEvento /> 
+                : <Navigate to="/eventos" replace />
+            } 
+          />
+          <Route 
+            path="/editar-evento/:id" 
+            element={
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR') 
+                ? <EditarEvento /> 
+                : <Navigate to="/eventos" replace />
+            } 
+          />
         </Routes>
-      </main>
     </BrowserRouter>
   );
 }
-
-export default App;

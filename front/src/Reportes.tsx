@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './Reportes.css';
 import type{ Filtros, GrupoReporte } from './types';
 import { traerReporte, traerTiposEvento } from './reportesService';
+//import {login, me, type Respuestatoken} from './api/login.tsx';
 
 
 export default function PanelReportes() {
@@ -42,9 +43,24 @@ export default function PanelReportes() {
       }
     }
   };
+/*
+  const handleLogin=async()=>{
+    try {
+      const data: Respuestatoken=await login();
+      console.log(data);
+      localStorage.setItem("token",data.token);
+      const meLogin=await me();
+      console.log(meLogin);
+    } catch(error){
+      if (error instanceof Error) {
+        console.error("Error al traer el reporte:", error.message);
+      } else {
+        console.error("Error desconocido:", error);
+      }
+  }
+  };
 
-
-
+*/
   return (
     <div className="panel-container">
       <h2>Reporte de estadisticas de eventos</h2>
