@@ -19,13 +19,18 @@ export default function CrearEvento() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const idUsuarioActual = Number(localStorage.getItem('id')) || 0;
+
       const dataAEnviar: Partial<Evento> = {
         ...formData,
         fechaHora: new Date(formData.fechaHora).toISOString(),
-        curador: { id: 2, nombre: 'Curador Temporal' } 
+        curador: { 
+          id: idUsuarioActual, 
+          nombre: 'Curador' 
+        } 
       };
       
       await crearEvento(dataAEnviar);

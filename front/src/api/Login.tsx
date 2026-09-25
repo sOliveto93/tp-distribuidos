@@ -21,8 +21,8 @@ export default function Login({onLogin}:LoginProps) {
       localStorage.setItem('token', dataLogin.token);
 
       
-      const perfil = await me() as {rol:string};
-
+      const perfil = await me() as {id: number; rol:string};
+      localStorage.setItem('id', perfil.id.toString());
       onLogin(perfil.rol);
     
         navigate('/eventos');

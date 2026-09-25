@@ -21,7 +21,12 @@ export default function Navbar({ rol, setRol }: NavbarProps) {
       <Link to="/eventos">Eventos</Link>
       
       {(rol === 'CURADOR' || rol === 'ADMINISTRADOR') && (
-        <Link to="/reportes">Reportes</Link>
+        <>
+          <Link to="/reportes">Reportes</Link>
+          <Link to="/crear-evento" style={{ color: '#4da6ff', fontWeight: 'bold' }}>
+            + Crear Evento
+          </Link>
+        </>
       )}
 
       <button onClick={cerrarSesion}>Salir</button>

@@ -15,10 +15,10 @@ export default function Eventos() {
 
   const navigate = useNavigate();
 
-  const rolUsuarioActual: string = 'CURADOR';
-  const idUsuarioActual = 6;
+  const rolUsuarioActual = localStorage.getItem('rol') || '';
+  const idUsuarioActual = Number(localStorage.getItem('id')) || 0;
   const tienePermisosAdmin = rolUsuarioActual === 'ADMINISTRADOR' || rolUsuarioActual === 'CURADOR';
-
+  
   const aplicarFiltros = (filtrosEspecificos?: { fecha: string; tipo: string; idCurador: string }) => {
     const filtrosAUso = filtrosEspecificos || filtros; 
     
@@ -45,8 +45,10 @@ export default function Eventos() {
 
   const handleAplicarFavorito = (fav: FiltroFavorito) => {
     try {
-      const config = fav.configuracionFiltros || {};
-      
+      const config = typeof fav.configuracionFiltros === 'string' 
+        ? JSON.parse(fav.configuracionFiltros) 
+        : (fav.configuracionFiltros || {});
+        
       const nuevosFiltros = {
         fecha: config.fecha || '',
         tipo: config.tipo || '',

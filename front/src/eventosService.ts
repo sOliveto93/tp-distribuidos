@@ -1,28 +1,27 @@
 import type { Evento, FiltroFavorito } from './types';
 
-const BASE_URL = import.meta.env.VITE_URL_BASE || 'http://localhost:8080/api';
-
+const BASE_URL ='http://localhost:8080/api';
 const API_URL = `${BASE_URL}/eventos`;
-const TOKEN = 'TOKEN';
+const getToken = () => localStorage.getItem('token') || '';
 
 //Obtener Eventos
 export const getEventos = async (filtros?: { fecha?: string; tipo?: string; idCurador?: number }): Promise<Evento[]> => {
   let url = API_URL;
-  
+
   if (filtros) {
     const params = new URLSearchParams();
     if (filtros.fecha) params.append('fecha', filtros.fecha);
     if (filtros.tipo) params.append('tipo', filtros.tipo);
     if (filtros.idCurador) params.append('idCurador', filtros.idCurador.toString());
-    
+
     const queryString = params.toString();
     if (queryString) url += `?${queryString}`;
   }
 
   const response = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${TOKEN}` } 
+    headers: { 'Authorization': `Bearer ${getToken()}` } 
   });
-  
+
   if (!response.ok) throw new Error('Error al obtener los eventos');
   return response.json();
 };
@@ -33,7 +32,7 @@ export const crearEvento = async (eventoData: Partial<Evento>): Promise<Evento> 
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${TOKEN}` 
+      'Authorization': `Bearer ${getToken()}` 
     },
     body: JSON.stringify(eventoData)
   });
@@ -45,7 +44,7 @@ export const crearEvento = async (eventoData: Partial<Evento>): Promise<Evento> 
 export const eliminarEvento = async (id: number): Promise<void> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
   if (!response.ok) throw new Error('Error al eliminar el evento');
 };
@@ -54,7 +53,7 @@ export const eliminarEvento = async (id: number): Promise<void> => {
 export const inscribirseEvento = async (idEvento: number, idUsuario: number): Promise<void> => {
   const response = await fetch(`${API_URL}/${idEvento}/inscribir/${idUsuario}`, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
   if (!response.ok) throw new Error('Error al inscribirse');
 };
@@ -63,7 +62,7 @@ export const inscribirseEvento = async (idEvento: number, idUsuario: number): Pr
 export const desinscribirseEvento = async (idEvento: number, idUsuario: number): Promise<void> => {
   const response = await fetch(`${API_URL}/${idEvento}/desinscribir/${idUsuario}`, {
     method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
   if (!response.ok) throw new Error('Error al cancelar inscripción');
 };
@@ -71,7 +70,7 @@ export const desinscribirseEvento = async (idEvento: number, idUsuario: number):
 // Traer un evento por ID para llenar el formulario
 export const getEventoById = async (id: string): Promise<Evento> => {
   const response = await fetch(`${API_URL}/${id}`, {
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
   if (!response.ok) throw new Error('Error al obtener el evento');
   return response.json();
@@ -83,7 +82,7 @@ export const actualizarEvento = async (id: string, eventoData: Partial<Evento>):
     method: 'PUT',
     headers: { 
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${TOKEN}` 
+      'Authorization': `Bearer ${getToken()}` 
     },
     body: JSON.stringify(eventoData)
   });
@@ -91,11 +90,10 @@ export const actualizarEvento = async (id: string, eventoData: Partial<Evento>):
   return response.json();
 };
 
-
 // Obtener los filtros guardados de un usuario
 export const getFiltrosFavoritos = async (idUsuario: number): Promise<FiltroFavorito[]> => {
   const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros`, {
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
   if (!response.ok) throw new Error('Error al obtener filtros favoritos');
   return response.json();
@@ -107,7 +105,7 @@ export const guardarFiltroFavorito = async (idUsuario: number, filtroData: Filtr
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${TOKEN}` 
+      'Authorization': `Bearer ${getToken()}` 
     },
     body: JSON.stringify(filtroData)
   });
@@ -118,7 +116,7 @@ export const guardarFiltroFavorito = async (idUsuario: number, filtroData: Filtr
 export const eliminarFiltroFavorito = async (idUsuario: number, idFiltro: number): Promise<void> => {
   const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros/${idFiltro}`, {
     method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${TOKEN}` }
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
   if (!response.ok) throw new Error('Error al eliminar el filtro favorito');
 };

@@ -46,10 +46,15 @@ export default function EditarEvento() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const idUsuarioActual = Number(localStorage.getItem('id')) || 0;
+
       const dataAEnviar: Partial<Evento> = {
         ...formData,
         fechaHora: new Date(formData.fechaHora).toISOString(),
-        curador: { id: 2, nombre: 'Curador Temporal' } 
+        curador: { 
+          id: idUsuarioActual, 
+          nombre: 'Curador'
+        } 
       };
       
       if (id) await actualizarEvento(id, dataAEnviar);
