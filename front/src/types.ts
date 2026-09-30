@@ -45,13 +45,13 @@ export interface Usuario {
     nombre: string;
 }
 
-export interface GrupoReporte {
+/*export interface GrupoReporte {
   llave_agrupacion: string;
   cantidad_de_eventos: number;
   total_inscriptos_acumulados: number;
   promedio_de_asistencia: number;
   eventos: Evento[];
-}
+}*/
 
 export interface GraphQLResponse {
   data?: {
@@ -92,4 +92,28 @@ export interface FiltroFavorito {
   tipo?: string;
   idCurador?: number | null;
   usuario?: { id: number };
+}
+
+export interface ReporteExcelRequest {
+    fecha: string;
+    titulo: string;
+    curador: string;
+    inscriptos: number;
+    cupoMax: number;
+    tipo: string;
+}
+export interface EventoReporte {
+  titulo: string;
+  fecha_hora: string;
+  cantidad_inscriptos: number;
+  curador: string;
+  cupo_max: number;
+  tipo: string;
+}
+export interface GrupoReporte {
+  llave_agrupacion: string;
+  cantidad_de_eventos: number;
+  total_inscriptos_acumulados: number;
+  promedio_de_asistencia: number;
+  eventos: EventoReporte[];
 }

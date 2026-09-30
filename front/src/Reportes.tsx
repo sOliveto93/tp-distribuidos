@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import './Reportes.css';
-import type{ Filtros, GrupoReporte } from './types';
+import type { Filtros, GrupoReporte, ReporteExcelRequest } from './types';
 import { traerReporte, traerTiposEvento } from './reportesService';
 //import {login, me, type Respuestatoken} from './api/login.tsx';
+
+const URL_BASE = import.meta.env.VITE_URL_BASE;
+const PORT_REST = import.meta.env.VITE_PORT_REST;
 
 
 export default function PanelReportes() {
@@ -11,8 +14,8 @@ export default function PanelReportes() {
     agruparPor: 'MES',
     estado: 'TODOS',
     tipo: '',
-    fechaInicio:'',
-    fechaFin:''
+    fechaInicio: '',
+    fechaFin: ''
   });
   const [tiposDisponibles, setTiposDisponibles] = useState<string[]>([]);
   useEffect(() => {
@@ -29,8 +32,9 @@ export default function PanelReportes() {
   }, []);
 
   const [busquedaRealizada, setBusquedaRealizada] = useState(false);
-  
+
   const generarReporte = async () => {
+
     try {
       const datos = await traerReporte(filtros);
       setReporte(datos);
@@ -43,50 +47,92 @@ export default function PanelReportes() {
       }
     }
   };
-/*
-  const handleLogin=async()=>{
-    try {
-      const data: Respuestatoken=await login();
-      console.log(data);
-      localStorage.setItem("token",data.token);
-      const meLogin=await me();
-      console.log(meLogin);
-    } catch(error){
-      if (error instanceof Error) {
-        console.error("Error al traer el reporte:", error.message);
-      } else {
-        console.error("Error desconocido:", error);
-      }
-  }
-  };
 
-*/
+  const exportarReporteExcel = async () => {
+
+
+    const datosExcel: ReporteExcelRequest[] = reporte.flatMap((grupo) =>
+      grupo.eventos.map((ev) => ({
+        fecha: ev.fecha_hora ?? "",
+        titulo: ev.titulo,
+        curador: ev.curador ?? "",
+        inscriptos: ev.cantidad_inscriptos ?? 0,
+        cupoMax: ev.cupo_max ?? 0,
+        tipo: ev.tipo ?? ""
+      }))
+    );
+    const respuesta = await fetch(`${URL_BASE}${PORT_REST}/api/reportes/exportar`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(datosExcel)
+
+    });
+
+    if (!respuesta.ok) {
+      console.error("Error al generar el Excel");
+      return;
+    }
+
+    const blob = await respuesta.blob();
+
+    const url = URL.createObjectURL(blob);
+
+    const enlace = document.createElement("a");
+    enlace.href = url;
+    enlace.download = "reporte.xlsx";
+    enlace.click();
+
+    URL.revokeObjectURL(url);
+
+  }
+
+  /*
+    const handleLogin=async()=>{
+      try {
+        const data: Respuestatoken=await login();
+        console.log(data);
+        localStorage.setItem("token",data.token);
+        const meLogin=await me();
+        console.log(meLogin);
+      } catch(error){
+        if (error instanceof Error) {
+          console.error("Error al traer el reporte:", error.message);
+        } else {
+          console.error("Error desconocido:", error);
+        }
+    }
+    };
+  
+  */
   return (
     <div className="panel-container">
       <h2>Reporte de estadisticas de eventos</h2>
-      
+
       <div className="filtros-container">
         <div>
           <label>Desde: </label>
-          <input 
-            type="date" 
-            value={filtros.fechaInicio} 
-            onChange={(e) => setFiltros({...filtros, fechaInicio: e.target.value})}
+          <input
+            type="date"
+            value={filtros.fechaInicio}
+            onChange={(e) => setFiltros({ ...filtros, fechaInicio: e.target.value })}
           />
         </div>
 
         <div>
           <label>Hasta: </label>
-          <input 
-            type="date" 
-            value={filtros.fechaFin} 
-            onChange={(e) => setFiltros({...filtros, fechaFin: e.target.value})}
+          <input
+            type="date"
+            value={filtros.fechaFin}
+            onChange={(e) => setFiltros({ ...filtros, fechaFin: e.target.value })}
           />
         </div>
         <div>
-          <select 
-            value={filtros.tipo} 
-            onChange={(e) => setFiltros({...filtros, tipo: e.target.value})}
+          <select
+            value={filtros.tipo}
+            onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}
           >
             <option value="">Todos los tipos</option>
             {tiposDisponibles.map((tipoBD) => (
@@ -96,18 +142,18 @@ export default function PanelReportes() {
             ))}
           </select>
         </div>
-        <select 
-          value={filtros.agruparPor} 
-          onChange={(e) => setFiltros({...filtros, agruparPor: e.target.value as Filtros['agruparPor']})}
+        <select
+          value={filtros.agruparPor}
+          onChange={(e) => setFiltros({ ...filtros, agruparPor: e.target.value as Filtros['agruparPor'] })}
         >
           <option value="MES">Agrupar por Mes</option>
           <option value="TIPO">Agrupar por Tipo</option>
           <option value="AMBOS">Mes y Tipo</option>
         </select>
 
-        <select 
-          value={filtros.estado} 
-          onChange={(e) => setFiltros({...filtros, estado: e.target.value as Filtros['estado']})}
+        <select
+          value={filtros.estado}
+          onChange={(e) => setFiltros({ ...filtros, estado: e.target.value as Filtros['estado'] })}
         >
           <option value="TODOS">Cualquier estado</option>
           <option value="PASADOS">Ya ocurrieron</option>
@@ -115,37 +161,38 @@ export default function PanelReportes() {
         </select>
 
         <button onClick={generarReporte}>Generar Reporte</button>
+        <button onClick={exportarReporteExcel}>Generar Excel</button>
       </div>
 
-      {busquedaRealizada && reporte.length == 0 ? <div className="grupo-card">No se encuentran resultados</div>:<div>
+      {busquedaRealizada && reporte.length == 0 ? <div className="grupo-card">No se encuentran resultados</div> : <div>
         {reporte.map((grupo) => (
           <div key={grupo.llave_agrupacion} className="grupo-card">
             <h3>{grupo.llave_agrupacion}</h3>
             <p><strong>Total Eventos:</strong> {grupo.cantidad_de_eventos}</p>
             <p><strong>Total Inscriptos:</strong> {grupo.total_inscriptos_acumulados}</p>
             <p><strong>Promedio Asistencia:</strong> {grupo.promedio_de_asistencia.toFixed(2)}</p>
-            
+
             <h4>Detalle de eventos:</h4>
             <ul>
               {grupo.eventos.map((ev, index) => {
-                  const fechaObj = new Date(Number(ev.fecha_hora));
-                  const fechaFormat= fechaObj.toLocaleString('es-AR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  });
-                  return(
-                 <li key={`${ev.titulo}-${index}`}>
-                  {fechaFormat} - {ev.titulo} - {ev.cantidad_inscriptos} inscriptos
-                </li>
-              );
+                const fechaObj = new Date(Number(ev.fecha_hora));
+                const fechaFormat = fechaObj.toLocaleString('es-AR', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                });
+                return (
+                  <li key={`${ev.titulo}-${index}`}>
+                    {fechaFormat} - {ev.titulo} - {ev.cantidad_inscriptos} inscriptos
+                  </li>
+                );
               })}
-               </ul>
+            </ul>
           </div>
-        ))}      
-      </div> } 
+        ))}
+      </div>}
     </div>
   );
 }
