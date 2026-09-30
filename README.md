@@ -174,7 +174,25 @@ ADMINISTRADOR
 ```
 Los usuarios registrados mediante /api/auth/register reciben inicialmente el rol VISITANTE.
 
+### Usuarios de prueba
+```text 
+admin@admin.com
+admin
 
+curador@curador.com
+curador
+
+------- visitantes  ---------- 
+
+martin@gmail.com 
+martin
+
+ana@gmail.com
+ana
+
+carlos@carlos.com
+carlos
+```
 ## Desarrollo
 
 Durante el desarrollo se recomienda ejecutar MySQL mediante Docker y los demás servicios localmente:

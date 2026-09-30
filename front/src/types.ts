@@ -6,6 +6,45 @@ export interface Filtros {
   fechaFin:string;
 }
 
+export interface FiltrosObra  {
+        palabraClave?: string
+        epoca?: string
+        tecnica?: string
+        ubicacion?: string
+        disponible?: boolean
+    
+};
+export interface Obra {
+    id: string;
+    titulo: string;
+    descripcion: string;
+    anio_creacion: string;
+    epoca: string;
+    tecnica: string;
+    ubicacion: string;
+    disponible: boolean;
+    imagen_url: string;
+    dimensiones: string;
+    artista: Artista;
+    comentarios: Comentario[];
+}
+
+export interface Artista {
+    nombre: string;
+    biografia: string;
+}
+
+export interface Comentario {
+    id: string;
+    fecha: string;
+    texto: string;
+    usuario: Usuario;
+}
+
+export interface Usuario {
+    nombre: string;
+}
+
 export interface GrupoReporte {
   llave_agrupacion: string;
   cantidad_de_eventos: number;

@@ -4,8 +4,10 @@ import Navbar from './components/Navbar';
 import Login from './api/Login';
 import Reportes from './Reportes';
 import Eventos from './Eventos';
+import Obras from './Obras';
 import CrearEvento from './CrearEvento';
 import EditarEvento from './EditarEvento';
+import Me from './Me';
 
 export default function App() {
   const [rol, setRol] = useState(localStorage.getItem('rol'));
@@ -21,9 +23,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login onLogin={iniciarSesion} />} />
-          
+          <Route path="/me" element={<Me/>} />
           <Route path="/eventos" element={<Eventos />} />
-
+          <Route path="/obras" element={<Obras/>}/>
           <Route 
             path="/reportes" 
             element={

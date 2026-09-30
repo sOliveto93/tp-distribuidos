@@ -22,7 +22,7 @@ export default function Navbar({ rol, setRol }: NavbarProps) {
       <div className="navbar-links">
         <Link to="/obras" className="nav-link">Obras</Link>
         <Link to="/eventos" className="nav-link">Eventos</Link>
-        
+        <Link to="/me" className="nav-link">Me</Link>
         {(rol === 'CURADOR' || rol === 'ADMINISTRADOR') && (
           <>
             <Link to="/reportes" className="nav-link">Reportes</Link>

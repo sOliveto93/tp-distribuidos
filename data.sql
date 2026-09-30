@@ -37,7 +37,7 @@ VALUES
  'Óleo sobre lienzo',
  'Sala 1',
  1,
- 'https://example.com/noche-estrellada.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl5EaH3PGcfo9eF3gjUQ6Q4agRNjyeuixHYHu4kUWuWw&s',
  '73.7 x 92.1 cm',
  1),
 
@@ -48,7 +48,7 @@ VALUES
  'Óleo sobre tabla',
  'Sala 2',
  1,
- 'https://example.com/gioconda.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfajaRZp9fiq6euhYhNqfj1WI_89oxSJJLLEbKTRhFfw&s=10',
  '77 x 53 cm',
  2),
 
@@ -59,7 +59,7 @@ VALUES
  'Temple y óleo sobre yeso',
  'Sala 2',
  0,
- 'https://example.com/ultima-cena.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRneAPpHlQaaXojfO2DrubEnC2GrfM6Ccwpwo6w7Cq1rA&s=10',
  '460 x 880 cm',
  2),
 
@@ -70,7 +70,7 @@ VALUES
  'Óleo sobre lienzo',
  'Sala 3',
  1,
- 'https://example.com/guernica.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7Mkr1cp1e-SPDrscBwiZOydL7M1BR5JVO4QAqlcBZow&s',
  '349 x 777 cm',
  3),
 
@@ -81,7 +81,7 @@ VALUES
  'Óleo sobre lienzo',
  'Sala 4',
  1,
- 'https://example.com/impresion-sol.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyeDFJWCJX4HrnehxcVETjWxid16FBU30Te-HuUcpJVg&s=10',
  '48 x 63 cm',
  4),
 
@@ -92,7 +92,7 @@ VALUES
  'Óleo sobre lienzo',
  'Sala 1',
  1,
- 'https://example.com/girasoles.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzqsTZWkVHiV1y5jo4iwAWrsBgEyarUI72Zm1xymHY6A&s=10',
  '92 x 73 cm',
  1);
 
