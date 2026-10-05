@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Reportes.css';
-import type { Filtros, GrupoReporte, ReporteExcelRequest } from './types';
-import { traerReporte, traerTiposEvento } from './reportesService';
+import type { Filtros, GrupoReporte, ReporteExcelRequest } from '../types/types';
+import { traerReporte, traerTiposEvento } from '../reportesService';
 //import {login, me, type Respuestatoken} from './api/login.tsx';
 
 const URL_BASE = import.meta.env.VITE_URL_BASE;

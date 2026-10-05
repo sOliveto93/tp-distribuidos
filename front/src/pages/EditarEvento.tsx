@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getEventoById, actualizarEvento } from './eventosService';
-import type { Evento } from './types';
+import { getEventoById, actualizarEvento } from '../services/eventosService';
+import type { Evento } from '../types/types';
 import './CrearEvento.css'; 
 
 export default function EditarEvento() {

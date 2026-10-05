@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { FiltrosObra, Obra } from "./types";
+import type { FiltrosObra, Obra } from "../types/types";
 
 const URL_BASE = import.meta.env.VITE_URL_BASE;
 const PORT_GRAPHQL = import.meta.env.VITE_PORT;

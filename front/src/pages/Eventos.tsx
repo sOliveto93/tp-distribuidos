@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Evento, FiltroFavorito } from './types';
+import type { Evento, FiltroFavorito } from '../types/types';
 import { 
   getEventos, eliminarEvento, inscribirseEvento, desinscribirseEvento,
   getFiltrosFavoritos, guardarFiltroFavorito, eliminarFiltroFavorito
-} from './eventosService';
+} from '../services/eventosService';
 import './Eventos.css';
 
 export default function Eventos() {

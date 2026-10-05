@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './api/Login';
-import Reportes from './Reportes';
-import Eventos from './Eventos';
-import Obras from './Obras';
-import CrearEvento from './CrearEvento';
-import EditarEvento from './EditarEvento';
-import Me from './Me';
+import Reportes from './pages/Reportes';
+import Eventos from './pages/Eventos';
+import Obras from './pages/Obras';
+import CrearEvento from './pages/CrearEvento';
+import EditarEvento from './pages/EditarEvento';
+import Me from './pages/Me';
 
 export default function App() {
   const [rol, setRol] = useState(localStorage.getItem('rol'));
