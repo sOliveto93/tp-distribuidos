@@ -232,3 +232,18 @@ button.btn-limpiar {
 .btn-eliminar-favorito:hover {
   color: #ff6b7a;
 }
+
+.btn-actualizar-favorito {
+  background: transparent;
+  border: none;
+  color: #f39c12;
+  cursor: pointer;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.btn-actualizar-favorito:hover {
+  color: #f1c40f; 
+}

@@ -120,3 +120,22 @@ export const eliminarFiltroFavorito = async (idUsuario: number, idFiltro: number
   });
   if (!response.ok) throw new Error('Error al eliminar el filtro favorito');
 };
+
+
+// Actualizar un filtro favorito
+export const actualizarFiltroFavorito = async (
+  idUsuario: number, 
+  idFiltro: number, 
+  data: { nombre: string; configuracionFiltros: object; usuario: { id: number } }
+) => {
+  const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros/${idFiltro}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`
+    },
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) throw new Error('Error al actualizar el filtro');
+  return response.json();
+};

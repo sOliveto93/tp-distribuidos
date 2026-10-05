@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Evento, FiltroFavorito } from '../types/types';
 import { 
   getEventos, eliminarEvento, inscribirseEvento, desinscribirseEvento,
-  getFiltrosFavoritos, guardarFiltroFavorito, eliminarFiltroFavorito
+  getFiltrosFavoritos, guardarFiltroFavorito, eliminarFiltroFavorito, actualizarFiltroFavorito
 } from '../services/eventosService';
 import './Eventos.css';
 
@@ -96,6 +96,29 @@ export default function Eventos() {
       } catch (error) {
         console.error(error);
         alert('Error al eliminar el filtro');
+      }
+    }
+  };
+
+  const handleActualizarFavorito = async (fav: FiltroFavorito) => {
+    if (!fav.id) return;
+    if (window.confirm(`¿Querés sobrescribir la configuración de "${fav.nombre}" con los filtros que tenés seleccionados ahora?`)) {
+      try {
+        await actualizarFiltroFavorito(idUsuarioActual, fav.id, {
+          nombre: fav.nombre,
+          configuracionFiltros: {
+            fecha: filtros.fecha,
+            tipo: filtros.tipo,
+            idCurador: filtros.idCurador
+          },
+          usuario: { id: idUsuarioActual }
+        });
+        
+        alert('Filtro actualizado con éxito');
+        cargarFavoritos();
+      } catch (error) {
+        console.error(error);
+        alert('Error al actualizar el filtro favorito.');
       }
     }
   };
@@ -243,6 +266,12 @@ const handleInscribirse = async (idEvento: number) => {
                   <span className="favorito-nombre" onClick={() => handleAplicarFavorito(fav)}>
                     {fav.nombre}
                   </span>
+                  <button onClick={() => handleActualizarFavorito(fav)} className="btn-actualizar-favorito" title="Sobrescribir con filtros actuales">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
                   <button onClick={() => fav.id && handleEliminarFavorito(fav.id)} className="btn-eliminar-favorito">
                     X
                   </button>

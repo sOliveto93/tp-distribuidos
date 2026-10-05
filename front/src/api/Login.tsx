@@ -1,5 +1,5 @@
 import { useState} from 'react';
-import { login, me } from '../authServ';
+import { login, me } from '../services/authServ';
 import { useNavigate } from 'react-router-dom';
 interface LoginProps {
   onLogin: (rol: string) => void;
