@@ -2,9 +2,14 @@ package com.example.rest.eventos.controller;
 
 import com.example.rest.dto.FiltroResponseDTO;
 import com.example.rest.entity.FiltrosFavoritos;
+import com.example.rest.entity.Usuario;
 import com.example.rest.eventos.service.FiltrosFavoritosService;
+import com.example.rest.usuario.service.UsuarioService; 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,24 +21,44 @@ public class FiltrosFavoritosController {
     @Autowired
     private FiltrosFavoritosService filtrosService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     private FiltroResponseDTO mapearADTO(FiltrosFavoritos filtro) {
         return FiltroResponseDTO.builder()
-                .id(filtro.getId())
-                .nombre(filtro.getNombre())
-                .descripcion(filtro.getDescripcion())
-                .configuracionFiltros(filtro.getConfiguracionFiltros())
-                .build();
+            .id(filtro.getId())
+            .nombre(filtro.getNombre())
+            .descripcion(filtro.getDescripcion())
+            .configuracionFiltros(filtro.getConfiguracionFiltros())
+            .build();
+    }
+
+    // --- ESCUDO DE SEGURIDAD ---
+    private boolean noEsDueño(Integer idUsuario, Authentication authentication) {
+        String emailToken = authentication.getName();
+        Usuario usuarioDeLaRuta = usuarioService.obtenerPorId(idUsuario); 
+        
+        return !usuarioDeLaRuta.getEmail().equals(emailToken);
     }
 
     @GetMapping
-    public List<FiltroResponseDTO> listarFiltros(@PathVariable Integer idUsuario) {
-        return filtrosService.obtenerPorUsuario(idUsuario).stream()
+    public ResponseEntity<?> listarFiltros(@PathVariable Integer idUsuario, Authentication authentication) {
+        if (noEsDueño(idUsuario, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado: No puedes ver filtros de otro usuario.");
+        }
+
+        List<FiltroResponseDTO> filtros = filtrosService.obtenerPorUsuario(idUsuario).stream()
                 .map(this::mapearADTO)
                 .toList();
+        return ResponseEntity.ok(filtros);
     }
 
     @PostMapping
-    public ResponseEntity<FiltroResponseDTO> crearFiltro(@PathVariable Integer idUsuario, @RequestBody FiltrosFavoritos filtro) {
+    public ResponseEntity<?> crearFiltro(@PathVariable Integer idUsuario, @RequestBody FiltrosFavoritos filtro, Authentication authentication) {
+        if (noEsDueño(idUsuario, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado: No puedes crear filtros para otro usuario.");
+        }
+
         try {
             FiltrosFavoritos guardado = filtrosService.guardarFiltro(idUsuario, filtro);
             return ResponseEntity.ok(mapearADTO(guardado));
@@ -43,7 +68,11 @@ public class FiltrosFavoritosController {
     }
 
     @PutMapping("/{idFiltro}")
-    public ResponseEntity<FiltroResponseDTO> actualizarFiltro(@PathVariable Integer idUsuario, @PathVariable Integer idFiltro, @RequestBody FiltrosFavoritos filtro) {
+    public ResponseEntity<?> actualizarFiltro(@PathVariable Integer idUsuario, @PathVariable Integer idFiltro, @RequestBody FiltrosFavoritos filtro, Authentication authentication) {
+        if (noEsDueño(idUsuario, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado: No puedes modificar filtros de otro usuario.");
+        }
+
         try {
             FiltrosFavoritos actualizado = filtrosService.actualizarFiltro(idFiltro, filtro);
             return ResponseEntity.ok(mapearADTO(actualizado));
@@ -53,7 +82,11 @@ public class FiltrosFavoritosController {
     }
 
     @DeleteMapping("/{idFiltro}")
-    public ResponseEntity<String> eliminarFiltro(@PathVariable Integer idUsuario, @PathVariable Integer idFiltro) {
+    public ResponseEntity<String> eliminarFiltro(@PathVariable Integer idUsuario, @PathVariable Integer idFiltro, Authentication authentication) {
+        if (noEsDueño(idUsuario, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado: No puedes eliminar filtros de otro usuario.");
+        }
+
         try {
             filtrosService.eliminarFiltro(idFiltro);
             return ResponseEntity.ok("El filtro favorito fue eliminado con éxito.");

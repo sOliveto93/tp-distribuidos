@@ -29,6 +29,12 @@ public class UsuarioService {
         );
     }
 
+    public Usuario obtenerPorId(Integer id) {
+        return usuarioRepository.findById(id).orElseThrow(
+            () -> new UsuarioNoEncontradoException("No se encontró usuario con ese ID")
+        );
+    }
+
 
     public Usuario registrar(RegisterRequest request) {
 

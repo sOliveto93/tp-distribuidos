@@ -1,15 +1,19 @@
 package com.example.rest.eventos.controller;
 
 import com.example.rest.entity.Evento;
+import com.example.rest.entity.Usuario;
 import com.example.rest.eventos.dto.EventoResponseDTO;
 import com.example.rest.eventos.service.EventoService;
 import com.example.rest.usuario.dto.UsuarioResponseDTO;
+import com.example.rest.usuario.service.UsuarioService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +25,14 @@ public class EventoController {
 
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private UsuarioService usuarioService;
+
+    private boolean noEsDueño(Integer idUsuario, Authentication authentication) {
+        String emailToken = authentication.getName();
+        Usuario usuarioDeLaRuta = usuarioService.obtenerPorId(idUsuario); 
+        return !usuarioDeLaRuta.getEmail().equals(emailToken);
+    }
 
     @GetMapping
     public List<EventoResponseDTO> listarTodos(
@@ -66,7 +78,11 @@ public class EventoController {
 
     // (POST a http://localhost:8080/api/eventos/1/inscribir/3)
     @PostMapping("/{idEvento}/inscribir/{idUsuario}")
-    public ResponseEntity<?> inscribir(@PathVariable Integer idEvento, @PathVariable Integer idUsuario) {
+    public ResponseEntity<?> inscribir(@PathVariable Integer idEvento, @PathVariable Integer idUsuario, Authentication authentication) {
+        if (noEsDueño(idUsuario, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado: No puedes inscribir a otro usuario.");
+        }
+        
         try {
             Evento eventoActualizado = eventoService.inscribirVisitante(idEvento, idUsuario);
             return ResponseEntity.ok(mapearAEventoDTO(eventoActualizado));
@@ -77,7 +93,11 @@ public class EventoController {
 
     // (DELETE a http://localhost:8080/api/eventos/1/desinscribir/3)
     @DeleteMapping("/{idEvento}/desinscribir/{idUsuario}")
-    public ResponseEntity<?> desinscribir(@PathVariable Integer idEvento, @PathVariable Integer idUsuario) {
+    public ResponseEntity<?> desinscribir(@PathVariable Integer idEvento, @PathVariable Integer idUsuario, Authentication authentication) {
+        if (noEsDueño(idUsuario, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado: No puedes desinscribir a otro usuario.");
+        }
+        
         try {
             Evento eventoActualizado = eventoService.desinscribirVisitante(idEvento, idUsuario);
             return ResponseEntity.ok(mapearAEventoDTO(eventoActualizado));
