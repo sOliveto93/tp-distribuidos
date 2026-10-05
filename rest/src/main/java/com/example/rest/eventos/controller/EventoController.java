@@ -47,8 +47,9 @@ public class EventoController {
     // (POST a http://localhost:8080/api/eventos)
     @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @PostMapping
-    public Evento crearEvento(@RequestBody Evento evento) {
-        return eventoService.guardarEvento(evento);
+    public ResponseEntity<EventoResponseDTO> crearEvento(@RequestBody Evento evento) {
+        Evento nuevoEvento = eventoService.guardarEvento(evento);
+        return ResponseEntity.ok(mapearAEventoDTO(nuevoEvento));
     }
 
     // (PUT a http://localhost:8080/api/eventos/1)
@@ -68,7 +69,7 @@ public class EventoController {
     public ResponseEntity<?> inscribir(@PathVariable Integer idEvento, @PathVariable Integer idUsuario) {
         try {
             Evento eventoActualizado = eventoService.inscribirVisitante(idEvento, idUsuario);
-            return ResponseEntity.ok(eventoActualizado);
+            return ResponseEntity.ok(mapearAEventoDTO(eventoActualizado));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -79,7 +80,7 @@ public class EventoController {
     public ResponseEntity<?> desinscribir(@PathVariable Integer idEvento, @PathVariable Integer idUsuario) {
         try {
             Evento eventoActualizado = eventoService.desinscribirVisitante(idEvento, idUsuario);
-            return ResponseEntity.ok(eventoActualizado);
+            return ResponseEntity.ok(mapearAEventoDTO(eventoActualizado));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -34,6 +34,7 @@ public class Usuario {
     private Integer id;
     private String nombre;
     private String email;
+    @JsonIgnore
     private String contrasenia;
     @Enumerated (EnumType.STRING)
     private Rol rol;
