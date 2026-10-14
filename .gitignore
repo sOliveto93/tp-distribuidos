@@ -12,9 +12,11 @@ rest/target/
 
 # Node
 graphql/node_modules/
+grpc/gateway/node_modules/
 graphql/npm-debug.log*
 graphql/yarn-debug.log*
 graphql/yarn-error.log*
+grpc/gateway/npm-debug.log*
 
 # Environment
 .env
@@ -25,3 +27,7 @@ application-local.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# Go
+
+grpc/server/bin/

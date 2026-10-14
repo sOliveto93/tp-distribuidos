@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package museo.v1;
+
+
+
+message Obra{
+    int64 id = 1;
+    string titulo = 2;
+    string artista = 3;
+    string epoca = 4;
+    string tecnica = 5;
+    string anio_creacion = 6;
+    string dimensiones = 7;
+    string descripcion = 8;
+    string ubicacion = 9;
+    bool disponible = 10;
+}
+message PreferenciasVisitante{
+    int64 visitante_id=1;
+    repeated string tematicas=2;
+    repeated string epocas=3;
+    repeated string tecnicas=4;
+}
+
+message Evento{
+    int64 id=1;
+    string nombre=2;
+    string descripcion=3;
+    string tipo=4;
+    string epoca_relacionada=5;
+}
+
+//------------- Servicio de obras----------------------
+
+service ObraService{
+    rpc ObtenerObrasPorIds (ObrasPorIdsRequest)
+    returns (ObrasResponse);
+
+    rpc BuscarObras (BuscarObrasRequest)
+    returns (ObrasResponse);
+}
+
+message ObrasPorIdsRequest{
+    repeated int64 ids=1;
+}
+
+message BuscarObrasRequest {
+    string palabra_clave = 1;
+    string epoca = 2;
+    string tecnica = 3;
+    string ubicacion = 4;
+    bool disponible = 5;
+    int32 cantidad_maxima = 6;
+}
+
+message ObrasResponse {
+    repeated Obra obras = 1;
+}
+
+
+// ------------------Servicio de visitantes------------------
+
+
+service VisitanteService {
+
+    rpc ObtenerPreferencias (PreferenciasRequest)
+    returns (PreferenciasVisitante);
+
+}
+
+message PreferenciasRequest {
+    int64 visitante_id = 1;
+}
+
+
+//------------------- Servicio de eventos---------------------
+
+
+service EventoService {
+
+    rpc BuscarEventos (BuscarEventosRequest)
+    returns (EventosResponse);
+
+}
+
+message BuscarEventosRequest {
+    string epoca_relacionada = 1;
+    string tipo = 2;
+}
+
+message EventosResponse {
+    repeated Evento eventos = 1;
+}
