@@ -2,16 +2,19 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"net"
+	museov1 "server/proto/museov1"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	"google.golang.org/grpc"
-
-	museov1 "server/proto/museov1"
 )
 
 type obraServer struct {
 	museov1.UnimplementedObraServiceServer
+	db *sql.DB
 }
 
 func (s *obraServer) ObtenerObrasPorIds(
@@ -19,24 +22,33 @@ func (s *obraServer) ObtenerObrasPorIds(
 	req *museov1.ObrasPorIdsRequest,
 ) (*museov1.ObrasResponse, error) {
 
-	obra := &museov1.Obra{
-		Id:           1,
-		Titulo:       "La noche estrellada",
-		Artista:      "Vincent van Gogh",
-		Epoca:        "Postimpresionismo",
-		Tecnica:      "Óleo sobre lienzo",
-		AnioCreacion: "1889",
-		Dimensiones:  "73.7 x 92.1 cm",
-		Descripcion:  "Paisaje nocturno",
-		Ubicacion:    "Museo de Arte Moderno",
-		Disponible:   true,
-	}
+	log.Printf("IDs recibidos en la petición: %v", req.GetIds())
+	query := `
+		SELECT o.id, o.titulo, a.nombre, o.epoca, o.tecnica, 
+		       CAST(o.anio_creacion AS CHAR), o.dimensiones, 
+		       COALESCE(o.descripcion, ''), o.ubicacion, o.disponible
+		FROM obras o
+		LEFT JOIN artistas a ON o.id_artista = a.id
+		WHERE o.id = ?
+	`
 
 	var obras []*museov1.Obra
-	obras = append(obras, obra)
 
-	respuesta := &museov1.ObrasResponse{Obras: obras}
-	return respuesta, nil
+	for _, id := range req.GetIds() {
+		var o museov1.Obra
+		err := s.db.QueryRowContext(ctx, query, id).Scan(
+			&o.Id, &o.Titulo, &o.Artista, &o.Epoca, &o.Tecnica,
+			&o.AnioCreacion, &o.Dimensiones, &o.Descripcion, &o.Ubicacion, &o.Disponible,
+		)
+
+		if err != nil {
+			log.Printf("Error al buscar o escanear la obra con ID %d: %v", id, err)
+			continue
+		}
+		obras = append(obras, &o)
+	}
+
+	return &museov1.ObrasResponse{Obras: obras}, nil
 }
 
 func (s *obraServer) BuscarObras(
@@ -48,6 +60,17 @@ func (s *obraServer) BuscarObras(
 }
 
 func main() {
+	dsn := "root:root@tcp(localhost:3307)/museo?parseTime=true"
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		log.Fatalf("Error abriendo conexión a BD: %v", err)
+	}
+	defer db.Close()
+
+	if err := db.Ping(); err != nil {
+		log.Fatalf("No se pudo conectar a la base de datos: %v", err)
+	}
+	log.Println("Conectado exitosamente a la base de datos 'museo'")
 	listener, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("Error al abrir el puerto: %v", err)
@@ -55,7 +78,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	museov1.RegisterObraServiceServer(grpcServer, &obraServer{})
+	museov1.RegisterObraServiceServer(grpcServer, &obraServer{db: db})
 
 	log.Println("Servidor gRPC escuchando en el puerto 50051")
 
