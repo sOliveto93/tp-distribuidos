@@ -9,7 +9,26 @@ obraRouter.get("/", (req, res) => {
         mensaje: "Listado de obras"
     });
 });
+obraRouter.get("/comparar", (req, res) => {
+    const ids = (req.query.ids || "")
+        .split(",")
+        .map(Number)
+        .filter(n => Number.isInteger(n) && n > 0);
 
+    if (ids.length < 2) {
+        return res.status(400).json({ error: "Seleccioná al menos 2 IDs" });
+    }
+
+    const solicitud = new museoMessages.ObrasPorIdsRequest();
+    solicitud.setIdsList(ids);
+
+    obraClient.obtenerObrasPorIds(solicitud, (error, resultado) => {
+        if (error) {
+            return res.status(502).json({ error: error.message });
+        }
+        res.json(resultado.toObject()); 
+    });
+});
 obraRouter.get("/:id", (req, res) => {
     const id = Number(req.params.id);
 

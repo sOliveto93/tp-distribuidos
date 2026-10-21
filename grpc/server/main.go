@@ -22,14 +22,12 @@ func (s *obraServer) ObtenerObrasPorIds(
 	req *museov1.ObrasPorIdsRequest,
 ) (*museov1.ObrasResponse, error) {
 
-	log.Printf("IDs recibidos en la petición: %v", req.GetIds())
 	query := `
 		SELECT o.id, o.titulo, a.nombre, o.epoca, o.tecnica, 
 		       CAST(o.anio_creacion AS CHAR), o.dimensiones, 
 		       COALESCE(o.descripcion, ''), o.ubicacion, o.disponible
 		FROM obras o
 		LEFT JOIN artistas a ON o.id_artista = a.id
-		WHERE o.id = ?
 	`
 
 	var obras []*museov1.Obra
@@ -55,8 +53,45 @@ func (s *obraServer) BuscarObras(
 	ctx context.Context,
 	req *museov1.BuscarObrasRequest,
 ) (*museov1.ObrasResponse, error) {
-	respuesta := &museov1.ObrasResponse{}
-	return respuesta, nil
+	query := `
+		SELECT 
+			o.id, o.titulo, COALESCE(a.nombre, 'Autor desconocido'), o.epoca, o.tecnica, 
+			CONCAT(o.anio_creacion, ''), o.dimensiones, 
+			COALESCE(o.descripcion, ''), o.ubicacion, o.disponible
+		FROM obras o
+		LEFT JOIN artistas a ON o.id_artista = a.id
+		WHERE (? = '' OR o.epoca = ?)
+		  AND (? = '' OR o.tecnica = ?)
+		  AND (? = '' OR o.ubicacion = ?)
+		  AND (? = '' OR o.titulo LIKE CONCAT('%', ?, '%'))
+	`
+
+	rows, err := s.db.QueryContext(ctx, query,
+		req.GetEpoca(), req.GetEpoca(),
+		req.GetTecnica(), req.GetTecnica(),
+		req.GetUbicacion(), req.GetUbicacion(),
+		req.GetPalabraClave(), req.GetPalabraClave(),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var obras []*museov1.Obra
+	for rows.Next() {
+		var o museov1.Obra
+		if err := rows.Scan(
+			&o.Id, &o.Titulo, &o.Artista, &o.Epoca, &o.Tecnica,
+			&o.AnioCreacion, &o.Dimensiones, &o.Descripcion, &o.Ubicacion, &o.Disponible,
+		); err == nil {
+	
+			obras = append(obras, &o)
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return &museov1.ObrasResponse{Obras: obras}, nil
 }
 
 func main() {
