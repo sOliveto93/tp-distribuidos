@@ -1,5 +1,6 @@
 const express = require("express");
 const obraRouter = require("./routes/obraRoutes.js");
+const exploracionRouter = require("./routes/exploracionRoutes.js");
 
 const app = express();
 const puerto = 3000;
@@ -13,6 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/obras", obraRouter);
+app.use("/exploracion", exploracionRouter);
 
 app.listen(puerto, () => {
     console.log(`servidor levantado en el puerto ${puerto}`);
