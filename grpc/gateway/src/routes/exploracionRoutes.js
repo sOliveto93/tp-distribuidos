@@ -1,4 +1,3 @@
-
 const { Router } = require("express");
 const obraClient = require("../grpc/obraGrpcClient.js");
 const eventoClient = require("../grpc/eventoGrpcClient.js");
@@ -6,39 +5,14 @@ const museoMessages = require("../generated/museo_pb.js");
 
 const exploracionRouter = Router();
 
-exploracionRouter.get("/", async (req, res) => {
-    const {
-        palabra_clave = "",
-        epoca = "",
-        tecnica = "",
-        ubicacion = "",
-        tipo = "",
-        cantidad_maxima = ""
-    } = req.query;
-
-    if (
-        cantidad_maxima !== "" &&
-        (!Number.isInteger(Number(cantidad_maxima)) ||
-            Number(cantidad_maxima) <= 0)
-    ) {
-        return res.status(400).json({
-            error: "cantidad_maxima debe ser un entero positivo"
-        });
-    }
+exploracionRouter.get("/:movimiento", async (req, res) => {
+    const movimiento = req.params.movimiento;
 
     const solicitudObras = new museoMessages.BuscarObrasRequest();
-    solicitudObras.setPalabraClave(palabra_clave);
-    solicitudObras.setEpoca(epoca);
-    solicitudObras.setTecnica(tecnica);
-    solicitudObras.setUbicacion(ubicacion);
-
-    if (cantidad_maxima !== "") {
-        solicitudObras.setCantidadMaxima(Number(cantidad_maxima));
-    }
+    solicitudObras.setEpoca(movimiento);
 
     const solicitudEventos = new museoMessages.BuscarEventosRequest();
-    solicitudEventos.setEpocaRelacionada(epoca);
-    solicitudEventos.setTipo(tipo);
+    solicitudEventos.setEpocaRelacionada(movimiento);
 
     try {
         const [resultadoObras, resultadoEventos] = await Promise.all([
@@ -56,19 +30,20 @@ exploracionRouter.get("/", async (req, res) => {
             })
         ]);
 
+        const artistasSet = new Set();
+        if (resultadoObras.obrasList) {
+            resultadoObras.obrasList.forEach(obra => {
+                if (obra.artista) artistasSet.add(obra.artista);
+            });
+        }
+
         return res.json({
-            filtros: {
-                palabra_clave,
-                epoca,
-                tecnica,
-                ubicacion,
-                tipo,
-                cantidad_maxima:
-                    cantidad_maxima === "" ? null : Number(cantidad_maxima)
-            },
-            obras: resultadoObras.obrasList,
-            eventos: resultadoEventos.eventosList
+            movimiento_explorado: movimiento,
+            obras_pertenecientes: resultadoObras.obrasList,
+            artistas_asociados: Array.from(artistasSet),
+            eventos_vinculados: resultadoEventos.eventosList
         });
+
     } catch (error) {
         return res.status(502).json({
             error: "Error al consultar los servicios gRPC",
