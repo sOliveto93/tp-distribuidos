@@ -7,6 +7,7 @@ import Eventos from './pages/Eventos';
 import Obras from './pages/Obras';
 import CrearEvento from './pages/CrearEvento';
 import EditarEvento from './pages/EditarEvento';
+import Comparador from './pages/Comparador'
 import Me from './pages/Me';
 import Exploracion from './pages/Exploracion';
 
@@ -52,7 +53,9 @@ export default function App() {
                 : <Navigate to="/eventos" replace />
             } 
           />
+          <Route path="/comparador" element={<Comparador/>}/>
         </Routes>
+        
     </BrowserRouter>
   );
 }

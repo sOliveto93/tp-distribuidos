@@ -1,4 +1,4 @@
-import type{ Filtros, GraphQLResponse, GrupoReporte } from './types';
+import type{ Filtros, GraphQLResponse, GrupoReporte } from '../types/types';
 const URL_BASE: string =import.meta.env.VITE_URL_BASE;
 const PORT:string= import.meta.env.VITE_PORT;
 const GRAPHQL:string =import.meta.env.VITE_GRAPHQL;

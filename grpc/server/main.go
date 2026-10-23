@@ -217,7 +217,6 @@ func main() {
 		log.Fatalf("No se pudo conectar a la base de datos: %v", err)
 	}
 	log.Println("Conectado exitosamente a la base de datos 'museo'")
-
 	listener, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("Error al abrir el puerto: %v", err)
