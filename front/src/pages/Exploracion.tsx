@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { DatosExploracion } from '../types/types';
+import { fetchExploracion } from '../services/ExploracionService';
 import './Exploracion.css';
 
 export default function Exploracion() {
@@ -7,7 +8,6 @@ export default function Exploracion() {
     const [datos, setDatos] = useState<DatosExploracion | null>(null);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState('');
-    const GATEWAY_URL = `${import.meta.env.VITE_URL_BASE}${import.meta.env.VITE_PORT_GATEWAY}`;
 
     const buscarExploracion = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -17,10 +17,7 @@ export default function Exploracion() {
         setError('');
         
         try {
-            const res = await fetch(`${GATEWAY_URL}/exploracion/${movimiento}`);
-            if (!res.ok) throw new Error('Error al buscar los datos');
-            
-            const data = await res.json();
+            const data = await fetchExploracion(movimiento);
             setDatos(data);
         } catch (err) {
             if (err instanceof Error) {
