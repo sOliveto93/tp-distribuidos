@@ -88,7 +88,37 @@ Disponible en:
 ```text
 http://localhost:4000/graphql
 ```
+## Backend gRPC
+```text
+Ingresar a `grpc/server`:
 
+cd grpc
+
+cd server
+
+Instalar dependencias:
+
+go mod tidy
+
+Ejecutar:
+
+go run main.go
+
+Ingresar a `grpc/gateway`:
+
+cd grpc
+
+cd gateway
+
+Instalar dependencias:
+
+npm install
+
+Ejecutar:
+
+npm start
+
+```
 
 ## Frontend
 ```text

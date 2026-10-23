@@ -28,6 +28,7 @@ func (s *obraServer) ObtenerObrasPorIds(
 		       COALESCE(o.descripcion, ''), o.ubicacion, o.disponible
 		FROM obras o
 		LEFT JOIN artistas a ON o.id_artista = a.id
+		WHERE o.id = ?
 	`
 
 	var obras []*museov1.Obra
@@ -84,7 +85,7 @@ func (s *obraServer) BuscarObras(
 			&o.Id, &o.Titulo, &o.Artista, &o.Epoca, &o.Tecnica,
 			&o.AnioCreacion, &o.Dimensiones, &o.Descripcion, &o.Ubicacion, &o.Disponible,
 		); err == nil {
-	
+
 			obras = append(obras, &o)
 		}
 	}

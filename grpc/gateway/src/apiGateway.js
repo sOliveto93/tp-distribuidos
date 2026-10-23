@@ -1,10 +1,14 @@
 const express = require("express");
 const obraRouter = require("./routes/obraRoutes.js");
-
+const cors = require("cors");
 const app = express();
 const puerto = 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 
@@ -13,6 +17,7 @@ app.get("/", (req, res) => {
         mensaje: "API GATEWAY del museo funcionando"
     });
 });
+
 
 app.use("/obras", obraRouter);
 

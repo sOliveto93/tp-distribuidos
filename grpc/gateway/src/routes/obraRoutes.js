@@ -5,8 +5,15 @@ const museoMessages = require("../generated/museo_pb.js");
 const obraRouter = Router();
 
 obraRouter.get("/", (req, res) => {
-    res.json({
-        mensaje: "Listado de obras"
+    const solicitud = new museoMessages.BuscarObrasRequest();
+    solicitud.setPalabraClave(req.query.q || "");
+    solicitud.setEpoca(req.query.epoca || "");
+    solicitud.setTecnica(req.query.tecnica || "");
+    solicitud.setUbicacion(req.query.ubicacion || "");
+
+    obraClient.buscarObras(solicitud, (error, resultado) => {
+        if (error) return res.status(502).json({ error: error.message });
+        res.json(resultado.toObject()); 
     });
 });
 obraRouter.get("/comparar", (req, res) => {
