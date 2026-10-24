@@ -37,6 +37,17 @@ function deserialize_museo_v1_EventosResponse(buffer_arg) {
   return museo_pb.EventosResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_museo_v1_GenerarRecorridoRequest(arg) {
+  if (!(arg instanceof museo_pb.GenerarRecorridoRequest)) {
+    throw new Error('Expected argument of type museo.v1.GenerarRecorridoRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_museo_v1_GenerarRecorridoRequest(buffer_arg) {
+  return museo_pb.GenerarRecorridoRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_museo_v1_ObrasPorIdsRequest(arg) {
   if (!(arg instanceof museo_pb.ObrasPorIdsRequest)) {
     throw new Error('Expected argument of type museo.v1.ObrasPorIdsRequest');
@@ -104,6 +115,17 @@ var ObraServiceService = exports.ObraServiceService = {
     responseType: museo_pb.ObrasResponse,
     requestSerialize: serialize_museo_v1_BuscarObrasRequest,
     requestDeserialize: deserialize_museo_v1_BuscarObrasRequest,
+    responseSerialize: serialize_museo_v1_ObrasResponse,
+    responseDeserialize: deserialize_museo_v1_ObrasResponse,
+  },
+  generarRecorrido: {
+    path: '/museo.v1.ObraService/GenerarRecorrido',
+    requestStream: false,
+    responseStream: false,
+    requestType: museo_pb.GenerarRecorridoRequest,
+    responseType: museo_pb.ObrasResponse,
+    requestSerialize: serialize_museo_v1_GenerarRecorridoRequest,
+    requestDeserialize: deserialize_museo_v1_GenerarRecorridoRequest,
     responseSerialize: serialize_museo_v1_ObrasResponse,
     responseDeserialize: deserialize_museo_v1_ObrasResponse,
   },
