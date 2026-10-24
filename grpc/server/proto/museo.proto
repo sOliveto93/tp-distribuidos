@@ -39,6 +39,9 @@ service ObraService{
 
     rpc BuscarObras (BuscarObrasRequest)
     returns (ObrasResponse);
+
+    rpc GenerarRecorrido (GenerarRecorridoRequest)
+    returns (ObrasResponse);
 }
 
 message ObrasPorIdsRequest{
@@ -58,6 +61,11 @@ message ObrasResponse {
     repeated Obra obras = 1;
 }
 
+message GenerarRecorridoRequest {
+    string epoca = 1;
+    string tecnica = 2;
+    int32 cantidad_obras = 3;
+}
 
 // ------------------Servicio de visitantes------------------
 

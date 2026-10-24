@@ -137,6 +137,82 @@ func (s *obraServer) BuscarObras(
 	return respuesta, nil
 }
 
+func (s *obraServer) GenerarRecorrido(
+	ctx context.Context,
+	req *museov1.GenerarRecorridoRequest,
+) (*museov1.ObrasResponse, error) {
+
+	log.Printf("Generando recorrido - Época: %q, Técnica: %q, Límite: %d",
+		req.GetEpoca(), req.GetTecnica(), req.GetCantidadObras())
+
+	query := `
+		SELECT 
+			o.id, 
+			o.titulo, 
+			COALESCE(a.nombre, 'Autor desconocido'), 
+			o.epoca, 
+			o.tecnica,
+			CAST(o.anio_creacion AS CHAR), 
+			COALESCE(o.dimensiones, ''), 
+			COALESCE(o.descripcion, ''), 
+			COALESCE(o.ubicacion, ''), 
+			o.disponible
+		FROM obras o
+		LEFT JOIN artistas a ON o.id_artista = a.id
+		WHERE (? = '' OR o.epoca = ?)
+		  AND (? = '' OR o.tecnica = ?)
+		ORDER BY o.id
+		LIMIT ?
+	`
+
+	epoca := req.GetEpoca()
+	tecnica := req.GetTecnica()
+	limite := req.GetCantidadObras()
+
+	if limite <= 0 {
+		limite = 5
+	}
+
+	filas, err := s.db.QueryContext(
+		ctx,
+		query,
+		epoca, epoca,
+		tecnica, tecnica,
+		limite,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer filas.Close()
+
+	var obras []*museov1.Obra
+	for filas.Next() {
+		var o museov1.Obra
+		err := filas.Scan(
+			&o.Id,
+			&o.Titulo,
+			&o.Artista,
+			&o.Epoca,
+			&o.Tecnica,
+			&o.AnioCreacion,
+			&o.Dimensiones,
+			&o.Descripcion,
+			&o.Ubicacion,
+			&o.Disponible,
+		)
+		if err != nil {
+			return nil, err
+		}
+		obras = append(obras, &o)
+	}
+
+	if err := filas.Err(); err != nil {
+		return nil, err
+	}
+
+	return &museov1.ObrasResponse{Obras: obras}, nil
+}
+
 func (s *eventoServer) BuscarEventos(
 	ctx context.Context,
 	req *museov1.BuscarEventosRequest,

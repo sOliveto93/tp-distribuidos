@@ -60,4 +60,22 @@ obraRouter.get("/:id", (req, res) => {
     });
 });
 
+obraRouter.post('/recorridos', (req, res) => {
+    const { epoca, tecnica, cantidad_obras } = req.body;
+
+    const solicitud = new museoMessages.GenerarRecorridoRequest();
+    solicitud.setEpoca(epoca || "");
+    solicitud.setTecnica(tecnica || "");
+    solicitud.setCantidadObras(parseInt(cantidad_obras) || 5);
+
+    obraClient.generarRecorrido(solicitud, (error, resultado) => {
+        if (error) {
+            console.error("Error gRPC al generar recorrido:", error);
+            return res.status(502).json({ error: "Error al generar el recorrido" });
+        }
+        
+        res.json(resultado.toObject());
+    });
+});
+
 module.exports = obraRouter;
