@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { DatosExploracion } from '../types/types';
-import { fetchExploracion } from '../services/ExploracionService';
+import { fetchExploracion } from '../services/exploracionService';
 import './Exploracion.css';
 
 export default function Exploracion() {

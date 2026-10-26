@@ -125,3 +125,13 @@ export interface DatosExploracion {
     artistas_asociados: string[];
     eventos_vinculados: Evento[];
 }
+
+export interface GenerarRecorridoRequest {
+    epoca?: string;
+    tecnica?: string;
+    cantidad_obras?: number;
+}
+
+export interface RecorridoResponse {
+    obrasList: Obra[];
+}

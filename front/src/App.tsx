@@ -10,6 +10,7 @@ import EditarEvento from './pages/EditarEvento';
 import Comparador from './pages/Comparador'
 import Me from './pages/Me';
 import Exploracion from './pages/Exploracion';
+import Recorridos from './pages/Recorridos';
 
 export default function App() {
   const [rol, setRol] = useState(localStorage.getItem('rol'));
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/eventos" element={<Eventos />} />
           <Route path="/explorar" element={<Exploracion />} />
           <Route path="/obras" element={<Obras/>}/>
+          <Route path="/recorridos" element={<Recorridos />} />
           <Route 
             path="/reportes" 
             element={
