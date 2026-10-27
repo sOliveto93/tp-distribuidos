@@ -35,12 +35,19 @@ export const generarReporteAsistencia = async (filtros, db) => {
 
   const reporteFinal = Object.values(gruposMapa).map(grupo => {
     const cantidad_de_eventos = grupo.eventos.length;
+    const eventosOrdenados = [...grupo.eventos].sort(
+      (a, b) => (b.cantidad_inscriptos ?? 0) - (a.cantidad_inscriptos ?? 0)
+    );
+    const eventos_mas_populares = eventosOrdenados.slice(0, 3);
+
+    const promedio= cantidad_de_eventos === 0 ? 0 : (grupo.total_inscriptos_acumulados / cantidad_de_eventos)
     return {
       ...grupo,
+      eventos:eventosOrdenados,
+      eventos_mas_populares,
       cantidad_de_eventos,
-      promedio_de_asistencia: cantidad_de_eventos === 0 ? 0 : (grupo.total_inscriptos_acumulados / cantidad_de_eventos),
-    };
+      promedio_de_asistencia: promedio
+  };
   });
-
   return reporteFinal.sort((a, b) => b.total_inscriptos_acumulados - a.total_inscriptos_acumulados);
 };
