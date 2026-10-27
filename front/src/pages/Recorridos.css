@@ -1,0 +1,98 @@
+.recorridos-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.recorridos-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.recorridos-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.recorridos-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.recorridos-form button:hover:not(:disabled) {
+    background-color: #004494;
+}
+
+.recorridos-form button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+.error-msg {
+    color: #dc3545;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cards-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.obra-card {
+    background: white;
+    border-left: 5px solid #0056b3;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.obra-card h4 {
+    margin: 0 0 10px 0;
+    color: #222;
+}
+
+.obra-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.ubicacion-texto {
+    margin-top: 10px !important;
+    font-style: italic;
+    color: #0056b3 !important;
+    font-weight: bold;
+}

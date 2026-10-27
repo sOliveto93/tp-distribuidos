@@ -1,6 +1,8 @@
 const express = require("express");
-const obraRouter = require("./routes/obraRoutes.js");
 const cors = require("cors");
+const obraRouter = require("./routes/obraRoutes.js");
+const exploracionRouter = require("./routes/exploracionRoutes.js");
+
 const app = express();
 const puerto = 3000;
 
@@ -20,6 +22,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/obras", obraRouter);
+app.use("/exploracion", exploracionRouter);
 
 app.get("/test", (req, res) => {
     res.json({ status: "OK", servicio: "API Gateway Museo" });

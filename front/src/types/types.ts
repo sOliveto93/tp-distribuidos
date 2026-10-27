@@ -70,6 +70,7 @@ export interface UsuarioCurador {
 export interface Evento {
   id?: number;
   titulo: string;
+  nombre?: string;
   descripcion?: string;
   tipo?: string;
   duracion?: number;
@@ -116,4 +117,21 @@ export interface GrupoReporte {
   total_inscriptos_acumulados: number;
   promedio_de_asistencia: number;
   eventos: EventoReporte[];
+}
+
+export interface DatosExploracion {
+    movimiento_explorado: string;
+    obras_pertenecientes: Obra[];
+    artistas_asociados: string[];
+    eventos_vinculados: Evento[];
+}
+
+export interface GenerarRecorridoRequest {
+    epoca?: string;
+    tecnica?: string;
+    cantidad_obras?: number;
+}
+
+export interface RecorridoResponse {
+    obrasList: Obra[];
 }

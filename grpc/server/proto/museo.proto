@@ -40,8 +40,13 @@ service ObraService{
     rpc BuscarObras (BuscarObrasRequest)
     returns (ObrasResponse);
 
+
     rpc GenerarRecomendacion (RecomendacionRequest) 
     returns (RecomendacionResponse);
+
+    rpc GenerarRecorrido (GenerarRecorridoRequest)
+    returns (ObrasResponse);
+
 }
 
 message ObrasPorIdsRequest{
@@ -74,6 +79,12 @@ message ObraRecomendada {
 
 message RecomendacionResponse {
   repeated ObraRecomendada recomendadas = 1;
+}
+message GenerarRecorridoRequest {
+    string epoca = 1;
+    string tecnica = 2;
+    int32 cantidad_obras = 3;
+
 }
 
 // ------------------Servicio de visitantes------------------
