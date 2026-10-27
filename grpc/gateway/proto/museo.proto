@@ -39,6 +39,9 @@ service ObraService{
 
     rpc BuscarObras (BuscarObrasRequest)
     returns (ObrasResponse);
+
+    rpc GenerarRecomendacion (RecomendacionRequest) 
+    returns (RecomendacionResponse);
 }
 
 message ObrasPorIdsRequest{
@@ -56,6 +59,21 @@ message BuscarObrasRequest {
 
 message ObrasResponse {
     repeated Obra obras = 1;
+}
+
+message RecomendacionRequest {
+  int32 id_usuario = 1;
+}
+
+message ObraRecomendada {
+  int32 id = 1;
+  string titulo = 2;
+  string artista = 3;
+  string motivo = 4;
+}
+
+message RecomendacionResponse {
+  repeated ObraRecomendada recomendadas = 1;
 }
 
 

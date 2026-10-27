@@ -95,6 +95,45 @@ func (s *obraServer) BuscarObras(
 	return &museov1.ObrasResponse{Obras: obras}, nil
 }
 
+func (s *obraServer) GenerarRecomendacion(
+	ctx context.Context,
+	req *museov1.RecomendacionRequest,
+) (*museov1.RecomendacionResponse, error) {
+
+	// Una sola consulta: cruza las obras con el texto de configuracion_filtros del usuario
+	query := `
+		SELECT DISTINCT
+			o.id, 
+			o.titulo, 
+			COALESCE(a.nombre, 'Autor desconocido'),
+			CONCAT('Basado en tu filtro favorito: ', f.nombre)
+		FROM obras o
+		LEFT JOIN artistas a ON o.id_artista = a.id
+		JOIN filtros_favoritos f ON (
+			f.configuracion_filtros LIKE CONCAT('%"', o.epoca, '"%')
+			OR f.configuracion_filtros LIKE CONCAT('%"', o.tecnica, '"%')
+			OR f.configuracion_filtros LIKE CONCAT('%"', a.nombre, '"%')
+		)
+		WHERE f.id_usuario = ?
+		LIMIT 5
+	`
+
+	rows, err := s.db.QueryContext(ctx, query, req.GetIdUsuario())
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var recomendadas []*museov1.ObraRecomendada
+	for rows.Next() {
+		var o museov1.ObraRecomendada
+		if err := rows.Scan(&o.Id, &o.Titulo, &o.Artista, &o.Motivo); err == nil {
+			recomendadas = append(recomendadas, &o)
+		}
+	}
+
+	return &museov1.RecomendacionResponse{Recomendadas: recomendadas}, nil
+}
 func main() {
 	dsn := "root:root@tcp(localhost:3307)/museo?parseTime=true"
 	db, err := sql.Open("mysql", dsn)

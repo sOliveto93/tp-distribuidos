@@ -81,6 +81,28 @@ function deserialize_museo_v1_PreferenciasVisitante(buffer_arg) {
   return museo_pb.PreferenciasVisitante.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_museo_v1_RecomendacionRequest(arg) {
+  if (!(arg instanceof museo_pb.RecomendacionRequest)) {
+    throw new Error('Expected argument of type museo.v1.RecomendacionRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_museo_v1_RecomendacionRequest(buffer_arg) {
+  return museo_pb.RecomendacionRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_museo_v1_RecomendacionResponse(arg) {
+  if (!(arg instanceof museo_pb.RecomendacionResponse)) {
+    throw new Error('Expected argument of type museo.v1.RecomendacionResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_museo_v1_RecomendacionResponse(buffer_arg) {
+  return museo_pb.RecomendacionResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 // ------------- Servicio de obras----------------------
 //
@@ -106,6 +128,17 @@ var ObraServiceService = exports.ObraServiceService = {
     requestDeserialize: deserialize_museo_v1_BuscarObrasRequest,
     responseSerialize: serialize_museo_v1_ObrasResponse,
     responseDeserialize: deserialize_museo_v1_ObrasResponse,
+  },
+  generarRecomendacion: {
+    path: '/museo.v1.ObraService/GenerarRecomendacion',
+    requestStream: false,
+    responseStream: false,
+    requestType: museo_pb.RecomendacionRequest,
+    responseType: museo_pb.RecomendacionResponse,
+    requestSerialize: serialize_museo_v1_RecomendacionRequest,
+    requestDeserialize: deserialize_museo_v1_RecomendacionRequest,
+    responseSerialize: serialize_museo_v1_RecomendacionResponse,
+    responseDeserialize: deserialize_museo_v1_RecomendacionResponse,
   },
 };
 
