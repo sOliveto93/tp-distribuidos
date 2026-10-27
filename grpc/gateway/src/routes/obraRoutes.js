@@ -36,6 +36,49 @@ obraRouter.get("/comparar", (req, res) => {
         res.json(resultado.toObject()); 
     });
 });
+
+obraRouter.post('/recorridos', (req, res) => {
+    const { epoca, tecnica, cantidad_obras } = req.body;
+
+    const solicitud = new museoMessages.GenerarRecorridoRequest();
+    solicitud.setEpoca(epoca || "");
+    solicitud.setTecnica(tecnica || "");
+    solicitud.setCantidadObras(parseInt(cantidad_obras) || 5);
+
+    obraClient.generarRecorrido(solicitud, (error, resultado) => {
+        if (error) {
+            console.error("Error gRPC al generar recorrido:", error);
+            return res.status(502).json({ error: "Error al generar el recorrido" });
+        }
+        
+        res.json(resultado.toObject());
+    });
+});
+
+obraRouter.get('/recomendaciones/:id_usuario',(req,res)=>{
+
+    const idUsuario = parseInt(req.params.id_usuario);
+
+    if(!Number.isInteger(idUsuario) || idUsuario <=0){
+        return res.status(400).json({error: "ID de usuario invalido"});
+    }
+
+    const solicitud = new museoMessages.RecomendacionRequest();
+    solicitud.setIdUsuario(idUsuario);
+    //console.log(solicitud.toObject());
+    obraClient.generarRecomendacion(solicitud,(error,resultado)=>{
+        
+        if(error){
+            console.error("Error gRPC al generar recomendaciones:", error);
+            return res.status(502).json({error: "Error al generar recomendaciones"});
+        }
+       // console.log(resultado.toObject());
+        res.json(resultado.toObject());
+    });
+
+
+});
+
 obraRouter.get("/:id", (req, res) => {
     const id = Number(req.params.id);
 
@@ -60,22 +103,6 @@ obraRouter.get("/:id", (req, res) => {
     });
 });
 
-obraRouter.post('/recorridos', (req, res) => {
-    const { epoca, tecnica, cantidad_obras } = req.body;
 
-    const solicitud = new museoMessages.GenerarRecorridoRequest();
-    solicitud.setEpoca(epoca || "");
-    solicitud.setTecnica(tecnica || "");
-    solicitud.setCantidadObras(parseInt(cantidad_obras) || 5);
-
-    obraClient.generarRecorrido(solicitud, (error, resultado) => {
-        if (error) {
-            console.error("Error gRPC al generar recorrido:", error);
-            return res.status(502).json({ error: "Error al generar el recorrido" });
-        }
-        
-        res.json(resultado.toObject());
-    });
-});
 
 module.exports = obraRouter;

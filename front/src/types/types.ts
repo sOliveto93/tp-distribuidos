@@ -84,16 +84,33 @@ export interface Evento {
   usuarios?: { id: number; nombre?: string }[];
 }
 
+
+
+export interface FiltrosEventos {
+  fecha?: string;
+  tipo?: string;
+  idCurador?: string | number;
+}
+
+export interface PreferenciasRecomendaciones {
+  tipoConfiguracion: "RECOMENDACIONES";
+  epoca: string;
+  tecnica: string;
+  artista: string;
+}
+
 export interface FiltroFavorito {
   id?: number;
   nombre: string;
   descripcion?: string;
-  configuracionFiltros?: { fecha?: string; tipo?: string; idCurador?: string | number };
+  configuracionFiltros?: FiltrosEventos | PreferenciasRecomendaciones;
   fecha?: string;
   tipo?: string;
   idCurador?: number | null;
   usuario?: { id: number };
 }
+
+
 
 export interface ReporteExcelRequest {
     fecha: string;
