@@ -42,6 +42,7 @@ service ObraService{
 
     rpc GenerarRecomendacion (RecomendacionRequest) 
     returns (RecomendacionResponse);
+
     rpc GenerarRecorrido (GenerarRecorridoRequest)
     returns (ObrasResponse);
 }
@@ -83,6 +84,10 @@ message GenerarRecorridoRequest {
     string tecnica = 2;
     int32 cantidad_obras = 3;
 }
+
+
+
+
 
 // ------------------Servicio de visitantes------------------
 
