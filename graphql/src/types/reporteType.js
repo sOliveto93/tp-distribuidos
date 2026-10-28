@@ -14,5 +14,6 @@ export const reporteType=`
         total_inscriptos_acumulados: Int!
         promedio_de_asistencia: Float!
         eventos: [EventoReporte!]!
+        eventos_mas_populares: [EventoReporte!]!
     }
 `;

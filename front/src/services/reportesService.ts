@@ -10,6 +10,14 @@ const QUERY_REPORTE = `
       cantidad_de_eventos
       total_inscriptos_acumulados
       promedio_de_asistencia
+      eventos_mas_populares {
+          titulo
+          fecha_hora
+          curador
+          cantidad_inscriptos
+          cupo_max
+          tipo
+        }
       eventos {
         titulo
         fecha_hora

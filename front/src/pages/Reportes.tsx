@@ -172,9 +172,9 @@ export default function PanelReportes() {
             <p><strong>Total Inscriptos:</strong> {grupo.total_inscriptos_acumulados}</p>
             <p><strong>Promedio Asistencia:</strong> {grupo.promedio_de_asistencia.toFixed(2)}</p>
 
-            <h4>Detalle de eventos:</h4>
+            <h4>Detalle de eventos más populares:</h4>
             <ul>
-              {grupo.eventos.map((ev, index) => {
+              {grupo.eventos_mas_populares.map((ev, index) => {
                 const fechaObj = new Date(Number(ev.fecha_hora));
                 const fechaFormat = fechaObj.toLocaleString('es-AR', {
                   day: '2-digit',
@@ -185,7 +185,7 @@ export default function PanelReportes() {
                 });
                 return (
                   <li key={`${ev.titulo}-${index}`}>
-                    {fechaFormat} - {ev.titulo} - {ev.cantidad_inscriptos} inscriptos
+                    {fechaFormat} - <strong>{ev.titulo}</strong> - {ev.cantidad_inscriptos} inscriptos
                   </li>
                 );
               })}
