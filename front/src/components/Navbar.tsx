@@ -12,8 +12,8 @@ export default function Navbar({ rol, setRol }: NavbarProps) {
 
   const cerrarSesion = () => {
     localStorage.clear();
+    navigate('/login', { replace: true });
     setRol(null);
-    navigate('/login');
   };
 
   return (

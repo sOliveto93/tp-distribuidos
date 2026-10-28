@@ -134,6 +134,7 @@ export interface GrupoReporte {
   total_inscriptos_acumulados: number;
   promedio_de_asistencia: number;
   eventos: EventoReporte[];
+  eventos_mas_populares: EventoReporte[];
 }
 
 export interface DatosExploracion {

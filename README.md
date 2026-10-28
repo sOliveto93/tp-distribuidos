@@ -102,7 +102,7 @@ go mod tidy
 
 Ejecutar:
 
-go run main.go
+go run .
 
 Ingresar a `grpc/gateway`:
 
