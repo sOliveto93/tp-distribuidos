@@ -88,13 +88,39 @@ Disponible en:
 ```text
 http://localhost:4000/graphql
 ```
+
+## Backend Kafka
+```text
+Ingresar a `kafka/consumer`:
+
+cd kafka/consumer
+
+Instalar dependencias:
+
+npm install
+
+Ejecutar consumidor:
+
+node index.js
+
+En otra terminal ingresar a `kafka/producer`:
+cd kafka/producer
+
+Crear y activar entorno virtual:
+python -m venv venv
+.\venv\Scripts\activate
+
+Instalar dependencias:
+pip install -r requirements.txt
+
+Ejecutar productor:
+python producer.py
+```
 ## Backend gRPC
 ```text
 Ingresar a `grpc/server`:
 
-cd grpc
-
-cd server
+cd grpc/server
 
 Instalar dependencias:
 
@@ -104,11 +130,9 @@ Ejecutar:
 
 go run .
 
-Ingresar a `grpc/gateway`:
+En otra terminal ingresar a `grpc/gateway`:
 
-cd grpc
-
-cd gateway
+cd grpc/gateway
 
 Instalar dependencias:
 
