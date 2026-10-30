@@ -40,7 +40,6 @@ service ObraService{
     rpc BuscarObras (BuscarObrasRequest)
     returns (ObrasResponse);
 
-
     rpc GenerarRecomendacion (RecomendacionRequest) 
     returns (RecomendacionResponse);
 

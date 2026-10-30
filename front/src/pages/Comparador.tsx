@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import { fetchObras, fetchComparacion } from "../services/comparadorService";
 import "./Comparador.css";
+import type { Obra } from "../types/types";
 export default function App() {
-  const [obras, setObras] = useState<any[]>([]);
-  const [seleccionadas, setSeleccionadas] = useState<any[]>([]);
-  const [comparacion, setComparacion] = useState<any[]>([]);
+  const [obras, setObras] = useState<Obra[]>([]);
+  const [seleccionadas, setSeleccionadas] = useState<string[]>([]);
+  const [comparacion, setComparacion] = useState<Obra[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
   useEffect(() => {
     void fetchObras()
@@ -16,9 +17,12 @@ export default function App() {
       });
   }, []);
 
-  const toggleObra = (id: number) => {
-    setSeleccionadas((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+  const toggleObra = (id: string) => {
+    setSeleccionadas((prev) =>{
+      if (prev.includes(id)) return prev.filter((item) => item !== id);
+      if (prev.length >= 4) return prev;
+      return [...prev, id];
+    }
     );
   };
 
@@ -31,7 +35,7 @@ export default function App() {
   return (
     <div className="comparador-container">
       <h2>Comparador de Obras</h2>
-      <p>Seleccioná al menos 2 obras para compararlas lado a lado:</p>
+      <p>Seleccioná entre 2 y 4 obras para compararlas lado a lado:</p>
 
       <div style={{ marginBottom: "16px" }}>
         {obras.map((o) => (
@@ -41,14 +45,14 @@ export default function App() {
               checked={seleccionadas.includes(o.id)}
               onChange={() => toggleObra(o.id)}
             />{" "}
-            <strong>{o.titulo}</strong> — {o.artista} <em>({o.epoca})</em>
+            <strong>{o.titulo}</strong> — {o.artista.nombre} <em>({o.epoca})</em>
           </label>
         ))}
       </div>
 
       <button
         onClick={comparar}
-        disabled={seleccionadas.length < 2}
+        disabled={seleccionadas.length < 2 || seleccionadas.length > 4}
         className="btn-comparar"
       >
         Comparar seleccionadas ({seleccionadas.length})
