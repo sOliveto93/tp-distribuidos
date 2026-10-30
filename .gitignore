@@ -11,6 +11,7 @@ rest/target/
 .settings/
 
 # Node
+node_modules/
 graphql/node_modules/
 grpc/gateway/node_modules/
 graphql/npm-debug.log*
