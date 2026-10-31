@@ -1,7 +1,9 @@
 package com.example.rest.eventos.service;
 
 import com.example.rest.entity.Evento;
+import com.example.rest.entity.OutboxEvento;
 import com.example.rest.entity.Usuario;
+import com.example.rest.enums.TipoNovedad;
 import com.example.rest.eventos.repository.EventoRepository;
 import com.example.rest.usuario.repository.UsuarioRepository;
 
@@ -19,6 +21,9 @@ public class EventoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private OutboxService outboxService;
+
     public List<Evento> obtenerTodos() {
         return eventoRepository.findAll();
     }
@@ -29,7 +34,12 @@ public class EventoService {
     }
 
     public Evento guardarEvento(Evento evento) {
-        return eventoRepository.save(evento);
+        Evento eventoNuevo = eventoRepository.save(evento);
+        
+        outboxService.guardarEvento(eventoNuevo, TipoNovedad.EVENTO_CREADO);
+
+        return eventoNuevo;
+
     }
 
     @Transactional
@@ -54,15 +64,16 @@ public class EventoService {
         eventoRepository.deleteById(id);
     }
 
-    @Transactional 
+    @Transactional
     public Evento inscribirVisitante(Integer idEvento, Integer idUsuario) {
         Evento evento = obtenerPorId(idEvento);
-        
+
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Error: Usuario no encontrado"));
 
         if (evento.getUsuarios().size() >= evento.getCupoMax()) {
-            throw new RuntimeException("No se puede inscribir: El evento ya alcanzó su cupo máximo de " + evento.getCupoMax() + " personas.");
+            throw new RuntimeException("No se puede inscribir: El evento ya alcanzó su cupo máximo de "
+                    + evento.getCupoMax() + " personas.");
         }
 
         if (evento.getUsuarios().contains(usuario)) {
@@ -73,7 +84,7 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
-    @Transactional 
+    @Transactional
     public Evento desinscribirVisitante(Integer idEvento, Integer idUsuario) {
         Evento evento = obtenerPorId(idEvento);
         Usuario usuario = usuarioRepository.findById(idUsuario)
@@ -91,13 +102,13 @@ public class EventoService {
                     .filter(e -> e.getTipo().equalsIgnoreCase(tipo))
                     .toList();
         }
-        
+
         if (idCurador != null) {
             eventos = eventos.stream()
                     .filter(e -> e.getCurador() != null && e.getCurador().getId().equals(idCurador))
                     .toList();
         }
-        
+
         if (fecha != null && !fecha.isEmpty()) {
             eventos = eventos.stream()
                     .filter(e -> e.getFechaHora().toLocalDate().toString().equals(fecha))
