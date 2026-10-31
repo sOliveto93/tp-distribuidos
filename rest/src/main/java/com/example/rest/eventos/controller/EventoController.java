@@ -109,9 +109,9 @@ public class EventoController {
     // (DELETE a http://localhost:8080/api/eventos/1)
     @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarEvento(@PathVariable Integer id) {
+    public ResponseEntity<?> eliminarEvento(@PathVariable Integer id, Authentication authentication) {
         try {
-            eventoService.eliminarEvento(id);
+            eventoService.eliminarEvento(id,authentication.getName());
             return ResponseEntity.ok("El evento fue eliminado exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body("No se pudo eliminar: Evento no encontrado con el ID especificado.");
