@@ -1,5 +1,5 @@
 const { Kafka } = require('kafkajs');
-const db = require('./db/db.js');
+const db = require('../db/db.js');
 
 const kafka = new Kafka({
   clientId: 'app-auditoria',
@@ -8,7 +8,7 @@ const kafka = new Kafka({
 
 const consumer = kafka.consumer({ groupId: 'grupo-auditoria' });
 
-const iniciar = async () => {
+const iniciarAuditoria = async () => {
   await consumer.connect();
   console.log("Consumidor de Auditoría conectado exitosamente a Kafka.");
   await consumer.subscribe({ topic: 'eventos', fromBeginning: true });
@@ -36,4 +36,4 @@ const iniciar = async () => {
   });
 };
 
-iniciar().catch(console.error);
+module.exports = { iniciarAuditoria };
