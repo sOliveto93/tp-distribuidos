@@ -17,6 +17,7 @@ graphql/npm-debug.log*
 graphql/yarn-debug.log*
 graphql/yarn-error.log*
 grpc/gateway/npm-debug.log*
+kafka/node_modules/
 
 # Environment
 .env
