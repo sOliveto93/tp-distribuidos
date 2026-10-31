@@ -113,3 +113,26 @@ CREATE TABLE `evento_obra` (
   CONSTRAINT `evento_obra_eventos_FK` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `evento_obra_obra_FK` FOREIGN KEY (`id_obra`) REFERENCES `obras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- museo.outbox_eventos definition
+
+CREATE TABLE `outbox_eventos` (
+    `id` bigint NOT NULL AUTO_INCREMENT,
+    `message_id` varchar(36) NOT NULL,
+    `tipo_novedad` varchar(30) NOT NULL,
+    `evento_id` int NOT NULL,
+    `usuario_responsable_id` int DEFAULT NULL,
+    `payload` json NOT NULL,
+    `intentos` int NOT NULL DEFAULT 0,
+    `disponible_en` datetime NOT NULL,
+    `bloqueado_hasta` datetime DEFAULT NULL,
+    `creado_en` datetime NOT NULL,
+    `enviado_en` datetime DEFAULT NULL,
+    `ultimo_error` varchar(500) DEFAULT NULL,
+    `estado` varchar(20) NOT NULL DEFAULT 'PENDIENTE',
+
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_outbox_message_id` (`message_id`),
+    KEY `idx_outbox_estado_disponible` (`estado`, `disponible_en`),
+    KEY `idx_outbox_evento` (`evento_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
