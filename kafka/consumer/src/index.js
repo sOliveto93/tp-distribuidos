@@ -1,4 +1,6 @@
 const { Kafka } = require('kafkajs');
+const { persistirNotificacion } = require('./notificaciones.js');
+
 
 const kafka = new Kafka({
   clientId: 'mi-app-prueba',
@@ -15,10 +17,11 @@ const iniciar = async () => {
 
   await consumer.run({
     eachMessage: async ({ message }) => {
-      const valor = JSON.parse(message.value.toString());
+      const evento = JSON.parse(message.value.toString());
 
-      console.log("Mensaje recibido desde Python:");
-      console.log(valor);
+      await persistirNotificacion(evento)
+      console.log(`Notificaciones persistidas para el evento ${evento.evento_id}`);
+      
     },
   });
 };

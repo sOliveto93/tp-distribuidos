@@ -136,3 +136,21 @@ CREATE TABLE `outbox_eventos` (
     KEY `idx_outbox_estado_disponible` (`estado`, `disponible_en`),
     KEY `idx_outbox_evento` (`evento_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE notificaciones (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    message_id VARCHAR(36) NOT NULL,
+    usuario_id INT NOT NULL,
+    evento_id INT NOT NULL,
+    tipo_novedad VARCHAR(30) NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    mensaje TEXT,
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uk_notificacion_message_usuario
+        UNIQUE (message_id, usuario_id),
+
+    CONSTRAINT fk_notificacion_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);

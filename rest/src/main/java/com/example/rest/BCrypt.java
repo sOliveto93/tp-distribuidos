@@ -5,7 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class BCrypt {
     public static void main(String args[]){
         BCryptPasswordEncoder encoder= new BCryptPasswordEncoder();
-        String pass= encoder.encode("carlos");
+        String pass= encoder.encode("admin");
         System.out.println(pass);
     }
 }
