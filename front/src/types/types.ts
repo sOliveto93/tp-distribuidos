@@ -162,3 +162,12 @@ export interface Notificacion {
     titulo: string;
     mensaje: string;
 }
+
+export interface Auditoria {
+  id: number;
+  messageId: string;
+  accion: string;
+  responsableId: number;
+  payload: string;
+  fechaRegistro: string;
+}
