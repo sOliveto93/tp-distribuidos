@@ -154,3 +154,12 @@ CREATE TABLE notificaciones (
     CONSTRAINT fk_notificacion_usuario
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
+
+CREATE TABLE auditoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    message_id VARCHAR(255) UNIQUE NOT NULL,
+    accion VARCHAR(50),
+    responsable_id INT,
+    payload JSON,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
