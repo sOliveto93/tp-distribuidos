@@ -12,54 +12,62 @@ import Me from './pages/Me';
 import Exploracion from './pages/Exploracion';
 import Recorridos from './pages/Recorridos';
 import Recomendaciones from './pages/Recomendaciones';
+import { NotificacionesProvider } from './context/NotificacionesContext';
+import Notificaciones from './pages/Notificaciones';
 
 export default function App() {
+
   const [rol, setRol] = useState(localStorage.getItem('rol'));
+
+
   const iniciarSesion = (nuevoRol: string) => {
     localStorage.setItem('rol', nuevoRol);
     setRol(nuevoRol);
   };
 
   return (
-    <BrowserRouter>
-      <Navbar rol={rol} setRol={setRol} />
-      
+    <NotificacionesProvider>
+      <BrowserRouter>
+        <Navbar rol={rol} setRol={setRol} />
+
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login onLogin={iniciarSesion} />} />
-          <Route path="/me" element={<Me/>} />
+          <Route path="/me" element={<Me />} />
           <Route path="/eventos" element={<Eventos />} />
           <Route path="/explorar" element={<Exploracion />} />
-          <Route path="/obras" element={<Obras/>}/>
+          <Route path="/obras" element={<Obras />} />
           <Route path="/recorridos" element={<Recorridos />} />
           <Route path="/recomendaciones" element={<Recomendaciones />} />
-          <Route 
-            path="/reportes" 
+          <Route path="/notificaciones" element={<Notificaciones />} />
+          <Route
+            path="/reportes"
             element={
-              (rol === 'CURADOR' || rol === 'ADMINISTRADOR') 
-                ? <Reportes /> 
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR')
+                ? <Reportes />
                 : <Navigate to="/eventos" replace />
-            } 
+            }
           />
-          <Route 
-            path="/crear-evento" 
+          <Route
+            path="/crear-evento"
             element={
-              (rol === 'CURADOR' || rol === 'ADMINISTRADOR') 
-                ? <CrearEvento /> 
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR')
+                ? <CrearEvento />
                 : <Navigate to="/eventos" replace />
-            } 
+            }
           />
-          <Route 
-            path="/editar-evento/:id" 
+          <Route
+            path="/editar-evento/:id"
             element={
-              (rol === 'CURADOR' || rol === 'ADMINISTRADOR') 
-                ? <EditarEvento /> 
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR')
+                ? <EditarEvento />
                 : <Navigate to="/eventos" replace />
-            } 
+            }
           />
-          <Route path="/comparador" element={<Comparador/>}/>
+          <Route path="/comparador" element={<Comparador />} />
         </Routes>
-        
-    </BrowserRouter>
+
+      </BrowserRouter>
+    </NotificacionesProvider>
   );
 }

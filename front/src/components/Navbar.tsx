@@ -26,6 +26,7 @@ export default function Navbar({ rol, setRol }: NavbarProps) {
         <Link to="/me" className="nav-link">Me</Link>
         <Link to="/comparador" className='nav-link'>Comparador</Link>
         <Link to="/recomendaciones" className='nav-link'>Recomendaciones</Link>
+        <Link to="/notificaciones" className='nav-link'>Notificaciones</Link>
         {(rol === 'CURADOR' || rol === 'ADMINISTRADOR') && (
           <>
             <Link to="/reportes" className="nav-link">Reportes</Link>

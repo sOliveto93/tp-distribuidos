@@ -1,29 +1,19 @@
-const { Kafka } = require('kafkajs');
-const { persistirNotificacion } = require('./notificaciones.js');
+const http = require('http');
+const { iniciarConsumer } = require('./kafka/consumer');
+const { configurarWebSocket } = require('./websocket/socket');
 
+const PORT = 3100;
 
-const kafka = new Kafka({
-  clientId: 'mi-app-prueba',
-  brokers: ['localhost:9092']
-});
+const server = http.createServer();
 
-const consumer = kafka.consumer({ groupId: 'grupo-prueba' });
+configurarWebSocket(server);
 
 const iniciar = async () => {
-  await consumer.connect();
-  console.log("Consumidor conectado exitosamente a Kafka.");
+    server.listen(PORT, () => {
+        console.log(`Servidor WebSocket escuchando en puerto ${PORT}`);
+    });
 
-  await consumer.subscribe({ topic: 'eventos', fromBeginning: true });
-
-  await consumer.run({
-    eachMessage: async ({ message }) => {
-      const evento = JSON.parse(message.value.toString());
-
-      await persistirNotificacion(evento)
-      console.log(`Notificaciones persistidas para el evento ${evento.evento_id}`);
-      
-    },
-  });
+    await iniciarConsumer();
 };
 
 iniciar().catch(console.error);

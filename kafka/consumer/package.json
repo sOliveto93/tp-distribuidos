@@ -3,7 +3,8 @@
   "dependencies": {
     "dotenv": "^18.0.9",
     "kafkajs": "^2.2.4",
-    "mysql2": "^3.24.6"
+    "mysql2": "^3.24.6",
+    "ws": "^8.22.1"
   },
   "version": "1.0.0",
   "description": "",
