@@ -59,17 +59,17 @@ public class EventoController {
     // (POST a http://localhost:8080/api/eventos)
     @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @PostMapping
-    public ResponseEntity<EventoResponseDTO> crearEvento(@RequestBody Evento evento) {
-        Evento nuevoEvento = eventoService.guardarEvento(evento);
+    public ResponseEntity<EventoResponseDTO> crearEvento(@RequestBody Evento evento, Authentication authentication) {
+        Evento nuevoEvento = eventoService.guardarEvento(evento,authentication.getName());
         return ResponseEntity.ok(mapearAEventoDTO(nuevoEvento));
     }
 
     // (PUT a http://localhost:8080/api/eventos/1)
     @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> modificarEvento(@PathVariable Integer id, @RequestBody Evento eventoActualizado) {
+    public ResponseEntity<?> modificarEvento(@PathVariable Integer id, @RequestBody Evento eventoActualizado, Authentication authentication) {
         try {
-            Evento evento = eventoService.actualizarEvento(id, eventoActualizado);
+            Evento evento = eventoService.actualizarEvento(id, eventoActualizado,authentication.getName());
             return ResponseEntity.ok(mapearAEventoDTO(evento));
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body("Error: El evento no existe o no se pudo modificar.");
