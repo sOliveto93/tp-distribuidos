@@ -17,10 +17,10 @@ INSERT INTO artistas (id, nombre, biografia) VALUES
 
 INSERT INTO usuarios (id, nombre, email, contrasenia, rol) VALUES
 (1, 'Sebastian Oliveto', 'admin@admin.com', '$2a$10$BGTC0bkRLPOqCHuOE9J1Yu7qjlyFKUXjGwKpOqjsQufD9f/BVqBgi', 'ADMINISTRADOR'),
-(2, 'Laura Gomez', 'curador@curador.com', '$2a$10$2VTjh67rotJHtFpCHuwPYe0EAJ/4tbWj6YKuAjrc9F.MmvuUSqCWC', 'CURADOR'),
-(3, 'Martin Perez', 'martin@gmail.com', '$2a$10$pfbqN7OUJgn41DfNQWmCuOwIYWUtxo2VRvdFKy29TSWTCUcgq.z4K', 'VISITANTE'),
-(4, 'Ana Rodriguez', 'ana@gmail.com', '$2a$10$qURiZUkqXRNRiG3fTzP.GOsgvzGaTLBwwypnFE4RLPAftIkjnHKQW', 'VISITANTE'),
-(5, 'Carlos Fernandez', 'carlos@gmail.com', '$2a$10$EVynsA8g8.DkocgErKD0YOukB3QdjH3nI3NZryuoSrX27DobOYUY.', 'VISITANTE');
+(2, 'Laura Gomez', 'curador@curador.com', '$2a$10$AV3jM9zj8JwS13r0QrOmIOcfk6qDfTSyAz1H8qzQfzCSCrv.l.3my', 'CURADOR'),
+(3, 'Martin Perez', 'martin@gmail.com', '$2a$10$r9xexUM5kLpijxSmJmWQ8u.liiwZGRbLM9BJ0U8IWJ3J2qC9OI8w6', 'VISITANTE'),
+(4, 'Ana Rodriguez', 'ana@gmail.com', '$2a$10$UwV1YlQba/A2FJdWUvc4peRnw/7rac7xJw064aipJN0CXFS./r6ra', 'VISITANTE'),
+(5, 'Carlos Fernandez', 'carlos@gmail.com', '$2a$10$fTxL3njavX0MJU1Fqj/6KubkpV.V6lYYi4OtTZRWAJTXvZU5GnjVO', 'VISITANTE');
 
 
 -- =========================================================

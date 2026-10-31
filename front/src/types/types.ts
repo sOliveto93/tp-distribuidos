@@ -153,3 +153,12 @@ export interface GenerarRecorridoRequest {
 export interface RecorridoResponse {
     obrasList: Obra[];
 }
+
+export interface Notificacion {
+    message_id: string;
+    usuario_id: number;
+    evento_id: number;
+    tipo_novedad: string;
+    titulo: string;
+    mensaje: string;
+}

@@ -1,9 +1,9 @@
-const db = require('./db/db.js');
+const db = require('../db/db.js');
 
 async function persistirNotificacion(evento) {
 
     const payload = JSON.parse(evento.payload);
-
+    const notificacionesCreadas = [];
 
     const [usuarios] = await db.execute(
         `SELECT id
@@ -13,8 +13,8 @@ async function persistirNotificacion(evento) {
     );
 
     for (const usuario of usuarios) {
-//esta query maneja los mensajes duplicados con unique
-        await db.execute(
+        //esta query maneja los mensajes duplicados con unique
+        const [resultado] = await db.execute(
             `INSERT INTO notificaciones
                 (message_id, usuario_id, evento_id, tipo_novedad, titulo, mensaje)
              VALUES (?, ?, ?, ?, ?, ?)
@@ -28,9 +28,26 @@ async function persistirNotificacion(evento) {
                 `Se creó un nuevo evento: ${payload.titulo}`
             ]
         );
+        //nos fijamos si realmente se inserto un registro porque ignoramos duplicados
+        //asi evitamos duplicar notificaciones
+        if (resultado.affectedRows === 1) {
+
+            notificacionesCreadas.push({
+
+                message_id: evento.message_id,
+                usuario_id: usuario.id,
+                evento_id: evento.evento_id,
+                tipo_novedad: evento.tipo_novedad,
+                titulo: payload.titulo,
+                mensaje: `Se creó un nuevo evento: ${payload.titulo}`
+
+            });
+        }
     }
 
-    console.log(`Notificaciones procesadas: ${usuarios.length}`);
+    console.log(`Notificaciones nuevas: ${notificacionesCreadas.length}`);
+
+    return notificacionesCreadas;
 }
 
 module.exports = { persistirNotificacion };
