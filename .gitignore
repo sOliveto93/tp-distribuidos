@@ -31,3 +31,21 @@ Thumbs.db
 # Go
 
 grpc/server/bin/
+
+#python
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Entorno virtual
+.venv/
+venv/
+
+# Variables de entorno
+.env
+
+# Archivos temporales
+*.log
+.pytest_cache/

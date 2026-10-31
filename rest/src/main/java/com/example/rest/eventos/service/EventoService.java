@@ -3,13 +3,16 @@ package com.example.rest.eventos.service;
 import com.example.rest.entity.Evento;
 import com.example.rest.entity.Usuario;
 import com.example.rest.enums.TipoNovedad;
+import com.example.rest.eventos.dto.EventoResponseDTO;
 import com.example.rest.eventos.repository.EventoRepository;
+import com.example.rest.usuario.dto.UsuarioResponseDTO;
 import com.example.rest.usuario.repository.UsuarioRepository;
 import com.example.rest.usuario.service.UsuarioService;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Map;
@@ -39,17 +42,17 @@ public class EventoService {
     }
 
     @Transactional
-    public Evento guardarEvento(Evento evento,String username) {
+    public EventoResponseDTO guardarEvento(Evento evento,String username) {
         Evento eventoNuevo = eventoRepository.save(evento);
         Usuario responsable = usuarioService.obtenerPorEmail(username);
         outboxService.guardarEvento(eventoNuevo, TipoNovedad.EVENTO_CREADO,responsable.getId());
 
-        return eventoNuevo;
+        return mapearAEventoDTO(eventoNuevo);
 
     }
 
     @Transactional
-    public Evento actualizarEvento(Integer id, Evento eventoActualizado,String username) {
+    public EventoResponseDTO actualizarEvento(Integer id, Evento eventoActualizado,String username) {
         Evento eventoExistente = obtenerPorId(id);
 
         Map<String, Object> datosAnteriores = outboxService.obtenerDatosEvento(eventoExistente);
@@ -71,7 +74,7 @@ public class EventoService {
 
         outboxService.guardarEventoModificado(eventoGuardado, datosAnteriores,responsable.getId());
 
-        return eventoGuardado;
+        return mapearAEventoDTO(eventoGuardado);
     }
 
     //revisar esto es baja logica por si piden que se cancele simplemente logicamente
@@ -116,7 +119,7 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
-    public List<Evento> obtenerConFiltros(String fecha, String tipo, Integer idCurador) {
+    public List<EventoResponseDTO> obtenerConFiltros(String fecha, String tipo, Integer idCurador) {
         List<Evento> eventos = eventoRepository.findAll();
 
         if (tipo != null && !tipo.isEmpty()) {
@@ -137,7 +140,44 @@ public class EventoService {
                     .toList();
         }
 
-        return eventos;
+        return eventos.stream()
+                .map(this::mapearAEventoDTO)
+                .toList();
     }
 
+
+public EventoResponseDTO mapearAEventoDTO(Evento evento) {
+    List<UsuarioResponseDTO> usuariosDTO = evento.getUsuarios() == null
+            ? List.of()
+            : evento.getUsuarios().stream()
+                .map(u -> UsuarioResponseDTO.builder()
+                        .id(u.getId())
+                        .nombre(u.getNombre())
+                        .email(u.getEmail())
+                        .rol(u.getRol())
+                        .build())
+                .toList();
+
+    UsuarioResponseDTO curadorDTO = null;
+    if (evento.getCurador() != null) {
+        curadorDTO = UsuarioResponseDTO.builder()
+                .id(evento.getCurador().getId())
+                .nombre(evento.getCurador().getNombre())
+                .email(evento.getCurador().getEmail())
+                .rol(evento.getCurador().getRol())
+                .build();
+    }
+
+    return EventoResponseDTO.builder()
+            .id(evento.getId())
+            .titulo(evento.getTitulo())
+            .descripcion(evento.getDescripcion())
+            .fechaHora(evento.getFechaHora())
+            .duracion(evento.getDuracion())
+            .tipo(evento.getTipo())
+            .cupoMax(evento.getCupoMax())
+            .curador(curadorDTO)
+            .usuarios(usuariosDTO)
+            .build();
+}
 }
