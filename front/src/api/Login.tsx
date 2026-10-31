@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { login, me } from '../services/authServ';
+import { login, me, obtenerNotificacionesPersistidas } from '../services/authServ';
 import { useNavigate } from 'react-router-dom';
 import { conectarNotificaciones } from '../services/webSocketService.ts';
 import { useContext } from 'react';
 import { NotificacionesContext } from '../context/NotificacionesContext';
+import Notificaciones from '../pages/Notificaciones.tsx';
 
 interface LoginProps {
   onLogin: (rol: string) => void;
@@ -13,7 +14,7 @@ export default function Login({ onLogin }: LoginProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { agregarNotificacion } = useContext(NotificacionesContext);
+  const { agregarNotificacion ,cargarNotificaciones} = useContext(NotificacionesContext);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,8 +40,9 @@ export default function Login({ onLogin }: LoginProps) {
       navigate('/eventos');
       if (perfil.rol === 'VISITANTE') {
         try {
-
-          conectarNotificaciones(perfil.id, agregarNotificacion);
+          const notificaciones=await obtenerNotificacionesPersistidas(dataLogin.token);
+          cargarNotificaciones(notificaciones);
+          conectarNotificaciones(dataLogin.token, agregarNotificacion);
 
         } catch (error) {
           console.error('No se pudieron iniciar las notificaciones:', error);

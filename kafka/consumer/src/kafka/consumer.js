@@ -10,27 +10,60 @@ const kafka = new Kafka({
 
 const consumer = kafka.consumer({ groupId: 'grupo-notificaciones' });
 
+const procesarEvento = async(evento) => {
+  let notificaciones=[];
+
+  switch (evento.tipo_novedad) {
+    case 'EVENTO_CREADO':
+      notificaciones = await persistirNotificacion(evento);
+      break;
+
+    case 'EVENTO_MODIFICADO':
+     console.log('evento modificado');
+      break;
+
+    case 'EVENTO_ELIMINADO':
+    console.log('evento eliminado');
+      break;
+
+    default:
+      throw new Error(`Tipo de evento desconocido: ${evento.tipo_novedad}`);
+  }
+
+  for (const notificacion of notificaciones) {
+        enviarNotificacion(notificacion.usuario_id, notificacion);
+    }
+
+}
+
 const iniciarConsumer = async () => {
   await consumer.connect();
-  console.log("Consumidor Notificaciones conectado exitosamente a Kafka.");
 
-  await consumer.subscribe({ topic: 'eventos', fromBeginning: true });
+  console.log('Consumidor conectado exitosamente a Kafka.');
+
+  await consumer.subscribe({
+    topic: 'eventos',
+    fromBeginning: true
+  });
 
   await consumer.run({
     eachMessage: async ({ message }) => {
-      const evento = JSON.parse(message.value.toString());
-
-      const notificaciones=await persistirNotificacion(evento);
-
-      for(const notificacion of notificaciones){
-        enviarNotificacion(notificacion.usuario_id,notificacion);
-      }
-
-      console.log(`Notificaciones persistidas para el evento ${evento.evento_id}`);
-      
-    },
-  });
+      const mensaje = JSON.parse(message.value.toString());
+      console.log('MENSAJE ORIGINAL:', mensaje);
+      //parseamos porque lo tenemos dentro de mensaje para estandarizar un poco sin tocar el producer
+      const evento = {
+    ...mensaje,
+    payload: JSON.parse(mensaje.payload)
 };
+console.log('TIPO DEL EVENTO:', evento.tipo_novedad);
+      await procesarEvento(evento);
 
-module.exports={iniciarConsumer};
+      console.log(
+        `Notificaciones procesadas para ${evento.tipo_novedad}`
+      );
+    }
+  });
+}
+
+module.exports = { iniciarConsumer };
 

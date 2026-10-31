@@ -43,3 +43,18 @@ if (!respuesta.ok) throw new Error("Token inválido o expirado");
 const usuario = await respuesta.json();
  return usuario;
 }
+
+export const obtenerNotificacionesPersistidas = async (token: string) => {
+  const respuesta = await fetch(`${URL_BASE}:3100/api/notificaciones`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if (!respuesta.ok) {
+    throw new Error('No se pudieron obtener las notificaciones');
+  }
+
+  return await respuesta.json();
+};

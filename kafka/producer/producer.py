@@ -17,7 +17,7 @@ try:
         for evento in eventos:
             try:
                 producer.send("eventos", value=evento).get(timeout=10)
-
+                #print("Payload enviado:", evento)
                 marcar_evento_enviado(evento["message_id"])
 
                 print(f"Evento enviado: {evento['message_id']}")
