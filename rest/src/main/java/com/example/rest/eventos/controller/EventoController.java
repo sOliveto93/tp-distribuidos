@@ -4,7 +4,6 @@ import com.example.rest.entity.Evento;
 import com.example.rest.entity.Usuario;
 import com.example.rest.eventos.dto.EventoResponseDTO;
 import com.example.rest.eventos.service.EventoService;
-import com.example.rest.usuario.dto.UsuarioResponseDTO;
 import com.example.rest.usuario.service.UsuarioService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,9 +39,7 @@ public class EventoController {
             @RequestParam(required = false) String tipo,
             @RequestParam(required = false) Integer idCurador) {
             
-        return eventoService.obtenerConFiltros(fecha, tipo, idCurador).stream()
-                .map(this::mapearAEventoDTO)
-                .toList();
+        return eventoService.obtenerConFiltros(fecha, tipo, idCurador);
     }
 
     // (GET a http://localhost:8080/api/eventos/1)
@@ -50,7 +47,7 @@ public class EventoController {
     public ResponseEntity<EventoResponseDTO> obtenerPorId(@PathVariable Integer id) {
         try {
             Evento evento = eventoService.obtenerPorId(id);
-            return ResponseEntity.ok(mapearAEventoDTO(evento));
+            return ResponseEntity.ok(eventoService.mapearAEventoDTO(evento));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -60,8 +57,8 @@ public class EventoController {
     @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @PostMapping
     public ResponseEntity<EventoResponseDTO> crearEvento(@RequestBody Evento evento, Authentication authentication) {
-        Evento nuevoEvento = eventoService.guardarEvento(evento,authentication.getName());
-        return ResponseEntity.ok(mapearAEventoDTO(nuevoEvento));
+        EventoResponseDTO nuevoEvento = eventoService.guardarEvento(evento,authentication.getName());
+        return ResponseEntity.ok(nuevoEvento);
     }
 
     // (PUT a http://localhost:8080/api/eventos/1)
@@ -69,8 +66,8 @@ public class EventoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> modificarEvento(@PathVariable Integer id, @RequestBody Evento eventoActualizado, Authentication authentication) {
         try {
-            Evento evento = eventoService.actualizarEvento(id, eventoActualizado,authentication.getName());
-            return ResponseEntity.ok(mapearAEventoDTO(evento));
+            EventoResponseDTO evento = eventoService.actualizarEvento(id, eventoActualizado,authentication.getName());
+            return ResponseEntity.ok(evento);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body("Error: El evento no existe o no se pudo modificar.");
         }
@@ -85,7 +82,7 @@ public class EventoController {
         
         try {
             Evento eventoActualizado = eventoService.inscribirVisitante(idEvento, idUsuario);
-            return ResponseEntity.ok(mapearAEventoDTO(eventoActualizado));
+            return ResponseEntity.ok(eventoService.mapearAEventoDTO(eventoActualizado));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -100,7 +97,7 @@ public class EventoController {
         
         try {
             Evento eventoActualizado = eventoService.desinscribirVisitante(idEvento, idUsuario);
-            return ResponseEntity.ok(mapearAEventoDTO(eventoActualizado));
+            return ResponseEntity.ok(eventoService.mapearAEventoDTO(eventoActualizado));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -118,38 +115,6 @@ public class EventoController {
         }
     }
 
-    private EventoResponseDTO mapearAEventoDTO(Evento evento) {
-        List<UsuarioResponseDTO> usuariosDTO = evento.getUsuarios().stream()
-                .map(u -> UsuarioResponseDTO.builder()
-                        .id(u.getId())
-                        .nombre(u.getNombre())
-                        .email(u.getEmail())
-                        .rol(u.getRol())
-                        .build())
-                .toList();
-
-        UsuarioResponseDTO curadorDTO = null;
-        if (evento.getCurador() != null) {
-            curadorDTO = UsuarioResponseDTO.builder()
-                    .id(evento.getCurador().getId())
-                    .nombre(evento.getCurador().getNombre())
-                    .email(evento.getCurador().getEmail())
-                    .rol(evento.getCurador().getRol())
-                    .build();
-        }
-
-        return EventoResponseDTO.builder()
-                .id(evento.getId())
-                .titulo(evento.getTitulo())
-                .descripcion(evento.getDescripcion())
-                .fechaHora(evento.getFechaHora())
-                .duracion(evento.getDuracion())
-                .tipo(evento.getTipo())
-                .cupoMax(evento.getCupoMax())
-                .curador(curadorDTO)
-                .usuarios(usuariosDTO)
-                .build();
-    }
-
+   
 
 }
