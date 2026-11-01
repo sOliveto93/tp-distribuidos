@@ -14,6 +14,7 @@ import Recorridos from './pages/Recorridos';
 import Recomendaciones from './pages/Recomendaciones';
 import { NotificacionesProvider } from './context/NotificacionesContext';
 import Notificaciones from './pages/Notificaciones';
+import Auditoria from './pages/Auditoria';
 
 export default function App() {
 
@@ -45,6 +46,14 @@ export default function App() {
             element={
               (rol === 'CURADOR' || rol === 'ADMINISTRADOR')
                 ? <Reportes />
+                : <Navigate to="/eventos" replace />
+            }
+          />
+          <Route
+            path="/auditoria"
+            element={
+              (rol === 'CURADOR' || rol === 'ADMINISTRADOR')
+                ? <Auditoria />
                 : <Navigate to="/eventos" replace />
             }
           />

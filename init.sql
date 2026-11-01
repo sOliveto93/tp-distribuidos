@@ -31,6 +31,7 @@ CREATE TABLE `eventos` (
   `tipo` varchar(100) NOT NULL,
   `cupo_max` int NOT NULL,
   `id_curador` int NOT NULL,
+  `activo` BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id`),
   KEY `eventos_usuarios_FK` (`id_curador`),
   CONSTRAINT `eventos_usuarios_FK` FOREIGN KEY (`id_curador`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
@@ -154,4 +155,13 @@ CREATE TABLE notificaciones (
 
     CONSTRAINT fk_notificacion_usuario
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+CREATE TABLE auditoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    message_id VARCHAR(255) UNIQUE NOT NULL,
+    accion VARCHAR(50),
+    responsable_id INT,
+    payload JSON,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

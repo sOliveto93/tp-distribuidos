@@ -17,4 +17,8 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
     List<Evento> findByFechaHoraAfter(LocalDateTime fechaHora);
 
     List<Evento> findByFechaHoraBefore(LocalDateTime fechaHora);
+    
+    List<Evento> findByActivoTrue();
+
+    List<Evento> findByActivoFalse();
 }

@@ -1,6 +1,6 @@
 import type { Evento, FiltroFavorito } from '../types/types';
 
-const BASE_URL ='http://localhost:8080/api';
+const BASE_URL = 'http://localhost:8080/api';
 const API_URL = `${BASE_URL}/eventos`;
 const getToken = () => localStorage.getItem('token') || '';
 
@@ -19,7 +19,7 @@ export const getEventos = async (filtros?: { fecha?: string; tipo?: string; idCu
   }
 
   const response = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${getToken()}` } 
+    headers: { 'Authorization': `Bearer ${getToken()}` }
   });
 
   if (!response.ok) throw new Error('Error al obtener los eventos');
@@ -30,13 +30,17 @@ export const getEventos = async (filtros?: { fecha?: string; tipo?: string; idCu
 export const crearEvento = async (eventoData: Partial<Evento>): Promise<Evento> => {
   const response = await fetch(API_URL, {
     method: 'POST',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}` 
+      'Authorization': `Bearer ${getToken()}`
     },
     body: JSON.stringify(eventoData)
   });
-  if (!response.ok) throw new Error('Error al crear el evento');
+  if (!response.ok) {
+    const error = await response.text();
+    console.error('Backend:', response.status, error);
+    throw new Error(error);
+  }
   return response.json();
 };
 
@@ -80,9 +84,9 @@ export const getEventoById = async (id: string): Promise<Evento> => {
 export const actualizarEvento = async (id: string, eventoData: Partial<Evento>): Promise<Evento> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}` 
+      'Authorization': `Bearer ${getToken()}`
     },
     body: JSON.stringify(eventoData)
   });
@@ -103,9 +107,9 @@ export const getFiltrosFavoritos = async (idUsuario: number): Promise<FiltroFavo
 export const guardarFiltroFavorito = async (idUsuario: number, filtroData: FiltroFavorito): Promise<void> => {
   const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros`, {
     method: 'POST',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}` 
+      'Authorization': `Bearer ${getToken()}`
     },
     body: JSON.stringify(filtroData)
   });
@@ -124,8 +128,8 @@ export const eliminarFiltroFavorito = async (idUsuario: number, idFiltro: number
 
 // Actualizar un filtro favorito
 export const actualizarFiltroFavorito = async (
-  idUsuario: number, 
-  idFiltro: number, 
+  idUsuario: number,
+  idFiltro: number,
   data: { nombre: string; configuracionFiltros: object; usuario: { id: number } }
 ) => {
   const response = await fetch(`${BASE_URL}/usuarios/${idUsuario}/filtros/${idFiltro}`, {

@@ -24,7 +24,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
 @Entity
 @Table(name = "eventos")
 public class Evento {
@@ -51,5 +50,8 @@ public class Evento {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "evento_usuario", joinColumns = @JoinColumn(name = "id_evento"), inverseJoinColumns = @JoinColumn(name = "id_usuario"))
     private List<Usuario> usuarios;
+    
+    @Column(nullable = false)
+    private Boolean activo = true;
 
 }

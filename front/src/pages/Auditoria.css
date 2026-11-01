@@ -1,0 +1,118 @@
+.auditoria-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #e0e0e0;
+}
+
+.auditoria-titulo {
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  background-color: #1e1e24;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.auditoria-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.auditoria-table th, .auditoria-table td {
+  padding: 16px;
+  border-bottom: 1px solid #333;
+}
+
+.auditoria-table th {
+  background-color: #252830;
+  color: #9ca3af;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.auditoria-table tbody tr:hover {
+  background-color: #2a2d35;
+}
+
+.col-fecha { white-space: nowrap; color: #a1a1aa; }
+.col-resp { text-align: center; color: #a1a1aa; }
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 600;
+  display: inline-block;    
+  white-space: nowrap;      
+  text-align: center;
+}
+.evento_creado { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+.evento_modificado { background-color: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+.evento_cancelado { background-color: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+.payload-modificado {
+  display: flex;
+  gap: 15px;
+}
+
+.payload-box {
+  background-color: #282c34;
+  border: 1px solid #3a3f4a;
+  border-radius: 6px;
+  padding: 12px;
+  flex: 1;
+}
+
+.box-title {
+  display: block;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #3a3f4a;
+  padding-bottom: 4px;
+}
+
+.payload-box.antes { border-top: 3px solid #ef4444; }
+.payload-box.despues { border-top: 3px solid #34d399; } 
+.payload-box.normal { border-top: 3px solid #60a5fa; }
+
+.payload-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+
+.payload-list li {
+  margin-bottom: 4px;
+}
+
+.payload-key {
+  color: #60a5fa;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.payload-raw {
+  background-color: #1e1e24;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  color: #d1d5db;
+}
+
+.auditoria-msg {
+  padding: 40px;
+  text-align: center;
+  color: #a1a1aa;
+}
+.error { color: #f87171; }

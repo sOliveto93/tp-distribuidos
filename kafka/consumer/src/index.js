@@ -1,8 +1,8 @@
 const http = require('http');
 const { iniciarConsumer } = require('./kafka/consumer');
 const { configurarWebSocket } = require('./websocket/socket');
+const { iniciarAuditoria } = require('./auditoria/auditoria');
 const { obtenerNotificaciones } = require('./routes/notificaciones');
-
 
 const PORT = 3100;
 
@@ -33,6 +33,7 @@ const iniciar = async () => {
     });
 
     await iniciarConsumer();
+    await iniciarAuditoria();
 };
 
 iniciar().catch(console.error);
