@@ -3,8 +3,10 @@ services:
     image: mysql:8.0
     container_name: museo_mysql
     environment:
+      TZ: America/Argentina/Buenos_Aires
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: museo
+    command: --default-time-zone=-03:00
     ports:
       - "3307:3306"
     volumes:

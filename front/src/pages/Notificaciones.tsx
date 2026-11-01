@@ -8,16 +8,12 @@ export default function Notificaciones() {
 
     const formatearFecha = (fecha?: string) => {
         if (!fecha) return 'Sin fecha';
-        const fechaNormalizada = String(fecha).replace(' ', 'T');
-        const date = new Date(fechaNormalizada);
-        if (isNaN(date.getTime())) return fecha; 
-        return date.toLocaleString('es-AR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        const limpia = String(fecha).replace('T', ' ').slice(0, 16);
+        const [parteFecha, parteHora] = limpia.split(' ');
+        if (!parteFecha || !parteHora) return String(fecha);
+
+        const [anio, mes, dia] = parteFecha.split('-');
+        return `${dia}/${mes}/${anio} ${parteHora}`;
     };
     return (
         <div className="notificaciones-container">

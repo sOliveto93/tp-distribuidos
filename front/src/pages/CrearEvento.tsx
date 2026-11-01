@@ -26,7 +26,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       const dataAEnviar: Partial<Evento> = {
         ...formData,
-        fechaHora: new Date(formData.fechaHora).toISOString(),
+        fechaHora: formData.fechaHora+':00',
         curador: { 
           id: idUsuarioActual, 
           nombre: 'Curador' 

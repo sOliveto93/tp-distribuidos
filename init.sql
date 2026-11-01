@@ -163,5 +163,5 @@ CREATE TABLE auditoria (
     accion VARCHAR(50),
     responsable_id INT,
     payload JSON,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
 );

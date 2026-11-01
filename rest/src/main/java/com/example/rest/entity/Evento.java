@@ -19,12 +19,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
+@ToString 
 @Table(name = "eventos")
 public class Evento {
     @Id
@@ -53,5 +55,4 @@ public class Evento {
     
     @Column(nullable = false)
     private Boolean activo = true;
-
 }

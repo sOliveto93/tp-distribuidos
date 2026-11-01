@@ -47,7 +47,6 @@ public class EventoService {
         Evento eventoNuevo = eventoRepository.save(evento);
         Usuario responsable = usuarioService.obtenerPorEmail(username);
         outboxService.guardarEvento(eventoNuevo, TipoNovedad.EVENTO_CREADO,responsable.getId());
-
         return mapearAEventoDTO(eventoNuevo);
 
     }
