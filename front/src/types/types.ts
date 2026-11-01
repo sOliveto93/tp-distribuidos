@@ -161,4 +161,6 @@ export interface Notificacion {
     tipo_novedad: string;
     titulo: string;
     mensaje: string;
+    fecha_evento?: string;
+    fecha_creacion?: string;
 }

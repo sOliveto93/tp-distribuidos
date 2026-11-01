@@ -145,6 +145,7 @@ CREATE TABLE notificaciones (
     evento_id INT NOT NULL,
     tipo_novedad VARCHAR(30) NOT NULL,
     titulo VARCHAR(255) NOT NULL,
+    fecha_evento DATETIME NULL,
     mensaje TEXT,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

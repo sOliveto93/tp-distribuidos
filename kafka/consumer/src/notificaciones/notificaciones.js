@@ -1,31 +1,52 @@
 const db = require('../db/db.js');
 
-async function persistirNotificacion(evento) {
+async function persistirNotificacion(evento, tipo_novedad) {
 
     const payload = evento.payload;
+    const titulo = payload.titulo || payload.despues?.titulo;
+    const rawFecha = payload.fechaHora || payload.despues?.fechaHora;
+    const fechaEvento = rawFecha ? String(rawFecha).replace('T', ' ') : null;
     const notificacionesCreadas = [];
-
-    const [usuarios] = await db.execute(
+    let usuarios;
+    if (tipo_novedad == 'EVENTO_CREADO') {
+    [usuarios] = await db.execute(
         `SELECT id
          FROM usuarios
          WHERE rol = ?`,
         ['VISITANTE']
-    );
+    );}
+    else{
+        [usuarios] = await db.execute(
+            `SELECT DISTINCT id_usuario AS id 
+             FROM evento_usuario 
+             WHERE id_evento = ?`,
+            [evento.evento_id]
+        );
+    }
+    
+    let accion="creó un nuevo";
+    if(tipo_novedad=='EVENTO_MODIFICADO'){
+        accion="modificó un";
+    }
+    else if(tipo_novedad=='EVENTO_CANCELADO'){
+        accion="canceló un";
+    }
 
     for (const usuario of usuarios) {
         //esta query maneja los mensajes duplicados con unique
         const [resultado] = await db.execute(
             `INSERT INTO notificaciones
-                (message_id, usuario_id, evento_id, tipo_novedad, titulo, mensaje)
-             VALUES (?, ?, ?, ?, ?, ?)
+                (message_id, usuario_id, evento_id, tipo_novedad, fecha_evento, titulo, mensaje)
+             VALUES (?, ?, ?, ?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE message_id = message_id`,
             [
                 evento.message_id,
                 usuario.id,
                 evento.evento_id,
                 evento.tipo_novedad,
-                payload.titulo,
-                `Se creó un nuevo evento: ${payload.titulo}`
+                fechaEvento,
+                titulo,
+                `Se ${accion} evento: ${titulo}`
             ]
         );
         //nos fijamos si realmente se inserto un registro porque ignoramos duplicados
@@ -38,9 +59,10 @@ async function persistirNotificacion(evento) {
                 usuario_id: usuario.id,
                 evento_id: evento.evento_id,
                 tipo_novedad: evento.tipo_novedad,
-                titulo: payload.titulo,
-                mensaje: `Se creó un nuevo evento: ${payload.titulo}`
-
+                fecha_evento: fechaEvento,
+                titulo: titulo,
+                mensaje: `Se ${accion} evento: ${titulo}`
+                
             });
         }
     }

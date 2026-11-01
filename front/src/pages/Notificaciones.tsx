@@ -6,6 +6,19 @@ import './Notificaciones.css';
 export default function Notificaciones() {
     const { notificaciones } = useContext(NotificacionesContext);
 
+    const formatearFecha = (fecha?: string) => {
+        if (!fecha) return 'Sin fecha';
+        const fechaNormalizada = String(fecha).replace(' ', 'T');
+        const date = new Date(fechaNormalizada);
+        if (isNaN(date.getTime())) return fecha; 
+        return date.toLocaleString('es-AR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
     return (
         <div className="notificaciones-container">
             <h1>Mis notificaciones</h1>
@@ -26,6 +39,10 @@ export default function Notificaciones() {
                             <h2>{notificacion.titulo}</h2>
 
                             <p>{notificacion.mensaje}</p>
+                            <div className="notificacion-detalles">
+                                <p><strong>Fecha del evento:</strong> {formatearFecha(notificacion.fecha_evento)}</p>
+                                <p><strong>Fecha de operación:</strong> {formatearFecha(notificacion.fecha_creacion)}</p>
+                            </div>
                         </article>
                     ))}
                 </div>
