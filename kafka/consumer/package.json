@@ -2,6 +2,7 @@
   "name": "base-consumer",
   "dependencies": {
     "dotenv": "^18.0.9",
+    "jsonwebtoken": "^9.0.3",
     "kafkajs": "^2.2.4",
     "mysql2": "^3.24.6",
     "ws": "^8.22.1"

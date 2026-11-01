@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useState } from 'react';
 import type { Notificacion } from '../types/types';
 
 export const NotificacionesContext = createContext<any>(null);
@@ -10,8 +10,12 @@ export function NotificacionesProvider({ children }: { children: React.ReactNode
         setNotificaciones((anteriores) => [...anteriores, notificacion]);
     };
 
+    const cargarNotificaciones = (notificaciones: Notificacion[]) => {
+    setNotificaciones(notificaciones);
+};
+
     return (
-        <NotificacionesContext.Provider value={{ notificaciones, agregarNotificacion }}>
+        <NotificacionesContext.Provider value={{ notificaciones, agregarNotificacion ,cargarNotificaciones}}>
             {children}
         </NotificacionesContext.Provider>
     );

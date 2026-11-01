@@ -2,7 +2,7 @@ const db = require('../db/db.js');
 
 async function persistirNotificacion(evento) {
 
-    const payload = JSON.parse(evento.payload);
+    const payload = evento.payload;
     const notificacionesCreadas = [];
 
     const [usuarios] = await db.execute(

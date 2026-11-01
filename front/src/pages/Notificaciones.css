@@ -1,0 +1,44 @@
+.notificaciones-container {
+    padding: 30px;
+}
+
+.notificaciones-container h1 {
+    margin-bottom: 25px;
+}
+
+.notificaciones-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.notificacion-card {
+    flex: 1 1 280px;
+    max-width: 350px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.notificacion-tipo {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 12px;
+    border-radius: 20px;
+    background-color: #e8eaff;
+    color: #4545a5;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.notificacion-card h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.notificacion-card p {
+    color: #555;
+    line-height: 1.5;
+}
