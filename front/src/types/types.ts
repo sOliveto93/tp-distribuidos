@@ -2,47 +2,47 @@ export interface Filtros {
   agruparPor: 'MES' | 'TIPO' | 'AMBOS';
   estado: 'TODOS' | 'PASADOS' | 'FUTUROS';
   tipo: string;
-  fechaInicio:string;
-  fechaFin:string;
+  fechaInicio: string;
+  fechaFin: string;
 }
 
-export interface FiltrosObra  {
-        palabraClave?: string
-        epoca?: string
-        tecnica?: string
-        ubicacion?: string
-        disponible?: boolean
-    
+export interface FiltrosObra {
+  palabraClave?: string
+  epoca?: string
+  tecnica?: string
+  ubicacion?: string
+  disponible?: boolean
+
 };
 export interface Obra {
-    id: string;
-    titulo: string;
-    descripcion: string;
-    anio_creacion: string;
-    epoca: string;
-    tecnica: string;
-    ubicacion: string;
-    disponible: boolean;
-    imagen_url: string;
-    dimensiones: string;
-    artista: Artista;
-    comentarios: Comentario[];
+  id: string;
+  titulo: string;
+  descripcion: string;
+  anio_creacion: string;
+  epoca: string;
+  tecnica: string;
+  ubicacion: string;
+  disponible: boolean;
+  imagen_url: string;
+  dimensiones: string;
+  artista: Artista;
+  comentarios: Comentario[];
 }
 
 export interface Artista {
-    nombre: string;
-    biografia: string;
+  nombre: string;
+  biografia: string;
 }
 
 export interface Comentario {
-    id: string;
-    fecha: string;
-    texto: string;
-    usuario: Usuario;
+  id: string;
+  fecha: string;
+  texto: string;
+  usuario: Usuario;
 }
 
 export interface Usuario {
-    nombre: string;
+  nombre: string;
 }
 
 /*export interface GrupoReporte {
@@ -63,8 +63,8 @@ export interface GraphQLResponse {
 export interface UsuarioCurador {
   id: number;
   nombre: string;
-  email?: string; 
-  rol?: string;   
+  email?: string;
+  rol?: string;
 }
 
 export interface Evento {
@@ -113,12 +113,12 @@ export interface FiltroFavorito {
 
 
 export interface ReporteExcelRequest {
-    fecha: string;
-    titulo: string;
-    curador: string;
-    inscriptos: number;
-    cupoMax: number;
-    tipo: string;
+  fecha: string;
+  titulo: string;
+  curador: string;
+  inscriptos: number;
+  cupoMax: number;
+  tipo: string;
 }
 export interface EventoReporte {
   titulo: string;
@@ -138,29 +138,30 @@ export interface GrupoReporte {
 }
 
 export interface DatosExploracion {
-    movimiento_explorado: string;
-    obras_pertenecientes: Obra[];
-    artistas_asociados: string[];
-    eventos_vinculados: Evento[];
+  movimiento_explorado: string;
+  obras_pertenecientes: Obra[];
+  artistas_asociados: string[];
+  eventos_vinculados: Evento[];
 }
 
 export interface GenerarRecorridoRequest {
-    epoca?: string;
-    tecnica?: string;
-    cantidad_obras?: number;
+  epoca?: string;
+  tecnica?: string;
+  cantidad_obras?: number;
 }
 
 export interface RecorridoResponse {
-    obrasList: Obra[];
+  obrasList: Obra[];
 }
 
 export interface Notificacion {
-    message_id: string;
-    usuario_id: number;
-    evento_id: number;
-    tipo_novedad: string;
-    titulo: string;
-    mensaje: string;
+  message_id: string;
+  usuario_id: number;
+  evento_id: number;
+  tipo_novedad: string;
+  titulo: string;
+  mensaje: string;
+
 }
 
 export interface Auditoria {
@@ -169,5 +170,8 @@ export interface Auditoria {
   accion: string;
   responsableId: number;
   payload: string;
-  fechaRegistro: string;
+
+  fecha_evento?: string;
+  fecha_creacion?: string;
+
 }

@@ -15,15 +15,15 @@ const procesarEvento = async(evento) => {
 
   switch (evento.tipo_novedad) {
     case 'EVENTO_CREADO':
-      notificaciones = await persistirNotificacion(evento);
+      notificaciones = await persistirNotificacion(evento, evento.tipo_novedad);
       break;
 
     case 'EVENTO_MODIFICADO':
-     console.log('evento modificado');
+     notificaciones = await persistirNotificacion(evento, evento.tipo_novedad);
       break;
 
-    case 'EVENTO_ELIMINADO':
-    console.log('evento eliminado');
+    case 'EVENTO_CANCELADO':
+      notificaciones = await persistirNotificacion(evento, evento.tipo_novedad);
       break;
 
     default:

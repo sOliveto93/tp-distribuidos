@@ -16,7 +16,7 @@ const obtenerNotificaciones = async (req, res) => {
         const usuario = await autenticarToken(token);
 
         const [notificaciones] = await db.execute(
-            `SELECT id, evento_id, tipo_novedad, titulo, mensaje, fecha_creacion
+            `SELECT id, evento_id, tipo_novedad, titulo, fecha_evento, mensaje, fecha_creacion
              FROM notificaciones
              WHERE usuario_id = ?
              ORDER BY fecha_creacion DESC`,

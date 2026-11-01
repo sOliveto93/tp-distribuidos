@@ -31,6 +31,7 @@ CREATE TABLE `eventos` (
   `tipo` varchar(100) NOT NULL,
   `cupo_max` int NOT NULL,
   `id_curador` int NOT NULL,
+  `activo` BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id`),
   KEY `eventos_usuarios_FK` (`id_curador`),
   CONSTRAINT `eventos_usuarios_FK` FOREIGN KEY (`id_curador`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
@@ -145,6 +146,7 @@ CREATE TABLE notificaciones (
     evento_id INT NOT NULL,
     tipo_novedad VARCHAR(30) NOT NULL,
     titulo VARCHAR(255) NOT NULL,
+    fecha_evento DATETIME NULL,
     mensaje TEXT,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

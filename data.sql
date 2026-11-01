@@ -102,7 +102,7 @@ VALUES
 -- =========================================================
 
 INSERT INTO eventos
-(id, titulo, descripcion, fecha_hora, duracion, tipo, cupo_max, id_curador)
+(id, titulo, descripcion, fecha_hora, duracion, tipo, cupo_max, id_curador,activo)
 VALUES
 (1,
  'Recorrido por el Renacimiento',
@@ -111,7 +111,7 @@ VALUES
  90,
  'VISITA_GUIADA',
  30,
- 2),
+ 2,true),
 
 (2,
  'Introducción al Impresionismo',
@@ -120,7 +120,7 @@ VALUES
  60,
  'CHARLA',
  50,
- 2),
+ 2,true),
 
 (3,
  'Arte y guerra',
@@ -129,7 +129,7 @@ VALUES
  120,
  'EXPOSICION',
  40,
- 2);
+ 2,true);
 
 
 -- =========================================================

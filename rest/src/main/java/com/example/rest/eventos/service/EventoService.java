@@ -43,6 +43,7 @@ public class EventoService {
 
     @Transactional
     public EventoResponseDTO guardarEvento(Evento evento,String username) {
+        evento.setActivo(true);
         Evento eventoNuevo = eventoRepository.save(evento);
         Usuario responsable = usuarioService.obtenerPorEmail(username);
         outboxService.guardarEvento(eventoNuevo, TipoNovedad.EVENTO_CREADO,responsable.getId());
@@ -83,15 +84,24 @@ public class EventoService {
         
         Evento evento = obtenerPorId(id);
 
+        if (!Boolean.TRUE.equals(evento.getActivo())) {
+            throw new RuntimeException("El evento ya está cancelado");
+        }
+
         Usuario responsable = usuarioService.obtenerPorEmail(username);
         outboxService.guardarEvento(evento, TipoNovedad.EVENTO_CANCELADO,responsable.getId());
-
-        eventoRepository.delete(evento);
+        evento.setActivo(false);
+        eventoRepository.save(evento);
     }
 
     @Transactional
     public Evento inscribirVisitante(Integer idEvento, Integer idUsuario) {
         Evento evento = obtenerPorId(idEvento);
+
+        if (!Boolean.TRUE.equals(evento.getActivo())) {
+            throw new RuntimeException(
+                    "No se puede inscribir en un evento cancelado");
+        }
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Error: Usuario no encontrado"));
@@ -120,7 +130,7 @@ public class EventoService {
     }
 
     public List<EventoResponseDTO> obtenerConFiltros(String fecha, String tipo, Integer idCurador) {
-        List<Evento> eventos = eventoRepository.findAll();
+        List<Evento> eventos = eventoRepository.findByActivoTrue();
 
         if (tipo != null && !tipo.isEmpty()) {
             eventos = eventos.stream()
@@ -177,6 +187,7 @@ public EventoResponseDTO mapearAEventoDTO(Evento evento) {
             .tipo(evento.getTipo())
             .cupoMax(evento.getCupoMax())
             .curador(curadorDTO)
+            .activo(Boolean.TRUE.equals(evento.getActivo()))
             .usuarios(usuariosDTO)
             .build();
 }
