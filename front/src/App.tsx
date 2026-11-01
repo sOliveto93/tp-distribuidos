@@ -31,8 +31,8 @@ export default function App() {
         <Navbar rol={rol} setRol={setRol} />
 
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login onLogin={iniciarSesion} />} />
+          <Route path="/" element={rol ? <Navigate to="/eventos" replace /> : <Navigate to="/login" replace />}/>
+          <Route path="/login" element={!rol ? <Login onLogin={iniciarSesion} /> : <Navigate to="/eventos" replace />} />
           <Route path="/me" element={<Me />} />
           <Route path="/eventos" element={<Eventos />} />
           <Route path="/explorar" element={<Exploracion />} />
