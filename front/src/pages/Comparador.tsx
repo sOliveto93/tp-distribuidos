@@ -71,7 +71,7 @@ export default function App() {
           <tbody>
             <tr>
               <td><strong>Artista</strong></td>
-              {comparacion.map((o) => <td key={o.id}>{o.artista}</td>)}
+              {comparacion.map((o) => <td key={o.id}>{o.artista.nombre}</td>)}
             </tr>
             <tr>
               <td><strong>Época</strong></td>
@@ -83,7 +83,7 @@ export default function App() {
             </tr>
             <tr>
               <td><strong>Año de creación</strong></td>
-              {comparacion.map((o) => <td key={o.id}>{o.anioCreacion}</td>)}
+              {comparacion.map((o) => <td key={o.id}>{o.anio_creacion}</td>)}
             </tr>
             <tr>
               <td><strong>Dimensiones</strong></td>

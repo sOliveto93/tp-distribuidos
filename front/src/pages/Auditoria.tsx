@@ -25,7 +25,7 @@ const AuditoriaPage: React.FC = () => {
   }, []);
 
   const auditoriasOrdenadas = [...auditorias].sort((a, b) =>
-    new Date(b.fechaRegistro).getTime() - new Date(a.fechaRegistro).getTime()
+    new Date(b.fecha_registro).getTime() - new Date(a.fecha_registro).getTime()
   );
 
   // FORMATEAR EL JSON
@@ -90,7 +90,7 @@ const AuditoriaPage: React.FC = () => {
           <tbody>
             {auditoriasOrdenadas.map((registro) => (
               <tr key={registro.id}>
-                <td className="col-fecha">{new Date(registro.fechaRegistro).toLocaleString('es-AR')}</td>
+                <td className="col-fecha">{new Date(registro.fecha_registro).toLocaleString('es-AR')}</td>
                 <td className="col-accion">
                   <span className={`badge ${registro.accion.toLowerCase()}`}>
                     {registro.accion.replace('_', ' ')}

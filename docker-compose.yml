@@ -2,6 +2,12 @@ services:
   mysql:
     image: mysql:8.0
     container_name: museo_mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping --protocol=TCP -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
     environment:
       TZ: America/Argentina/Buenos_Aires
       MYSQL_ROOT_PASSWORD: root
@@ -25,9 +31,117 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    
+  rest:
+    build:
+      context: ./rest
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:mysql://mysql:3306/museo
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: mi-secreto-super-largo-para-jwt-32
+  graphql:
+    build:
+      context: ./graphql
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: museo
+      JWT_SECRET: mi-secreto-super-largo-para-jwt-32
+  grpc:
+    build:
+      context: ./grpc/server
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "50051:50051"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+
+  gateway:
+    build:
+      context: ./grpc/gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - grpc
+    ports:
+      - "3000:3000"
+    environment:
+      GRPC_HOST: grpc:50051
+  producer:
+    build:
+      context: ./kafka/producer
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: museo
+      KAFKA_BROKER: kafka:29092
+  consumer:
+    build:
+      context: ./kafka/consumer
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "3100:3100"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: museo
+      KAFKA_BROKER: kafka:29092
+      JWT_SECRET: mi-secreto-super-largo-para-jwt-32
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    depends_on:
+      - rest
+      - graphql
+      - gateway
+      - consumer
+    ports:
+      - "5173:80"

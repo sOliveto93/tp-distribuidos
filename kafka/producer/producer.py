@@ -1,10 +1,13 @@
 import json
+import os
 import time
 from kafka import KafkaProducer
 from db import obtener_eventos_pendientes, marcar_evento_enviado, marcar_evento_fallido,reactivar_eventos_fallidos
 
+KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
+
 producer = KafkaProducer(
-    bootstrap_servers="localhost:9092",
+    bootstrap_servers=KAFKA_BROKER,
     value_serializer=lambda v: json.dumps(v, default=str).encode("utf-8")
 )
 reactivar_eventos_fallidos()

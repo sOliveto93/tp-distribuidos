@@ -2,8 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net"
+	"os"
 	museov1 "server/proto/museov1"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -12,7 +14,23 @@ import (
 )
 
 func main() {
-	dsn := "root:root@tcp(localhost:3307)/museo?parseTime=true"
+	//dsn := "root:root@tcp(localhost:3307)/museo?parseTime=true"
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
+
+	dbPort := os.Getenv("DB_PORT")
+	if dbPort == "" {
+		dbPort = "3307"
+	}
+
+	dsn := fmt.Sprintf(
+		"root:root@tcp(%s:%s)/museo?parseTime=true",
+		dbHost,
+		dbPort,
+	)
+
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatalf("Error abriendo conexión a BD: %v", err)

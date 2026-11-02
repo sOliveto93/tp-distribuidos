@@ -161,7 +161,8 @@ export interface Notificacion {
   tipo_novedad: string;
   titulo: string;
   mensaje: string;
-
+  fecha_evento:string;
+  fecha_creacion:string;
 }
 
 export interface Auditoria {
@@ -170,7 +171,7 @@ export interface Auditoria {
   accion: string;
   responsableId: number;
   payload: string;
-
+  fecha_registro:string;
   fecha_evento?: string;
   fecha_creacion?: string;
 

@@ -3,7 +3,7 @@ const db = require('../db/db.js');
 
 const kafka = new Kafka({
   clientId: 'app-auditoria',
-  brokers: ['localhost:9092']
+  brokers: [process.env.KAFKA_BROKER || 'localhost:9092']
 });
 
 const consumer = kafka.consumer({ groupId: 'grupo-auditoria' });

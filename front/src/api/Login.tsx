@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { conectarNotificaciones } from '../services/webSocketService.ts';
 import { useContext } from 'react';
 import { NotificacionesContext } from '../context/NotificacionesContext';
-import Notificaciones from '../pages/Notificaciones.tsx';
 
 interface LoginProps {
   onLogin: (rol: string) => void;
