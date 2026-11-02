@@ -1,60 +1,280 @@
 # Museo Virtual Interactivo
 
-## Requisitos
+## Tecnologías utilizadas
 
-- Java 17+
-- Maven
-- Node.js 20+
-- npm
-- Docker / Docker Compose
-
-## Estructura
 ```text
+Componente
+
+Tecnología
+
+Backend REST
+
+Java 17+, Spring Boot, Maven
+
+Backend GraphQL
+
+Node.js, Express, GraphQL
+
+Servicio gRPC
+
+Go
+
+Gateway gRPC
+
+Node.js
+
+Mensajería
+
+Apache Kafka
+
+Coordinación de Kafka
+
+Zookeeper
+
+Productor Kafka
+
+Python
+
+Consumidor Kafka
+
+Node.js
+
+Frontend
+
+React, TypeScript, Vite
+
+Base de datos
+
+MySQL 8
+
+Contenedores
+```
+## Docker y Docker Compose
+
+``` text
+Para ejecutar el sistema completo
+
+Docker.
+
+Docker Compose (plugin docker compose).
+```
+No es necesario instalar Java, Maven, Node.js, Go o Python en el equipo anfitrión para ejecutar todos los servicios mediante Docker.
+
+
+## Para desarrollo local
+```
+Java 17 o superior.
+
+Maven.
+
+Node.js 20 o superior.
+
+npm.
+
+Go.
+
+Python 3.
+
+Docker y Docker Compose.
+```
+
+
+## Arquitectura del sistema
+
+El sistema está dividido en servicios independientes, cada uno responsable de una funcionalidad específica.
+```
+                         ┌──────────────────┐
+                         │     FRONTEND     │
+                         │  React + Vite    │
+                         └────────┬─────────┘
+                                  │
+                 ┌────────────────┼─────────────────┐
+                 │                │                 │
+                 ▼                ▼                 ▼
+          ┌────────────┐  ┌────────────┐    ┌────────────┐
+          │  REST API  │  │  GraphQL   │    │  Gateway   │
+          │ Spring Boot│  │   Node.js   │    │   Node.js  │
+          └─────┬──────┘  └─────┬──────┘    └─────┬──────┘
+                │               │                 │
+                │               │                 ▼
+                │               │           ┌───────────┐
+                │               │           │ gRPC Go   │
+                │               │           └─────┬─────┘
+                │               │                 │
+                └───────────────┴─────────────────┘
+                                │
+                                ▼
+                         ┌────────────┐
+                         │   MySQL    │
+                         └────────────┘
+
+                 Flujo de eventos y notificaciones
+
+                         ┌────────────┐
+                         │   MySQL    │
+                         │ Outbox     │
+                         └─────┬──────┘
+                               │
+                               ▼
+                         ┌────────────┐
+                         │  Productor │
+                         │  Python    │
+                         └─────┬──────┘
+                               │
+                               ▼
+                         ┌────────────┐
+                         │   Kafka    │
+                         └─────┬──────┘
+                               │
+                               ▼
+                         ┌────────────┐
+                         │ Consumidor │
+                         │  Node.js   │
+                         └─────┬──────┘
+                               │
+                         ┌─────┴──────┐
+                         ▼            ▼
+                    Persistencia  WebSocket
+                    notificaciones
+```
+
+### Responsabilidades de los servicios
+
+REST: API principal desarrollada con Spring Boot. Gestiona las operaciones correspondientes a los recursos del sistema y la autenticación.
+
+GraphQL: permite consultar y operar sobre los datos mediante un esquema GraphQL.
+
+gRPC: servicio desarrollado en Go que expone operaciones mediante comunicación gRPC.
+
+Gateway: expone una interfaz HTTP para acceder a las funcionalidades del servicio gRPC.
+
+Productor Kafka: consulta periódicamente la tabla Outbox de MySQL y publica los eventos pendientes en Kafka.
+
+Kafka: intermediario de mensajería que permite desacoplar la generación de eventos de su procesamiento.
+
+Consumidor Kafka: recibe los eventos, procesa las notificaciones y las distribuye a los usuarios mediante WebSocket. También permite consultar las notificaciones persistidas.
+
+Frontend: interfaz de usuario desarrollada con React y TypeScript.
+
+MySQL: almacenamiento persistente compartido por los servicios que lo requieren.
+
+
+## Estructura del proyecto
+```
 museo/
-├── rest/          # Backend REST - Spring Boot
-├── graphql/       # Backend GraphQL - Node.js + Express
-├── front/         # Frontend React
+├── docker-compose.yml
 ├── init.sql
 ├── data.sql
-└── docker-compose.yml
+│
+├── rest/
+│   ├── Dockerfile
+│   └── src/
+│
+├── graphql/
+│   ├── Dockerfile
+│   └── ...
+│
+├── grpc/
+│   ├── server/
+│   │   ├── Dockerfile
+│   │   └── ...
+│   └── gateway/
+│       ├── Dockerfile
+│       └── ...
+│
+├── kafka/
+│   ├── producer/
+│   │   ├── Dockerfile
+│   │   └── ...
+│   └── consumer/
+│       ├── Dockerfile
+│       └── ...
+│
+└── front/
+    ├── Dockerfile
+    └── ...
+
+
 ```
-## Base de datos
 
-La base de datos MySQL se ejecuta mediante Docker.
+Cada servicio dispone de su propio Dockerfile, mientras que Docker Compose coordina la construcción, configuración, redes y ejecución de los contenedores.
 
-### Levantar MySQL
+## Despliegue completo con Docker
 
-docker compose up
+La forma recomendada de ejecutar el sistema es mediante Docker Compose.
 
-Configuración(a modo de ejemplo):
+ Clonar el repositorio
+```
+git clone <URL_DEL_REPOSITORIO>
+cd museo
+```
+## Construir e iniciar todos los servicios
 
-- Host: localhost
-- Puerto: 3307
-- Base de datos: museo
-- Usuario: root
-- Contraseña: root
+Desde la raíz del proyecto ejecutar:
+```
+docker compose up --build -d
+```
+Comprobar el estado de los contenedores
+```
+docker compose ps
+```
+Para consultar los registros de todos los servicios:
+```
+docker compose logs -f
+```
+Para consultar los registros de un servicio específico:
+```
+docker compose logs -f rest
+docker compose logs -f producer
+docker compose logs -f consumer
+```
 
-Los scripts `init.sql` y `data.sql` se ejecutan al inicializar la base de datos.
+Comprobar el estado de los contenedores
+```
+docker compose ps
+```
+Para consultar los registros de todos los servicios:
+```
+docker compose logs -f
+```
+Para consultar los registros de un servicio específico:
+```
+docker compose logs -f rest
+docker compose logs -f producer
+docker compose logs -f consumer
+```
+## Acceso a los servicios
+```
+Servicio
 
+Dirección
 
-## Backend REST
-```text
-Ingresar a `rest/`:
+Frontend
 
-cd rest
+http://localhost:5173
 
-Ejecutar:
-
-./mvnw clean install -DskipTests <-- comando necesario por si hay problemas con las dependencias y los test
-
-./mvnw spring-boot:run
-
-o click derecho 'RUN' o metodo que utilice su ide para ejecutar
-
-Disponible en:
+REST API
 
 http://localhost:8080
+
+Swagger UI
+
+http://localhost:8080/swagger-ui/index.html
+
+GraphQL
+
+http://localhost:4000/graphql
+
+Gateway gRPC
+
+http://localhost:3000
+
+Consumidor / WebSocket
+
+Puerto 3100
 ```
+
+
 ### Swagger / OpenAPI
 
 La API REST cuenta con documentación mediante 
@@ -63,24 +283,7 @@ Disponible en:
 ```text
 http://localhost:8080/swagger-ui/index.html
 ```
-## Backend GraphQL
-```text
-Ingresar a `graphql/`:
 
-cd graphql
-
-Instalar dependencias:
-
-npm install
-
-Ejecutar en desarrollo:
-
-npm run dev
-
-Disponible en:
-
-http://localhost:4000
-```
 ### Esquema con GraphiQL
 Se encuentra habilitado para consultar y explorar el esquema GraphQL.
 
@@ -109,6 +312,7 @@ cd kafka/producer
 Crear y activar entorno virtual:
 python -m venv venv
 .\venv\Scripts\activate
+source venv/bin/activate <-- linux
 
 Instalar dependencias:
 pip install -r requirements.txt
@@ -261,29 +465,3 @@ Local:
 ```
 Esto permite modificar el código sin reconstruir las imágenes Docker.
 
-## Docker
-
-Actualmente Docker se utiliza únicamente para ejecutar MySQL.
-
-Para levantar la base de datos:
-
-```bash
-docker compose up
-```
-Para detener el contenedor:
-```
-docker compose down
-```
-Más adelante se dockerizarán todos los servicios. Actualmente cada servicio cuenta con un Dockerfile preparado para esa futura implementación.
-
-
-
-### Reinicializar la base de datos
-
-Si se desea eliminar la base de datos actual y volver a crear el esquema con los datos de prueba:
-
-```bash
-docker compose down -v
-docker compose up
-```
-Esto elimina el volumen de MySQL, por lo que init.sql y data.sql se ejecutan nuevamente.
