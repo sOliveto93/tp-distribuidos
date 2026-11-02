@@ -36,8 +36,8 @@ async function persistirNotificacion(evento, tipo_novedad) {
         //esta query maneja los mensajes duplicados con unique
         const [resultado] = await db.execute(
             `INSERT INTO notificaciones
-                (message_id, usuario_id, evento_id, tipo_novedad, fecha_evento, titulo, mensaje)
-             VALUES (?, ?, ?, ?, ?, ?, ?)
+                (message_id, usuario_id, evento_id, tipo_novedad, fecha_evento,fecha_creacion, titulo, mensaje)
+             VALUES (?, ?, ?, ?, ?, NOW(),?, ?)
              ON DUPLICATE KEY UPDATE message_id = message_id`,
             [
                 evento.message_id,
@@ -53,6 +53,12 @@ async function persistirNotificacion(evento, tipo_novedad) {
         //asi evitamos duplicar notificaciones
         if (resultado.affectedRows === 1) {
 
+            const [filas] = await db.execute(
+                `SELECT fecha_creacion
+                 FROM notificaciones
+                WHERE message_id = ? AND usuario_id = ?`,
+                [evento.message_id, usuario.id]
+    );
             notificacionesCreadas.push({
 
                 message_id: evento.message_id,
@@ -60,6 +66,7 @@ async function persistirNotificacion(evento, tipo_novedad) {
                 evento_id: evento.evento_id,
                 tipo_novedad: evento.tipo_novedad,
                 fecha_evento: fechaEvento,
+                fecha_creacion: filas[0].fecha_creacion,
                 titulo: titulo,
                 mensaje: `Se ${accion} evento: ${titulo}`
                 
