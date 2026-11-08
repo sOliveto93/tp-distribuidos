@@ -29,10 +29,16 @@ public class FiltrosFavoritosService {
         return filtrosRepository.save(filtro);
     }
 
-    public FiltrosFavoritos actualizarFiltro(Integer idFiltro, FiltrosFavoritos datosNuevos) {
-        FiltrosFavoritos existente = filtrosRepository.findById(idFiltro)
+    public FiltrosFavoritos actualizarFiltro(Integer idUsuario,Integer idFiltro, FiltrosFavoritos datosNuevos) {
+
+        FiltrosFavoritos existente = filtrosRepository
+           .findByIdAndUsuarioId(idFiltro, idUsuario)
+            .orElseThrow(() -> new RuntimeException("Filtro no encontrado"));
+       
+       /*  se cambia porque no servia segun correcciones
+       FiltrosFavoritos existente = filtrosRepository.findById(idFiltro)
                 .orElseThrow(() -> new RuntimeException("Filtro no encontrado"));
-        
+        */
         existente.setNombre(datosNuevos.getNombre());
         existente.setDescripcion(datosNuevos.getDescripcion());
         existente.setConfiguracionFiltros(datosNuevos.getConfiguracionFiltros());
@@ -40,10 +46,17 @@ public class FiltrosFavoritosService {
         return filtrosRepository.save(existente);
     }
 
-    public void eliminarFiltro(Integer idFiltro) {
-        if (!filtrosRepository.existsById(idFiltro)) {
+    public void eliminarFiltro(Integer idUsuario,Integer idFiltro) {
+         FiltrosFavoritos existente = filtrosRepository
+           .findByIdAndUsuarioId(idFiltro, idUsuario)
+            .orElseThrow(() -> new RuntimeException("Filtro no encontrado"));
+        //se elimina porque por correcciones de seguridad
+            /*if (!filtrosRepository.existsById(idFiltro)) {
             throw new RuntimeException("Filtro no encontrado");
         }
-        filtrosRepository.deleteById(idFiltro);
+            filtrosRepository.deleteById(idFiltro);
+            */
+        filtrosRepository.delete(existente);
+        
     }
 }

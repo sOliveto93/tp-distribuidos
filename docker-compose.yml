@@ -99,6 +99,7 @@ services:
       - "3000:3000"
     environment:
       GRPC_HOST: grpc:50051
+      JWT_SECRET: mi-secreto-super-largo-para-jwt-32
   producer:
     build:
       context: ./kafka/producer

@@ -497,6 +497,50 @@ func (x *RecomendacionRequest) GetIdUsuario() int32 {
 	return 0
 }
 
+type RecomendacionByEmailRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RecomendacionByEmailRequest) Reset() {
+	*x = RecomendacionByEmailRequest{}
+	mi := &file_museo_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecomendacionByEmailRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecomendacionByEmailRequest) ProtoMessage() {}
+
+func (x *RecomendacionByEmailRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_museo_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecomendacionByEmailRequest.ProtoReflect.Descriptor instead.
+func (*RecomendacionByEmailRequest) Descriptor() ([]byte, []int) {
+	return file_museo_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *RecomendacionByEmailRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
 type ObraRecomendada struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -509,7 +553,7 @@ type ObraRecomendada struct {
 
 func (x *ObraRecomendada) Reset() {
 	*x = ObraRecomendada{}
-	mi := &file_museo_proto_msgTypes[7]
+	mi := &file_museo_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -521,7 +565,7 @@ func (x *ObraRecomendada) String() string {
 func (*ObraRecomendada) ProtoMessage() {}
 
 func (x *ObraRecomendada) ProtoReflect() protoreflect.Message {
-	mi := &file_museo_proto_msgTypes[7]
+	mi := &file_museo_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -534,7 +578,7 @@ func (x *ObraRecomendada) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ObraRecomendada.ProtoReflect.Descriptor instead.
 func (*ObraRecomendada) Descriptor() ([]byte, []int) {
-	return file_museo_proto_rawDescGZIP(), []int{7}
+	return file_museo_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ObraRecomendada) GetId() int32 {
@@ -574,7 +618,7 @@ type RecomendacionResponse struct {
 
 func (x *RecomendacionResponse) Reset() {
 	*x = RecomendacionResponse{}
-	mi := &file_museo_proto_msgTypes[8]
+	mi := &file_museo_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -586,7 +630,7 @@ func (x *RecomendacionResponse) String() string {
 func (*RecomendacionResponse) ProtoMessage() {}
 
 func (x *RecomendacionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_museo_proto_msgTypes[8]
+	mi := &file_museo_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -599,7 +643,7 @@ func (x *RecomendacionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecomendacionResponse.ProtoReflect.Descriptor instead.
 func (*RecomendacionResponse) Descriptor() ([]byte, []int) {
-	return file_museo_proto_rawDescGZIP(), []int{8}
+	return file_museo_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *RecomendacionResponse) GetRecomendadas() []*ObraRecomendada {
@@ -620,7 +664,7 @@ type GenerarRecorridoRequest struct {
 
 func (x *GenerarRecorridoRequest) Reset() {
 	*x = GenerarRecorridoRequest{}
-	mi := &file_museo_proto_msgTypes[9]
+	mi := &file_museo_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -632,7 +676,7 @@ func (x *GenerarRecorridoRequest) String() string {
 func (*GenerarRecorridoRequest) ProtoMessage() {}
 
 func (x *GenerarRecorridoRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_museo_proto_msgTypes[9]
+	mi := &file_museo_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -645,7 +689,7 @@ func (x *GenerarRecorridoRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerarRecorridoRequest.ProtoReflect.Descriptor instead.
 func (*GenerarRecorridoRequest) Descriptor() ([]byte, []int) {
-	return file_museo_proto_rawDescGZIP(), []int{9}
+	return file_museo_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GenerarRecorridoRequest) GetEpoca() string {
@@ -678,7 +722,7 @@ type PreferenciasRequest struct {
 
 func (x *PreferenciasRequest) Reset() {
 	*x = PreferenciasRequest{}
-	mi := &file_museo_proto_msgTypes[10]
+	mi := &file_museo_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -690,7 +734,7 @@ func (x *PreferenciasRequest) String() string {
 func (*PreferenciasRequest) ProtoMessage() {}
 
 func (x *PreferenciasRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_museo_proto_msgTypes[10]
+	mi := &file_museo_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -703,7 +747,7 @@ func (x *PreferenciasRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PreferenciasRequest.ProtoReflect.Descriptor instead.
 func (*PreferenciasRequest) Descriptor() ([]byte, []int) {
-	return file_museo_proto_rawDescGZIP(), []int{10}
+	return file_museo_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *PreferenciasRequest) GetVisitanteId() int64 {
@@ -723,7 +767,7 @@ type BuscarEventosRequest struct {
 
 func (x *BuscarEventosRequest) Reset() {
 	*x = BuscarEventosRequest{}
-	mi := &file_museo_proto_msgTypes[11]
+	mi := &file_museo_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -735,7 +779,7 @@ func (x *BuscarEventosRequest) String() string {
 func (*BuscarEventosRequest) ProtoMessage() {}
 
 func (x *BuscarEventosRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_museo_proto_msgTypes[11]
+	mi := &file_museo_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -748,7 +792,7 @@ func (x *BuscarEventosRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BuscarEventosRequest.ProtoReflect.Descriptor instead.
 func (*BuscarEventosRequest) Descriptor() ([]byte, []int) {
-	return file_museo_proto_rawDescGZIP(), []int{11}
+	return file_museo_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *BuscarEventosRequest) GetEpocaRelacionada() string {
@@ -774,7 +818,7 @@ type EventosResponse struct {
 
 func (x *EventosResponse) Reset() {
 	*x = EventosResponse{}
-	mi := &file_museo_proto_msgTypes[12]
+	mi := &file_museo_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -786,7 +830,7 @@ func (x *EventosResponse) String() string {
 func (*EventosResponse) ProtoMessage() {}
 
 func (x *EventosResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_museo_proto_msgTypes[12]
+	mi := &file_museo_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -799,7 +843,7 @@ func (x *EventosResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventosResponse.ProtoReflect.Descriptor instead.
 func (*EventosResponse) Descriptor() ([]byte, []int) {
-	return file_museo_proto_rawDescGZIP(), []int{12}
+	return file_museo_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *EventosResponse) GetEventos() []*Evento {
@@ -854,7 +898,9 @@ const file_museo_proto_rawDesc = "" +
 	"\x05obras\x18\x01 \x03(\v2\x0e.museo.v1.ObraR\x05obras\"5\n" +
 	"\x14RecomendacionRequest\x12\x1d\n" +
 	"\n" +
-	"id_usuario\x18\x01 \x01(\x05R\tidUsuario\"k\n" +
+	"id_usuario\x18\x01 \x01(\x05R\tidUsuario\"3\n" +
+	"\x1bRecomendacionByEmailRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"k\n" +
 	"\x0fObraRecomendada\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x16\n" +
 	"\x06titulo\x18\x02 \x01(\tR\x06titulo\x12\x18\n" +
@@ -872,11 +918,12 @@ const file_museo_proto_rawDesc = "" +
 	"\x11epoca_relacionada\x18\x01 \x01(\tR\x10epocaRelacionada\x12\x12\n" +
 	"\x04tipo\x18\x02 \x01(\tR\x04tipo\"=\n" +
 	"\x0fEventosResponse\x12*\n" +
-	"\aeventos\x18\x01 \x03(\v2\x10.museo.v1.EventoR\aeventos2\xc9\x02\n" +
+	"\aeventos\x18\x01 \x03(\v2\x10.museo.v1.EventoR\aeventos2\xb0\x03\n" +
 	"\vObraService\x12K\n" +
 	"\x12ObtenerObrasPorIds\x12\x1c.museo.v1.ObrasPorIdsRequest\x1a\x17.museo.v1.ObrasResponse\x12D\n" +
 	"\vBuscarObras\x12\x1c.museo.v1.BuscarObrasRequest\x1a\x17.museo.v1.ObrasResponse\x12W\n" +
-	"\x14GenerarRecomendacion\x12\x1e.museo.v1.RecomendacionRequest\x1a\x1f.museo.v1.RecomendacionResponse\x12N\n" +
+	"\x14GenerarRecomendacion\x12\x1e.museo.v1.RecomendacionRequest\x1a\x1f.museo.v1.RecomendacionResponse\x12e\n" +
+	"\x1bGenerarRecomendacionByEmail\x12%.museo.v1.RecomendacionByEmailRequest\x1a\x1f.museo.v1.RecomendacionResponse\x12N\n" +
 	"\x10GenerarRecorrido\x12!.museo.v1.GenerarRecorridoRequest\x1a\x17.museo.v1.ObrasResponse2i\n" +
 	"\x10VisitanteService\x12U\n" +
 	"\x13ObtenerPreferencias\x12\x1d.museo.v1.PreferenciasRequest\x1a\x1f.museo.v1.PreferenciasVisitante2[\n" +
@@ -895,40 +942,43 @@ func file_museo_proto_rawDescGZIP() []byte {
 	return file_museo_proto_rawDescData
 }
 
-var file_museo_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_museo_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_museo_proto_goTypes = []any{
-	(*Obra)(nil),                    // 0: museo.v1.Obra
-	(*PreferenciasVisitante)(nil),   // 1: museo.v1.PreferenciasVisitante
-	(*Evento)(nil),                  // 2: museo.v1.Evento
-	(*ObrasPorIdsRequest)(nil),      // 3: museo.v1.ObrasPorIdsRequest
-	(*BuscarObrasRequest)(nil),      // 4: museo.v1.BuscarObrasRequest
-	(*ObrasResponse)(nil),           // 5: museo.v1.ObrasResponse
-	(*RecomendacionRequest)(nil),    // 6: museo.v1.RecomendacionRequest
-	(*ObraRecomendada)(nil),         // 7: museo.v1.ObraRecomendada
-	(*RecomendacionResponse)(nil),   // 8: museo.v1.RecomendacionResponse
-	(*GenerarRecorridoRequest)(nil), // 9: museo.v1.GenerarRecorridoRequest
-	(*PreferenciasRequest)(nil),     // 10: museo.v1.PreferenciasRequest
-	(*BuscarEventosRequest)(nil),    // 11: museo.v1.BuscarEventosRequest
-	(*EventosResponse)(nil),         // 12: museo.v1.EventosResponse
+	(*Obra)(nil),                        // 0: museo.v1.Obra
+	(*PreferenciasVisitante)(nil),       // 1: museo.v1.PreferenciasVisitante
+	(*Evento)(nil),                      // 2: museo.v1.Evento
+	(*ObrasPorIdsRequest)(nil),          // 3: museo.v1.ObrasPorIdsRequest
+	(*BuscarObrasRequest)(nil),          // 4: museo.v1.BuscarObrasRequest
+	(*ObrasResponse)(nil),               // 5: museo.v1.ObrasResponse
+	(*RecomendacionRequest)(nil),        // 6: museo.v1.RecomendacionRequest
+	(*RecomendacionByEmailRequest)(nil), // 7: museo.v1.RecomendacionByEmailRequest
+	(*ObraRecomendada)(nil),             // 8: museo.v1.ObraRecomendada
+	(*RecomendacionResponse)(nil),       // 9: museo.v1.RecomendacionResponse
+	(*GenerarRecorridoRequest)(nil),     // 10: museo.v1.GenerarRecorridoRequest
+	(*PreferenciasRequest)(nil),         // 11: museo.v1.PreferenciasRequest
+	(*BuscarEventosRequest)(nil),        // 12: museo.v1.BuscarEventosRequest
+	(*EventosResponse)(nil),             // 13: museo.v1.EventosResponse
 }
 var file_museo_proto_depIdxs = []int32{
 	0,  // 0: museo.v1.ObrasResponse.obras:type_name -> museo.v1.Obra
-	7,  // 1: museo.v1.RecomendacionResponse.recomendadas:type_name -> museo.v1.ObraRecomendada
+	8,  // 1: museo.v1.RecomendacionResponse.recomendadas:type_name -> museo.v1.ObraRecomendada
 	2,  // 2: museo.v1.EventosResponse.eventos:type_name -> museo.v1.Evento
 	3,  // 3: museo.v1.ObraService.ObtenerObrasPorIds:input_type -> museo.v1.ObrasPorIdsRequest
 	4,  // 4: museo.v1.ObraService.BuscarObras:input_type -> museo.v1.BuscarObrasRequest
 	6,  // 5: museo.v1.ObraService.GenerarRecomendacion:input_type -> museo.v1.RecomendacionRequest
-	9,  // 6: museo.v1.ObraService.GenerarRecorrido:input_type -> museo.v1.GenerarRecorridoRequest
-	10, // 7: museo.v1.VisitanteService.ObtenerPreferencias:input_type -> museo.v1.PreferenciasRequest
-	11, // 8: museo.v1.EventoService.BuscarEventos:input_type -> museo.v1.BuscarEventosRequest
-	5,  // 9: museo.v1.ObraService.ObtenerObrasPorIds:output_type -> museo.v1.ObrasResponse
-	5,  // 10: museo.v1.ObraService.BuscarObras:output_type -> museo.v1.ObrasResponse
-	8,  // 11: museo.v1.ObraService.GenerarRecomendacion:output_type -> museo.v1.RecomendacionResponse
-	5,  // 12: museo.v1.ObraService.GenerarRecorrido:output_type -> museo.v1.ObrasResponse
-	1,  // 13: museo.v1.VisitanteService.ObtenerPreferencias:output_type -> museo.v1.PreferenciasVisitante
-	12, // 14: museo.v1.EventoService.BuscarEventos:output_type -> museo.v1.EventosResponse
-	9,  // [9:15] is the sub-list for method output_type
-	3,  // [3:9] is the sub-list for method input_type
+	7,  // 6: museo.v1.ObraService.GenerarRecomendacionByEmail:input_type -> museo.v1.RecomendacionByEmailRequest
+	10, // 7: museo.v1.ObraService.GenerarRecorrido:input_type -> museo.v1.GenerarRecorridoRequest
+	11, // 8: museo.v1.VisitanteService.ObtenerPreferencias:input_type -> museo.v1.PreferenciasRequest
+	12, // 9: museo.v1.EventoService.BuscarEventos:input_type -> museo.v1.BuscarEventosRequest
+	5,  // 10: museo.v1.ObraService.ObtenerObrasPorIds:output_type -> museo.v1.ObrasResponse
+	5,  // 11: museo.v1.ObraService.BuscarObras:output_type -> museo.v1.ObrasResponse
+	9,  // 12: museo.v1.ObraService.GenerarRecomendacion:output_type -> museo.v1.RecomendacionResponse
+	9,  // 13: museo.v1.ObraService.GenerarRecomendacionByEmail:output_type -> museo.v1.RecomendacionResponse
+	5,  // 14: museo.v1.ObraService.GenerarRecorrido:output_type -> museo.v1.ObrasResponse
+	1,  // 15: museo.v1.VisitanteService.ObtenerPreferencias:output_type -> museo.v1.PreferenciasVisitante
+	13, // 16: museo.v1.EventoService.BuscarEventos:output_type -> museo.v1.EventosResponse
+	10, // [10:17] is the sub-list for method output_type
+	3,  // [3:10] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
@@ -945,7 +995,7 @@ func file_museo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_museo_proto_rawDesc), len(file_museo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   3,
 		},

@@ -2,6 +2,8 @@ package com.example.rest.reportes.service;
 
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,14 +14,25 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import com.example.rest.eventos.repository.EventoRepository;
+import com.example.rest.reportes.dto.EventoReporteDto;
+import com.example.rest.reportes.dto.FiltrosReporteRequestDto;
 import com.example.rest.reportes.dto.ReporteExcelRequest;
 
 @Service
 public class ExcelService {
 
-    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
             .withZone(ZoneId.of("America/Argentina/Buenos_Aires"));
 
+
+    private EventoRepository eventoRepository;
+
+    public ExcelService(EventoRepository eventoRepository) {
+        this.eventoRepository = eventoRepository;
+    }
+
+   
     public byte[] generarExcel(List<ReporteExcelRequest> datos) {
 
         try (Workbook workbook = new XSSFWorkbook();
@@ -97,7 +110,6 @@ public class ExcelService {
             } else {
                 ocupacion = (double) evento.inscriptos() / evento.cupoMax() * 100;
             }
-            
 
             row.createCell(5).setCellValue(ocupacion);
         }
@@ -113,5 +125,39 @@ public class ExcelService {
 
         return FORMATO_FECHA.format(
                 Instant.ofEpochMilli(millis));
+    }
+
+    public byte[] generarExcelConFiltros(FiltrosReporteRequestDto filtros) {
+
+        LocalDateTime fechaInicio = filtros.fechaInicio() == null
+                || filtros.fechaInicio().isBlank()
+                        ? null
+                        : LocalDate.parse(filtros.fechaInicio()).atStartOfDay();
+
+        LocalDateTime fechaFin = filtros.fechaFin() == null
+                || filtros.fechaFin().isBlank()
+                        ? null
+                        : LocalDate.parse(filtros.fechaFin()).atTime(23, 59, 59);
+
+        List<EventoReporteDto> eventos = eventoRepository.obtenerEventosParaExcel(
+                fechaInicio,
+                fechaFin,
+                filtros.tipo(),
+                filtros.estado());
+
+        List<ReporteExcelRequest> datos = eventos.stream()
+                .map(evento -> new ReporteExcelRequest(
+                        String.valueOf(evento.fechaHora()
+                                .atZone(ZoneId.of("America/Argentina/Buenos_Aires"))
+                                .toInstant()
+                                .toEpochMilli()),
+                        evento.titulo(),
+                        evento.curador() == null ? "" : evento.curador(),
+                        evento.cantidadInscriptos().intValue(),
+                        evento.cupoMax(),
+                        evento.tipo()))
+                .toList();
+
+        return generarExcel(datos);
     }
 }

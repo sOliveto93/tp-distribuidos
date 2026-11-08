@@ -43,6 +43,9 @@ service ObraService{
     rpc GenerarRecomendacion (RecomendacionRequest) 
     returns (RecomendacionResponse);
 
+    rpc GenerarRecomendacionByEmail (RecomendacionByEmailRequest) 
+    returns (RecomendacionResponse);
+
     rpc GenerarRecorrido (GenerarRecorridoRequest)
     returns (ObrasResponse);
 }
@@ -66,6 +69,9 @@ message ObrasResponse {
 
 message RecomendacionRequest {
   int32 id_usuario = 1;
+}
+message RecomendacionByEmailRequest {
+  string email = 1;
 }
 
 message ObraRecomendada {

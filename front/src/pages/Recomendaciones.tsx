@@ -36,8 +36,8 @@ export default function Recomendaciones() {
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState("");
 
-  const cargarRecomendaciones = async (idUsuario: number) => {
-    const data = await fetchRecomendaciones(idUsuario);
+  const cargarRecomendaciones = async () => {
+    const data = await fetchRecomendaciones();
     setRecomendadas(data.recomendadasList || []);
   };
 
@@ -132,7 +132,7 @@ export default function Recomendaciones() {
         await guardarFiltroFavorito(idUsuario, filtro);
       }
 
-      await cargarRecomendaciones(idUsuario);
+      await cargarRecomendaciones();
       setMensaje("Preferencias actualizadas correctamente.");
     } catch (error) {
       console.error("Error al guardar preferencias:", error);
@@ -156,7 +156,7 @@ export default function Recomendaciones() {
       setEpocas([]);
       setTecnicas([]);
 
-      await cargarRecomendaciones(idUsuario);
+      await cargarRecomendaciones();
       setMensaje("Preferencias eliminadas correctamente.");
     } catch (error) {
       console.error("Error al eliminar preferencias:", error);
@@ -183,7 +183,7 @@ export default function Recomendaciones() {
           return;
         }
 
-        await cargarRecomendaciones(idUsuario);
+        await cargarRecomendaciones();
       } catch (err) {
         setError(
           err instanceof Error

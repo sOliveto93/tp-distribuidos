@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const obraClient = require("../grpc/obraGrpcClient.js");
 const museoMessages = require("../generated/museo_pb.js");
-
+const {jwtMiddleware} = require("../../auth/jwt.js");
 const obraRouter = Router();
 
 obraRouter.get("/", (req, res) => {
@@ -54,7 +54,28 @@ obraRouter.post('/recorridos', (req, res) => {
         res.json(resultado.toObject());
     });
 });
+obraRouter.get('/recomendaciones',jwtMiddleware,(req,res)=>{
+    if (!req.user) {
+    return res.status(401).json({ error: "No autenticado" });
+}
 
+if (req.user.rol !== "VISITANTE") {
+    return res.status(403).json({ error: "No autorizado" });
+}
+    
+    const solicitud = new museoMessages.RecomendacionByEmailRequest();
+    solicitud.setEmail(req.user.email);
+   
+    obraClient.generarRecomendacionByEmail(solicitud,(error,resultado)=>{
+        
+        if(error){
+            console.error("Error gRPC al generar recomendaciones:", error);
+            return res.status(502).json({error: "Error al generar recomendaciones"});
+        }
+      
+        res.json(resultado.toObject());
+    });
+});/*
 obraRouter.get('/recomendaciones/:id_usuario',(req,res)=>{
 
     const idUsuario = parseInt(req.params.id_usuario);
@@ -77,7 +98,7 @@ obraRouter.get('/recomendaciones/:id_usuario',(req,res)=>{
     });
 
 
-});
+});*/
 
 obraRouter.get("/:id", (req, res) => {
     const id = Number(req.params.id);

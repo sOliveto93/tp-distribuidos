@@ -1,4 +1,4 @@
-package main;
+package main
 
 import (
 	"context"
@@ -241,4 +241,26 @@ func (s *obraServer) GenerarRecomendacion(
 	}
 
 	return &museov1.RecomendacionResponse{Recomendadas: recomendadas}, nil
+}
+
+func (s *obraServer) GenerarRecomendacionByEmail(ctx context.Context, req *museov1.RecomendacionByEmailRequest) (*museov1.RecomendacionResponse, error) {
+
+	var idUsuario int32
+
+	err := s.db.QueryRowContext(
+		ctx,
+		"SELECT id FROM usuarios WHERE email = ?",
+		req.GetEmail(),
+	).Scan(&idUsuario)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return s.GenerarRecomendacion(
+		ctx,
+		&museov1.RecomendacionRequest{
+			IdUsuario: idUsuario,
+		},
+	)
 }

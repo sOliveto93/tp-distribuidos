@@ -92,6 +92,17 @@ function deserialize_museo_v1_PreferenciasVisitante(buffer_arg) {
   return museo_pb.PreferenciasVisitante.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_museo_v1_RecomendacionByEmailRequest(arg) {
+  if (!(arg instanceof museo_pb.RecomendacionByEmailRequest)) {
+    throw new Error('Expected argument of type museo.v1.RecomendacionByEmailRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_museo_v1_RecomendacionByEmailRequest(buffer_arg) {
+  return museo_pb.RecomendacionByEmailRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_museo_v1_RecomendacionRequest(arg) {
   if (!(arg instanceof museo_pb.RecomendacionRequest)) {
     throw new Error('Expected argument of type museo.v1.RecomendacionRequest');
@@ -148,6 +159,17 @@ var ObraServiceService = exports.ObraServiceService = {
     responseType: museo_pb.RecomendacionResponse,
     requestSerialize: serialize_museo_v1_RecomendacionRequest,
     requestDeserialize: deserialize_museo_v1_RecomendacionRequest,
+    responseSerialize: serialize_museo_v1_RecomendacionResponse,
+    responseDeserialize: deserialize_museo_v1_RecomendacionResponse,
+  },
+  generarRecomendacionByEmail: {
+    path: '/museo.v1.ObraService/GenerarRecomendacionByEmail',
+    requestStream: false,
+    responseStream: false,
+    requestType: museo_pb.RecomendacionByEmailRequest,
+    responseType: museo_pb.RecomendacionResponse,
+    requestSerialize: serialize_museo_v1_RecomendacionByEmailRequest,
+    requestDeserialize: deserialize_museo_v1_RecomendacionByEmailRequest,
     responseSerialize: serialize_museo_v1_RecomendacionResponse,
     responseDeserialize: deserialize_museo_v1_RecomendacionResponse,
   },

@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ObraService_ObtenerObrasPorIds_FullMethodName   = "/museo.v1.ObraService/ObtenerObrasPorIds"
-	ObraService_BuscarObras_FullMethodName          = "/museo.v1.ObraService/BuscarObras"
-	ObraService_GenerarRecomendacion_FullMethodName = "/museo.v1.ObraService/GenerarRecomendacion"
-	ObraService_GenerarRecorrido_FullMethodName     = "/museo.v1.ObraService/GenerarRecorrido"
+	ObraService_ObtenerObrasPorIds_FullMethodName          = "/museo.v1.ObraService/ObtenerObrasPorIds"
+	ObraService_BuscarObras_FullMethodName                 = "/museo.v1.ObraService/BuscarObras"
+	ObraService_GenerarRecomendacion_FullMethodName        = "/museo.v1.ObraService/GenerarRecomendacion"
+	ObraService_GenerarRecomendacionByEmail_FullMethodName = "/museo.v1.ObraService/GenerarRecomendacionByEmail"
+	ObraService_GenerarRecorrido_FullMethodName            = "/museo.v1.ObraService/GenerarRecorrido"
 )
 
 // ObraServiceClient is the client API for ObraService service.
@@ -32,6 +33,7 @@ type ObraServiceClient interface {
 	ObtenerObrasPorIds(ctx context.Context, in *ObrasPorIdsRequest, opts ...grpc.CallOption) (*ObrasResponse, error)
 	BuscarObras(ctx context.Context, in *BuscarObrasRequest, opts ...grpc.CallOption) (*ObrasResponse, error)
 	GenerarRecomendacion(ctx context.Context, in *RecomendacionRequest, opts ...grpc.CallOption) (*RecomendacionResponse, error)
+	GenerarRecomendacionByEmail(ctx context.Context, in *RecomendacionByEmailRequest, opts ...grpc.CallOption) (*RecomendacionResponse, error)
 	GenerarRecorrido(ctx context.Context, in *GenerarRecorridoRequest, opts ...grpc.CallOption) (*ObrasResponse, error)
 }
 
@@ -73,6 +75,16 @@ func (c *obraServiceClient) GenerarRecomendacion(ctx context.Context, in *Recome
 	return out, nil
 }
 
+func (c *obraServiceClient) GenerarRecomendacionByEmail(ctx context.Context, in *RecomendacionByEmailRequest, opts ...grpc.CallOption) (*RecomendacionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RecomendacionResponse)
+	err := c.cc.Invoke(ctx, ObraService_GenerarRecomendacionByEmail_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *obraServiceClient) GenerarRecorrido(ctx context.Context, in *GenerarRecorridoRequest, opts ...grpc.CallOption) (*ObrasResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ObrasResponse)
@@ -90,6 +102,7 @@ type ObraServiceServer interface {
 	ObtenerObrasPorIds(context.Context, *ObrasPorIdsRequest) (*ObrasResponse, error)
 	BuscarObras(context.Context, *BuscarObrasRequest) (*ObrasResponse, error)
 	GenerarRecomendacion(context.Context, *RecomendacionRequest) (*RecomendacionResponse, error)
+	GenerarRecomendacionByEmail(context.Context, *RecomendacionByEmailRequest) (*RecomendacionResponse, error)
 	GenerarRecorrido(context.Context, *GenerarRecorridoRequest) (*ObrasResponse, error)
 	mustEmbedUnimplementedObraServiceServer()
 }
@@ -109,6 +122,9 @@ func (UnimplementedObraServiceServer) BuscarObras(context.Context, *BuscarObrasR
 }
 func (UnimplementedObraServiceServer) GenerarRecomendacion(context.Context, *RecomendacionRequest) (*RecomendacionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerarRecomendacion not implemented")
+}
+func (UnimplementedObraServiceServer) GenerarRecomendacionByEmail(context.Context, *RecomendacionByEmailRequest) (*RecomendacionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerarRecomendacionByEmail not implemented")
 }
 func (UnimplementedObraServiceServer) GenerarRecorrido(context.Context, *GenerarRecorridoRequest) (*ObrasResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerarRecorrido not implemented")
@@ -188,6 +204,24 @@ func _ObraService_GenerarRecomendacion_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ObraService_GenerarRecomendacionByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecomendacionByEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObraServiceServer).GenerarRecomendacionByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ObraService_GenerarRecomendacionByEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObraServiceServer).GenerarRecomendacionByEmail(ctx, req.(*RecomendacionByEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ObraService_GenerarRecorrido_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GenerarRecorridoRequest)
 	if err := dec(in); err != nil {
@@ -224,6 +258,10 @@ var ObraService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerarRecomendacion",
 			Handler:    _ObraService_GenerarRecomendacion_Handler,
+		},
+		{
+			MethodName: "GenerarRecomendacionByEmail",
+			Handler:    _ObraService_GenerarRecomendacionByEmail_Handler,
 		},
 		{
 			MethodName: "GenerarRecorrido",

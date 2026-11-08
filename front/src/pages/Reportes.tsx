@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Reportes.css';
-import type { Filtros, GrupoReporte, ReporteExcelRequest } from '../types/types';
+import type { Filtros, GrupoReporte } from '../types/types';
 import { traerReporte, traerTiposEvento } from '../services/reportesService';
 //import {login, me, type Respuestatoken} from './api/login.tsx';
 
@@ -51,7 +51,7 @@ export default function PanelReportes() {
   const exportarReporteExcel = async () => {
 
 
-    const datosExcel: ReporteExcelRequest[] = reporte.flatMap((grupo) =>
+    /*const datosExcel: ReporteExcelRequest[] = reporte.flatMap((grupo) =>
       grupo.eventos.map((ev) => ({
         fecha: ev.fecha_hora ?? "",
         titulo: ev.titulo,
@@ -60,14 +60,15 @@ export default function PanelReportes() {
         cupoMax: ev.cupo_max ?? 0,
         tipo: ev.tipo ?? ""
       }))
-    );
+    );*/
     const respuesta = await fetch(`${URL_BASE}${PORT_REST}/api/reportes/exportar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify(datosExcel)
+      //enviamos los filtros originales
+      body: JSON.stringify(filtros)
 
     });
 

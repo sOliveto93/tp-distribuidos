@@ -10,6 +10,8 @@ COPY src ./src
 
 COPY proto ./proto
 
+COPY auth ./auth
+
 EXPOSE 3000
 
 CMD ["npm", "start"]

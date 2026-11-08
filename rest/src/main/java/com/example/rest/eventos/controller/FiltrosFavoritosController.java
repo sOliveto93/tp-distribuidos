@@ -74,7 +74,7 @@ public class FiltrosFavoritosController {
         }
 
         try {
-            FiltrosFavoritos actualizado = filtrosService.actualizarFiltro(idFiltro, filtro);
+            FiltrosFavoritos actualizado = filtrosService.actualizarFiltro(idUsuario,idFiltro, filtro);
             return ResponseEntity.ok(mapearADTO(actualizado));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -88,7 +88,7 @@ public class FiltrosFavoritosController {
         }
 
         try {
-            filtrosService.eliminarFiltro(idFiltro);
+            filtrosService.eliminarFiltro(idUsuario,idFiltro);
             return ResponseEntity.ok("El filtro favorito fue eliminado con éxito.");
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Error: El filtro no fue encontrado o ya se eliminó previamente.");

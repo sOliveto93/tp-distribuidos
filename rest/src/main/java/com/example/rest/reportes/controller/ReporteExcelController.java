@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.rest.reportes.dto.FiltrosReporteRequestDto;
 import com.example.rest.reportes.dto.ReporteExcelRequest;
 import com.example.rest.reportes.service.ExcelService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 
 @SecurityRequirement(name = "bearerAuth")
 @RestController 
@@ -26,11 +28,13 @@ public class ReporteExcelController {
     public ReporteExcelController(ExcelService excelService){
         this.excelService=excelService;
     }
-
+//revisar no solo validacion por dto 
+// considerar recibir identificadores de recursos, consumirlos desde bd y validar que el usuario 
+//mediante authentication tenga permisos para consumirlos antes de crear el excel
     @PreAuthorize("hasAnyRole('CURADOR', 'ADMINISTRADOR')")
     @PostMapping ("/exportar")
-    public ResponseEntity<byte[]> exportar(@RequestBody List<ReporteExcelRequest> datos){
-        byte[] excel = excelService.generarExcel(datos);
+    public ResponseEntity<byte[]> exportar(@Valid @RequestBody FiltrosReporteRequestDto filtros){
+        byte[] excel = excelService.generarExcelConFiltros(filtros);
 
         return ResponseEntity.ok()
                 .header(

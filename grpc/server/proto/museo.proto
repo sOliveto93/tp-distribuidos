@@ -43,9 +43,11 @@ service ObraService{
     rpc GenerarRecomendacion (RecomendacionRequest) 
     returns (RecomendacionResponse);
 
+    rpc GenerarRecomendacionByEmail (RecomendacionByEmailRequest) 
+    returns (RecomendacionResponse);
+
     rpc GenerarRecorrido (GenerarRecorridoRequest)
     returns (ObrasResponse);
-
 }
 
 message ObrasPorIdsRequest{
@@ -68,6 +70,9 @@ message ObrasResponse {
 message RecomendacionRequest {
   int32 id_usuario = 1;
 }
+message RecomendacionByEmailRequest {
+  string email = 1;
+}
 
 message ObraRecomendada {
   int32 id = 1;
@@ -79,12 +84,13 @@ message ObraRecomendada {
 message RecomendacionResponse {
   repeated ObraRecomendada recomendadas = 1;
 }
+
 message GenerarRecorridoRequest {
     string epoca = 1;
     string tecnica = 2;
     int32 cantidad_obras = 3;
-
 }
+
 
 
 // ------------------Servicio de visitantes------------------
